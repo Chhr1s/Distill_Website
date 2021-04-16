@@ -41,7 +41,7 @@ For those unfamiliar, these matches are more-or-less single-round match-play eve
 "Only The Best" Discs aka [OTB Discs](https://otbdiscs.com/) has sponsored these events all year, and they've offered free shipping on their products--on top of providing cash for the competitors--as a sponsorship promotion. I personally found myself fighting the urge to purchase a disc from them any time I watched a skins match (and often failed the urge). For that reason, I wanted to dive into the data and see what impact these had on OTB webtraffic. As a note, I would prefer to follow this up with sales data before being confident in any impact to their bottom line, but that's not publicly available. We should note that someone may look at OTB's website without purchasing anything.
 
 ```{r, layout="l-screen-inset"}
-knitr::include_graphics("~/Documents/Distill_Website/images/discs.jpeg")
+knitr::include_graphics(here::here("images", "discs.jpeg"))
 ```
 
 # Method

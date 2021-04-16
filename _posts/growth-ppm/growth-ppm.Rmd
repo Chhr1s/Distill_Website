@@ -24,7 +24,7 @@ output:
 ---
 
 ```{r, layout="l-screen-inset"}
-knitr::include_graphics("~/Documents/Distill_Website/images/tomas-sobek.jpeg")
+knitr::include_graphics(here::here("images", "tomas-sobek.jpeg"))
 ```
 
 photo by [Tomas Sobek](https://unsplash.com/@tomas_nz)

@@ -40,8 +40,9 @@ Here's what I hope to answer:
 
 
 ```{r, layout="l-screen-inset"}
-knitr::include_graphics("~/Documents/Distill_Website/images/ted-johnson.jpeg")
+knitr::include_graphics(here::here("images", "ted-johnson.jpeg"))
 ```
+
 photo by [Ted Johnson](https://unsplash.com/@ted_johnsson?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
 
 Before we hop in, pay attention to the units of relative popularity that Google gives: 

@@ -24,8 +24,8 @@ categories:
   - Tutorial
 ---
 
-```{r, layout="l-screen-inset"}
-knitr::include_graphics("~/Documents/Distill_Website/images/tree.jpeg")
+```{r,  echo=FALSE, layout="l-screen-inset"}
+knitr::include_graphics(here::here("images", "tree.jpeg"))
 ```
 
 # Intro
@@ -303,7 +303,7 @@ fit_rf <- fit_resamples(
 
 The plot below shows the root nodes from a random forest with 1000 trees (specified using `set_args(trees = 1000)` in the parsnip model object).
 
-```{r echo=FALSE, , preview = T}
+```{r echo=FALSE, preview = T}
 # extract roots
 rf_tree_roots <- function(x){
   map_chr(1:1000, 
