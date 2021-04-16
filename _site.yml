@@ -1,0 +1,34 @@
+name: "Christopher Loan"
+title: Christopher Loan's Website
+
+
+description: |
+  CML
+output_dir: "docs"
+
+navbar:
+  search: false
+  logo:
+    image: images/photo.png
+  right:
+    - text: "Home"
+      href: index.html
+    - text: 'Blog'
+      href: blog.html
+    - text: "Abbreviated CV"
+      href: about.html
+    - text: 'Links to Additional Projects'
+      menu:
+        - text: Inequity FlexDashboard
+          href: https://chhr1s.github.io/GA_DOE_Public/index.html
+        - text: Shiny App Neural Net (Beta)
+          href: https://chhr1s.shinyapps.io/Neural_Net_Predictions/
+    - icon: fa fa-github
+      href: https://github.com/Chhr1s
+    - icon: fa fa-linkedin
+      href: https://www.linkedin.com/in/christopher-loan-09965950/
+output:
+  distill::distill_article:
+    css: style.css
+    toc: true
+    toc_float: false

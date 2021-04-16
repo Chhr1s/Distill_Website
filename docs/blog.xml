@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+  <channel>
+    <title>Christopher Loan's Website</title>
+    <link>~/christopherloan/Documents/Distill_Website/</link>
+    <atom:link href="~/christopherloan/Documents/Distill_Website/blog.xml" rel="self" type="application/rss+xml"/>
+    <description>CML
+</description>
+    <generator>Distill</generator>
+    <lastBuildDate>Sat, 26 Dec 2020 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Disc Golf Popularity</title>
+      <dc:creator>Christopher Loan</dc:creator>
+      <link>~/christopherloan/Documents/Distill_Website/posts/disc-golf-web-traffic</link>
+      <description>Trying to figure out why the disc golf course is so crowded these days, with code.</description>
+      <category>Side Projects</category>
+      <category>Google Trends</category>
+      <category>Public Data</category>
+      <category>Plotting</category>
+      <category>Geographic Data</category>
+      <guid>~/christopherloan/Documents/Distill_Website/posts/disc-golf-web-traffic</guid>
+      <pubDate>Sat, 26 Dec 2020 00:00:00 +0000</pubDate>
+      <media:content url="~/christopherloan/Documents/Distill_Website/posts/disc-golf-web-traffic/Popularity-of-DG_files/figure-html5/unnamed-chunk-4-1.png" medium="image" type="image/png"/>
+    </item>
+    <item>
+      <title>Impact of GKPro Sponsored Skins Matches on OTB &amp; GKPro Webtraffic </title>
+      <dc:creator>Christopher Loan</dc:creator>
+      <link>~/christopherloan/Documents/Distill_Website/posts/webtraffic-analysis-for-otb-discs</link>
+      <description>An example of leveraging free data to impart value to a company, with code.</description>
+      <category>Side Projects</category>
+      <category>Google Trends</category>
+      <category>Public Data</category>
+      <category>SEM</category>
+      <category>Structural Equation Modeling</category>
+      <category>Mediation</category>
+      <category>Bootstrapping</category>
+      <category>Plotting</category>
+      <guid>~/christopherloan/Documents/Distill_Website/posts/webtraffic-analysis-for-otb-discs</guid>
+      <pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Growth &amp; Parallel Process Models</title>
+      <dc:creator>Christopher Loan</dc:creator>
+      <link>~/christopherloan/Documents/Distill_Website/posts/growth-ppm</link>
+      <description>Making Growth Models and Parallel Process Models in `{lavaan}`.</description>
+      <category>SEM</category>
+      <category>Structural Equation Modeling</category>
+      <category>Mediation</category>
+      <category>Bootstrapping</category>
+      <category>Plotting</category>
+      <category>Simulated Data</category>
+      <category>Tutorial</category>
+      <category>Model Comparisons</category>
+      <guid>~/christopherloan/Documents/Distill_Website/posts/growth-ppm</guid>
+      <pubDate>Tue, 08 Sep 2020 00:00:00 +0000</pubDate>
+      <media:content url="~/christopherloan/Documents/Distill_Website/posts/growth-ppm/growth-ppm_files/figure-html5/unnamed-chunk-6-1.png" medium="image" type="image/png"/>
+    </item>
+    <item>
+      <title>Tidymodels: Decision Tree Learning in R</title>
+      <dc:creator>Cianna Bedford-Petersen</dc:creator>
+      <dc:creator>Christopher Loan</dc:creator>
+      <dc:creator>Brendan Cullen</dc:creator>
+      <link>~/christopherloan/Documents/Distill_Website/posts/decision-trees-in-r</link>
+      <description>Exploring Decision Tree Variants in `{tidymodels}`.</description>
+      <category>Machine Learning</category>
+      <category>Decision Trees</category>
+      <category>Model Comparisons</category>
+      <category>Plotting</category>
+      <category>Public Data</category>
+      <category>Collaboration</category>
+      <category>Tutorial</category>
+      <guid>~/christopherloan/Documents/Distill_Website/posts/decision-trees-in-r</guid>
+      <pubDate>Tue, 02 Jun 2020 00:00:00 +0000</pubDate>
+      <media:content url="~/christopherloan/Documents/Distill_Website/posts/decision-trees-in-r/Decision_Trees_in_R_files/figure-html5/unnamed-chunk-16-1.png" medium="image" type="image/png"/>
+    </item>
+  </channel>
+</rss>

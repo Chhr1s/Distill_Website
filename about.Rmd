@@ -1,0 +1,98 @@
+---
+title: "Abbreviated Curriculum Vitae"
+output: 
+  distill::distill_article:
+    toc: true
+---
+
+# Education
+
+Doctoral Student: [Quantitative Research Methods in Education](https://education.uoregon.edu/qrme)\n
+Department of Education Methodology, Policy, & Leadership\n
+College of Education\n
+University of Oregon\n
+
+* Fall 2020 - Present
+* GPA (to date): 4.14
+
+Master of Science: [Prevention Science](https://education.uoregon.edu/prevsci/graduate/ms)\n
+Department of Counseling Psychology & Human Services\n
+College of Education\n
+University of Oregon\n
+
+* Fall 2018 - Spring 2020
+* GPA: 4.14/4.00 
+
+Bachelor of Arts: [Neuroscience](https://www.hamilton.edu/academics/departments/Home?dept=Neuroscience)\n
+Hamilton College\n
+
+* Fall 2011 - Spring 2015
+* GPA: 3.61/4.00 
+
+# Manuscripts
+
+## Published:
+
+[Tanner-Smith, E. E., Nichols, L. M., Loan, C. M., Finch, A. J., & Moberg, D. P. (2020). Recovery High School Attendance Effects on Student Delinquency and Substance Use: the Moderating Role of Social Problem Solving Styles. Prevention Science, 21(8), 1104-1113.](https://doi.org/10.1007/s11121-020-01161-z)
+
+## Under Review:
+
+Loan, C. M., Khurana, A., Wright, J., & Romer, D. (Under Review 2021). Selection versus Socialization Effects of Peer Norms on Adolescent Cigarette Use. Journal of Youth and Adolescence.
+
+Parr, N. J., Loan, C. M., Tanner-Smith, E. E. (R&R 2021). Machine Learning Approaches for Identifying and Investigating Moderators of Alcohol Use Intervention Effects in Meta-analyses. Alcohol & Alcoholism: Special Issue on Meta-Analysis & Systematic Review.
+
+Clark, M., Loan, C.M., Kjellstrand, J. (Under Review 2021). Predictors of Parent-Child Contact During a Parent’s Incarceration. Children and Youth Services Review.
+
+
+## Unpublished Documents:
+
+Loan, C. M., & Clark, B. A. M. (2020). Wellbeing of International Undergraduates during Initial Months of the COVID-19 Pandemic. Office of Assessment and Research, Division of Student Life, University of Oregon.
+
+Loan, C. M. (2019). Evaluation of 3rd Millennium as a Universal Alcohol and Cannabis Prevention Program at the University of Oregon. Office of Dean of Students, University of Oregon. 
+
+Loan, C. M. (2019). MS Thesis: A Developmental, Behavioral Economics Explanation of Adolescence Cigarette Use & Tobacco Use Disorder Symptom. 
+
+
+## In Progress:
+
+Loan, C. M., Graham, M.C., Zorilla, E. M., Villanueva, I., Husman, J., & Zvoch, K. (IN PROGRESS). Application of generalized mixed-effect regression trees with multi-modal data. Journal: TBD.
+
+Khurana, A., Loan, C. M., & Romer, D. (IN PROGRESS). The Role of Affect and Perceived Risk in Predicting Cigarette Use and Dependence Symptoms from Early to Late Adolescence. Target Journal: Addiction
+
+# Selected Poster Presentations: 
+
+Loan, C. M., Graham, M.C., Zorilla, E. M., Villanueva, I., Husman, J., & Zvoch, K. (2021, August 12-14). Application of generalized mixed-effect regression trees with multi-modal data [Poster]. APA2021, Remote. https://convention.apa.org/
+
+Marchetti, M., Loan, C. M., Cronce, J. M. (November 2019). An Investigation of Cannabis–related Consequences and Their Predictors Among College Students. Association of Cognitive and Behavioral Therapy (Addictive Behavior Sig), Atlanta, GA.
+
+Loan, C. M. & Khurana, A. (2019). Role of Subjective Affect and Risk Perceptions in Predicting 	Initiation of Adolescent Substance Use. University of Oregon 2019 Graduate Research Forum, Eugene, OR.
+
+Loan, C. M. (2015). Delay–Dependent Memory is Modulated by Subconscious Faces. Presented at: Hamilton College Neuroscience Senior Thesis Symposium – Clinton, NY
+
+
+# Fun Publications
+
+[Loan, C. &  Williamson, A. (2019, August 25). Do Ratings Take a Dive in Estonia? Retrieved](https://udisc.com/blog/post/do-ratings-take-a-dive-in-estonia)
+
+# Work Experience
+
+## Assessment & Research 
+* Assessment & Research Extern | UO Office of Assessment & Research | 2019-Present
+* Graduate Research Assistant | Prevention Science Institute (Khurana & DeGarmo Lab) | 2019-2020
+* Substance Abuse Prevention Extern | UO Office of Dean of Students | 2019
+* Graduate Research Assistant | Prevention Science Institute (Tanner-Smith Lab) | 2019
+
+## Teaching & Course Development
+
+* Course Developer: EDLD 312—Effective Leadership Decision Making | UO College of Education | 2020-Present 
+* Teaching Assistant | EDUC 642: Mutliple Regression | UO College of Education | 2020
+* Medical College Admissions Test (MCAT) Teacher | Kaplan @ Oregon State University | 2018-2019 (Summers)
+* High School Science Teacher | Christ School (Asheville, NC) | 2015-2017
+
+## Administrative
+
+* Data Science Graduate Employee | UO College of Education | 2020-Present 
+
+
+
+

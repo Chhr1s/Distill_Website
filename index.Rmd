@@ -1,0 +1,73 @@
+---
+title: "Welcome!"
+site: distill::distill_website
+output: 
+  distill::distill_article:
+    code_folding: false
+    toc: false
+---
+
+```{css, echo=FALSE}
+
+d-title {
+    padding-top: 6rem;
+    background-color: rgb(120 157 175);
+
+}
+
+
+```
+
+:::: {style="display: flex;"}
+
+::: {}
+
+```{r echo=FALSE, out.width='90%'}
+library(fontawesome)
+knitr::include_graphics("~/Documents/Distill_Website/images/photo.png")
+```
+
+<center>
+[`r fa("github", fill = "steelblue",  height = '35px')`](https://github.com/Chhr1s)
+[`r fa("linkedin", fill = "steelblue", height = '35px')`](https://www.linkedin.com/in/christopher-loan-09965950/)
+[`r fa("twitter", fill = "steelblue", height = '35px')`](https://twitter.com/chhr1s)
+[`r fa("clock", fill = "steelblue", height = '35px')`](https://chhr1s.github.io/GA_DOE_Public/index.html)
+</center>
+
+:::
+
+::: {}
+
+I'm Christopher Loan, a PhD student at the UO's **Quantitative Research Methods in Education** program.\n
+
+***
+
+I primarily consider myself a methodologist, exploring applications of **structural equation modeling, multilevel-modeling, machine learning, data visualization, & their intersections**.\n
+
+***
+
+:::
+
+::::
+
+I've applied these methods in **Prevention Science, Psychology, & Education** contexts, with my theoretical interests lying at these fields' boundaries. I use `R` every chance I get — [including making this website with `distill`](https://rstudio.github.io/distill/) — but dabble in `Python`, as well.
+
+# When I'm not on my laptop, you can find me:
+
+`r fa("circle", fill = "steelblue")` disc golfing,
+
+`r fa("dog", fill = "steelblue")` walking my dog,
+
+`r fa("snowboarding", fill = "steelblue")` skateboarding,
+
+`r fa("golf-ball", fill = "steelblue")` *trying* to play golf,
+
+`r fa("mountain", fill = "steelblue")` rock climbing,  
+
+
+***
+
+# Projects coming soon
+
+Lately, my interests have pulled me towards deep learning, computer vision, and network analysis. So keep an eye out for new blog posts on these coming soon. 
+

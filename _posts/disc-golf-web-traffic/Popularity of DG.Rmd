@@ -1,0 +1,365 @@
+---
+title: "Disc Golf Popularity"
+author: "Christopher Loan"
+date: 2020-12-26
+description: |
+  Trying to figure out why the disc golf course is so crowded these days, with code.
+categories: 
+  - Side Projects
+  - Google Trends
+  - Public Data
+  - Plotting
+  - Geographic Data
+output:
+  distill::distill_article:
+    self_contained: false
+    code_folding: show code
+    toc: true
+    toc_float: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, 
+                      include = T, 
+                      message = F, 
+                      warning = F)
+
+```
+
+Anyone who plays disc golf has heard that disc golf grew this year—it's been a very easy socially distant activity, and it's awesome. I actually coached a disc golf team in 2015-2017 while I was a high school biology teacher, so it's near and dear to me. A large part of me is happy for the growth, but I'd be lying if I didn't admit a small part of me is annoyed how busy the courses are now, hah! While waiting on a teepad, I had an idea to quantify this and I hadn't seen anyone try to quantify it yet.\n
+
+I'm going to generally refer to the growth of disc golf based on it's search popularity in [Google Trends](trends.google.com). This is an imperfect proxy for the overall growth of disc golf, but I am okay with that, and it's my only source of data for this project. \n
+
+Every time someone is looking for a disc, a nearby course, a YouTube tutorial, or a bit of Disc Golf Pro Tour coverage, they probably search for this on Google (or something owned by Google, i.e., YouTube). \n
+
+Here's what I hope to answer: 
+
+* Has disc golf grown since 2004? 
+* How much of that growth was witnessed in 2020?  
+* Where in the country (United States) is all the webtraffic occuring? 
+
+
+```{r, layout="l-screen-inset"}
+knitr::include_graphics("~/Documents/Distill_Website/images/ted-johnson.jpeg")
+```
+photo by [Ted Johnson](https://unsplash.com/@ted_johnsson?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+
+Before we hop in, pay attention to the units of relative popularity that Google gives: 
+
+"Numbers represent search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term."
+
+So basically, when I query data from 2004-2020, all data will be scaled with 100 being the peak popularity at any time in that window. I have no information on absolute numbers, just change. Anyways, let's dive in. 
+
+This [GitHub Repo](https://github.com/Chhr1s/Disc_Golf_Growth_by_Webtraffic) has all my data if you're interested.
+
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(rio)
+library(here)
+library(stringr)
+library(lubridate)
+library(knitr)
+library(usmap)
+library(glmertree)
+library(ggthemes)
+theme_set(theme_economist())
+```
+
+```{r}
+dat <- import("geoMap 2017.csv") %>% 
+  left_join(import("geoMap 2018.csv")) %>% 
+  left_join(import("geoMap 2019.csv")) %>% 
+  left_join(import("geoMap 2020.csv")) %>% 
+  mutate(Region = factor(Region)) %>% 
+  rename(`2017` = 'disc golf: (2017)',
+         `2018` = 'disc golf: (2018)',
+         `2019` = 'disc golf: (2019)',
+         `2020` = 'disc golf: (2020)')
+
+dat_trend <- 
+  import("Search DG Since 2004.csv") %>% 
+  transmute(Date = 
+              ymd(parse_date_time(date, "ym")),
+            searches = searches, 
+            year = year(Date), 
+            month = month(Date))
+```
+
+# Average Webtraffic by Year
+
+Let's start with average Google Searches of with words "Disc Golf" over time every year. I have data for each month, and we can show the variation across months in these error bars. Where they do not overlap, we have significant differences. 
+
+### Figure 1.
+
+```{r, preview = T}
+months_vector <- 
+  c('Jan', 'Feb', 'Mar', 'April', 'May', 'Jun',
+    'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec')
+
+dat_trend %>% 
+  group_by(year) %>% 
+  summarize(mean_yearly = mean(searches),
+            sd = sd(searches), 
+            se_yearly = sd/sqrt(n())) %>% 
+ ggplot(aes(x = year, 
+            y = mean_yearly, 
+            ymin = mean_yearly-1.96*se_yearly, 
+            ymax=mean_yearly+1.96*se_yearly
+            ),
+        show.legend = F) + 
+  scale_x_continuous(breaks = 2004:2020) +
+  geom_col(fill = '#cc0000', 
+           show.legend = F) + 
+  geom_point() +
+  geom_errorbar() +
+  geom_line(aes(x = year, y = mean_yearly), show.legend = F) +
+  labs(
+    title = 'Figure 1. Average Yearly Google Search 
+Popularity of the Term `Disc Golf`',
+       caption = 'Error Bars Represent 95% Confidence Intervals',
+       y = 'Relative Search Popularity',
+       x = 'Year') + 
+  theme(axis.text.x = 
+          element_text(angle = 30, vjust = 0.5, hjust=0.5))
+```
+
+As you can see, 2020 was the first year with a significant change in relative search popularity from the year prior since 2004. Again, keep in mind this is using Google's scaled units.
+
+### Figure 2. 
+
+```{r message=FALSE, warning=FALSE}
+dat_trend %>% 
+  group_by(month) %>% 
+  summarize(mean_monthly = mean(searches),
+            sd = sd(searches), 
+            se_monthly = sd/n()) %>% 
+ ggplot(aes(x = month, 
+            y = mean_monthly, 
+            ymin = mean_monthly - 1.96*se_monthly, 
+            ymax = mean_monthly + 1.96*se_monthly,
+            ),
+        show.legend = F) + 
+  scale_x_continuous(breaks = 1:12,
+                     labels = months_vector) +
+  geom_col(fill = '#cc0000', 
+           show.legend = F) + 
+  geom_point() +
+  geom_errorbar() +
+  labs(title = 'Figure 2. Average Monthly Google Search 
+Popularity of the Term `Disc Golf`',
+       caption = 'Error Bars Represent 95% Confidence Intervals',
+       y = 'Relative Search Popularity',
+       x = 'Month') + 
+  theme(axis.text.x = 
+          element_text(angle = 30, vjust = 0.5, hjust=0.5))
+```
+
+It shouldn't surprise me, but it really surprises me how clean the distribution of popularity over months are. Consistently, thhe highest searches are in the warmer months, and the colder months get less. 
+
+
+# Visualizing Monthly Trends over Time
+
+### Figure 3. 
+
+Another way to look at this would be line graphs over time, with different lines for every year. I've done that below (Figure 3), and I added a dashed black line for the overall average search popularity for all other years (2004-2019) and then a solid pink (2020 only) line to show search popularity increase this year. 
+
+```{r}
+dat_trend %>%
+  ggplot(aes(x = month, 
+             y = searches, 
+             group = year, 
+             color = year)) +
+  scale_x_continuous(breaks = 1:12, 
+                     labels = months_vector) +
+  geom_line() +
+  labs(title = 'Figure 3. Relative Search Popularity of 
+Disc Golf Every Month Since 2004',
+       y = 'Relative Search Popularity', 
+       x = 'Month', 
+       color = 'Year') + 
+  theme(axis.text.x = 
+          element_text(angle = 30, vjust = 0.5, hjust = 1), 
+        legend.position = 'right',
+        legend.direction = 'vertical') + 
+  geom_hline(
+    aes(yintercept = 45.67188), 
+    linetype = 2) + 
+  geom_hline(
+    aes(yintercept = 71.41667), 
+    color = '#cc0000')
+  
+
+```
+
+### Figure 4. 
+
+Figure 4 shows similar data, except the dashed (orange) line represents all years' (2004-2020) averages, and the solid (color-coded) lines tell each year's mean. 
+
+
+```{r message=FALSE, warning=FALSE, include=T}
+dat_plot <- dat_trend %>% 
+  group_by(year) %>% 
+  mutate(mean_yearly = mean(searches), 
+            sd = sd(searches), 
+            se_yearly = sd/sqrt(n())) %>% 
+  ungroup()
+
+dat_plot %>% 
+  ggplot(aes(x = month, y = searches)) + 
+  geom_col(aes(fill = year), 
+           show.legend = F) + 
+  geom_hline(aes(yintercept = mean(searches)), 
+             color = 'orange', 
+             linetype = 2, 
+             show.legend = F) +
+  facet_wrap(~year, ncol = 6) + 
+  geom_hline(
+    aes(yintercept = 
+          mean_yearly, 
+        color = year), 
+    show.legend = F) +
+  scale_x_continuous(breaks = 1:12, 
+                     labels = months_vector) +
+  labs(
+  title = 'Figure 4. Relative Search Popularity 
+of Disc Golf Every Year Since 2004',
+y = 'Relative Search Popularity', 
+x = 'Month') + 
+  coord_flip() + 
+  theme_economist(horizontal = F) +
+  theme(axis.text.y = element_text(size = 7, angle = 45), 
+        axis.text.x = element_text(size = 7, angle = 45, vjust = 0.75) 
+        )
+```
+
+Anyway you cut it up, disc golf became more popular in terms of Google Search Popularity. Here are the actual numbers. 
+
+### Table 1. 
+
+Webtraffic over time
+
+```{r message=FALSE, warning=FALSE}
+dat_trend %>% 
+  group_by(year) %>% 
+  rename(Year = year) %>% 
+  summarize(`Average Webtraffic` = mean(searches),
+            `Standard Deviation` = sd(searches), 
+            `Standard Error` = `Standard Deviation`/sqrt(n())) %>% 
+  kable()
+```
+
+So how many times (and when) has disc golf trends significantly increased? I'll spare you the details, but I can do some exploratory analysis with something called a 'generalized linear mixed effects regression tree' which is an emerging exploratory technique to find group differences. \n
+
+I wrote the model to account for seasonal trends with a random intercept of month, and then I ask the model to tell me between which years differences occured. \n
+
+### Figure 5. 
+
+```{r}
+tree1 <- lmertree(searches ~ 1 | (1 | month) | year, 
+         data = dat_trend, 
+         cluster = month)
+plot(tree1, ask = F, which = 'tree')
+```
+
+
+It looks like the first bit of growth was relatively small, but was significant. This was at year 2011. The window from 2004-2010 had an average of 41.26 of webtraffic, and we saw a significant (but modest) increase (of ~8%) to 49.10 in webtraffic from 2011-2019. These two windows together were significantly different than 2020, which had an average of 71.42! That's an increase of over 20% from the prior window (2011-2019) \n
+
+This shows no matter how the computer groups the years, there are only 2 significant increases in disc golf search popularity: before 2011 and after 2019. And the latter jump was __much__ larger.\n
+
+
+# Where (at least within the USA) is the Webtraffic Located?
+
+```{r include=T, echo= F}
+dat_long <- dat %>% 
+  pivot_longer(`2017`:`2020`,
+               names_to = "year",
+               values_to = "searches") %>% 
+   mutate(year = factor(year))
+```
+
+You can't get webtraffic trends by state, but you can go in each year and get a single (averaged) snapshot about the relative disc golf webtraffic for a year. So I gathered webtraffic data for 2017-2020 individually and merged the data files. You really need to keep in mind what Google says about this webtraffic for Regions before you look at the data: \n
+
+"A higher value means a higher proportion of all queries, not a higher absolute query count. So a tiny country where 80% of the queries are for "bananas" will get twice the score of a giant country where only 40% of the queries are for "bananas"
+
+The vertical line is the average across all months of 2017-2020, and the error bars represent the 95% confidence intervals. It's pretty clear that Maine is holding it down for Disc Golf Webtraffic (per volume webtraffic), whatever is going on there. Other places (e.g., California) may appear really low there potentially because of a really established disc golf scene which means everyone knows where the courses are / there are in-person pro shops, etc. It also can be conflated with overall webtraffic, so this isn't as clean as an analysis as above, but it's still interesting to see who is conducting relatively more searches.\n
+
+### Figures 6. 
+
+```{r message=FALSE, warning=FALSE, include = T, echo = T}
+dat_long %>% 
+  group_by(Region) %>% 
+  summarize(mean = mean(searches), 
+            sd = sd(searches), 
+            se = sd/sqrt(n())#, 
+            #popularity = mean*num_courses
+            ) %>% 
+  ggplot(aes(y = reorder(Region, mean),
+             x = mean,
+             )) + 
+  geom_errorbar(
+    aes(xmin = mean-1.96*se, 
+        xmax = mean + 1.96*se, 
+        color = mean), 
+    show.legend = F) +
+  geom_point(
+    aes(color = mean), 
+    show.legend = F) + 
+  geom_vline(
+    aes(xintercept = mean(mean))) +
+  labs(title = 'Figure 6. Relative Search 
+Interest in `Disc Golf` by State', 
+       caption = 'Error Bars Represent 95% Confidence Interval', 
+       y = 'State',
+       x = 'Average Relative Search Interest on Google (2017-2020)') + 
+  theme_economist(horizontal = F) +
+  theme(axis.text.y = 
+          element_text(angle = 30, vjust = 0.5, hjust = 1, size = 5)) 
+```
+
+```{r}
+dat_long <- dat_long %>% 
+  mutate(fips = fips(Region))
+dat_plot2017 <- dat_long %>% 
+  filter(year == '2017') 
+dat_plot2018 <- dat_long %>% 
+  filter(year == '2018')
+dat_plot2019 <- dat_long %>% 
+  filter(year == '2019')
+dat_plot2020 <- dat_long %>% 
+  filter(year == '2020')
+```
+
+# Maps (Figures 7-10.) Search Popularity by State in 2017-2020
+
+Here's the 2017-2020 relative websearch popularity for you visual learners
+
+```{r message=FALSE, warning=FALSE}
+plot_usmap(data = dat_plot2017,
+           values = 'searches',
+           labels = T, 
+           label_color = "black",
+           ) + labs(title = 'Figure 7. Search Popularity by State in 2017', 
+                    fill = 'Relative Search Popularity')
+
+plot_usmap(data = dat_plot2018,
+           values = 'searches',
+           labels = T, 
+           label_color = "black",
+           )  + labs(title = 'Figure 8. Search Popularity by State in 2018', 
+                    fill = 'Relative Search Popularity')
+
+plot_usmap(data = dat_plot2019,
+           values = 'searches',
+           labels = T, 
+           label_color = "black",
+           ) + labs(title = 'Figure 9. Search Popularity by State in 2019', 
+                    fill = 'Relative Search Popularity')
+
+plot_usmap(data = dat_plot2020,
+           values = 'searches',
+           labels = T, 
+           label_color = "black",
+           ) + labs(title = 'Figure 10. Search Popularity by State in 2020', 
+                    fill = 'Relative Search Popularity')
+```
