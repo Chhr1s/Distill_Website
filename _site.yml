@@ -1,6 +1,7 @@
 name: "Christopher Loan"
 title: Christopher Loan's Website
 
+favicon: images/photo.png
 
 description: |
   CML
@@ -11,7 +12,7 @@ navbar:
   logo:
     image: images/photo.png
   right:
-    - text: "Home"
+    - icon: fa fa-home
       href: index.html
     - text: 'Blog'
       href: blog.html
