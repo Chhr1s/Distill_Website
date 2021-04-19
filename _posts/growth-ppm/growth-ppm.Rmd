@@ -1,7 +1,7 @@
 ---
-title: "Growth & Parallel Process Models"
+title: "Introduction to Growth & Parallel Process Models in `{lavaan}`"
 description: |
-  Making Growth Models and Parallel Process Models in `{lavaan}`.
+  A tutorial to parameterize and plot results of a parallel process model (PPM) in `{lavaan}`.
 author:
   - name: Christopher Loan
 date: 2020-09-08

@@ -1,8 +1,8 @@
 ---
-title: "Impact of GKPro Sponsored Skins Matches on OTB & GKPro Webtraffic "
+title: "Impact of GKPro Sponsorship on OTB & GKPro Webtraffic "
 date: 2020-12-18
 description: |
-  An example of leveraging free data to impart value to a company, with code.
+  An example of leveraging free data to benefit a company, with code.
   
 author:
   - name: Christopher Loan

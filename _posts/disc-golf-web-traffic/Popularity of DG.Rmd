@@ -1,5 +1,5 @@
 ---
-title: "Disc Golf Popularity"
+title: "Quantifying Pandemic-Era Growth in Disc Golf by Webtraffic"
 author: "Christopher Loan"
 date: 2020-12-26
 description: |

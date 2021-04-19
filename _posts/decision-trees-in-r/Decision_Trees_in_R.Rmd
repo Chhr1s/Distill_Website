@@ -1,5 +1,5 @@
 ---
-title: 'Tidymodels: Decision Tree Learning in R'
+title: 'An introduction to `{Tidymodels}`: Decision Tree Learning in R'
 description: |
   Exploring Decision Tree Variants in `{tidymodels}`.
 author: 
