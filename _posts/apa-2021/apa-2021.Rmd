@@ -44,15 +44,11 @@ library(tidyverse)
 
 # simulating data: skip this if you just want `{glmertree}` model specification
 
-In a perfect world, I'd be able to share the data with you and use the same data used on the poster without anything bad happening; however, we have data privacy for a reason. I still want to show you how to specify these models, and I want you to have the option to follow along. The supplemental data can be simulated on your machine if you follow the instructions on [another blog post of mine](www.christopherloan.com/simulating-2-level-data-for-apa-2021-supplemental/). 
+In a perfect world, I'd be able to share the data with you and use the same data used on the poster without anything bad happening; however, we have data privacy for a reason. I still want to show you how to specify these models, and I want you to have the option to follow along. The supplemental data can be simulated on your machine if you follow the instructions on [another blog post of mine](www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/). 
 
 If you don't care about the simulation and just want to see model specification, you're in the right place.   
 
-We're simulating some with similar size level 1 and level 2 units as our poster, but we're going to omit the cross-classified design just to make this process a bit simpler to follow.
-
-## function to simulate 2 level data with an interaction
-
-There's a million ways to do this, but so you can see every step in simulating multilevel data, I've written it here as a function. This function allows you to specify sample sizes, two main effects, an interaction, and other features of the data. 
+The short of it: I simulate some with similar size level 1 and level 2 units as our poster, but we're going to omit the cross-classified design just to make this process a bit simpler to follow.
 
 ```{r functions, include = FALSE}
 simulate_interaction_w_2_levels <-
@@ -139,10 +135,7 @@ project_theme <-
     plot.title = element_text(size = 25),
     strip.text = element_text(size = 25),
   )
-  
 ```
-
-## making the simulation call
 
 We have 15 level 1 units (number of question in our poster), 71 level 2 units (students in our poster). The level 1 intercept of the outcome is 4.25 with a main effect of 1.25 for x, 2.00 for z, and 0.75 for their interaction. The function also makes a nuisance variable `w`, which does not contribute to the outcome at all. 
 
@@ -162,6 +155,8 @@ sim_dat <-
   ) %>% 
   tibble()
 ```
+
+## MLM parameters with this data, via `{lme4}`
 
 ```{r lmer}
 confirmation_lmer <- 
