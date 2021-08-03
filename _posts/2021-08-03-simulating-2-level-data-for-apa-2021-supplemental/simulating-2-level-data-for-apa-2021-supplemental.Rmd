@@ -1,0 +1,271 @@
+---
+title: "Simulating Multilevel Data"
+description: |
+  Simulating 2-level data for APA 2021 Supplemental, so others can follow along.
+author:
+  - name: Christopher Loan
+    url: {}
+date: 2021-08-03
+categories:
+  - Conference
+  - Multi-Level Modeling
+  - MLM
+  - Plotting
+  - Simulated Data
+  - Tutorial 
+output:
+  distill::distill_article:
+    self_contained: false
+    code_folding: show code
+    toc: true
+draft: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r libs}
+library(tidyverse)
+library(glmertree)
+```
+
+This post is meant for two audiences:
+
+1) anyone who wants to follow along with my [APA 2021 Supplemental Material](www.christopherloan.com/blog/apa-2021/) or see descriptive statistics on simulated variables
+2) someone looking to simulate their own interaction with nested data
+
+My code is available for use and alteration, but please give credit via citations. Anyways, let's get into it!
+
+# Goal
+
+Simulate data to use in my [APA 2021 Supplemental Material Post](www.christopherloan.com/blog/apa-2021/)
+
+**NUANCE:**
+We're simulating some data with a similar size to the data used in the APA 2021 poster (N = 1065), but with a simpler structure so it's easier to understand. In the poster, we used a cross-classified design which took into account participant-level and item-level variance. The simpler structure we specify here is just using participant-level variance (our hypothetical level 2 unit). Each of the 15 items — our theoretical level 1 unit — is nested within a participant (n = 71), meaning we only estimate 1 random effect instead of the 2 we had in our poster.
+
+# Function to simulate 2 level data with an interaction
+
+There's a million ways to do this, but so you can see every step in simulating multilevel data, I've written it here as a function. This function allows you to specify sample sizes, two main effects, an interaction, and other features of the data. 
+
+```{r functions, include = FALSE}
+simulate_interaction_w_2_levels <-
+  function(
+    n, ## number level 1 units
+    j, ## number level 2 units
+    intercept_lv1, ## intercept at level 1
+    main_x, ## main effect of x
+    main_z, ## main effect of z
+    interaction, ## interaction of x and z
+    residual_var_sd_lv1, ## standard deviation of residuals at level 1
+    random_int_mean_lv2, ## mean of random intercept at level 2
+    random_int_sd_lv2, ## standard deviation of random intercept at level 2,
+    start_seed = 123
+  ){
+    
+    ## placeholder for level 2 outcomes
+    outcomes_j <- vector("list", j)
+    
+    ## for each variable, make list 
+    ## as long as level 2
+    ## fill each element with a list of level 1 outcomes
+    
+    
+    x <- vector("list", j) 
+    z <- vector("list", j) 
+    w <- vector("list", j) 
+    
+    ## School distribution (intercept at level 2)
+    ## Standard deviation of random intercept at level 2
+    set.seed(start_seed)
+    
+    a_j <- rnorm(j, random_int_mean_lv2, random_int_sd_lv2)
+    
+    for(i in 1:j) {
+      
+      ## make a level 1 predictor variable:
+      ## set multiple seeds that change each iteration
+      ## prevents identical cases with seed
+      
+      set.seed(start_seed+i)
+      x[[i]] <- rnorm(n)
+      set.seed(start_seed-i)
+      z[[i]] <- rnorm(n)
+      set.seed(-start_seed + i)
+      outcomes_j[[i]] <- 
+        rnorm(
+          n, 
+          intercept_lv1 + 
+            interaction*z[[i]]*x[[i]] + 
+            main_x*x[[i]] + 
+            main_z*z[[i]] + 
+            a_j[i], 
+          ## standard deviation of residual variance
+          residual_var_sd_lv1
+        )
+      set.seed(start_seed*197+197*i)
+      w[[i]] <- rnorm(n)
+    }
+    
+    outcomes_df <- 
+      data.frame(
+        id = rep(1:j, each = n),
+        x = unlist(x),
+        z = unlist(z),
+        outcome = unlist(outcomes_j),
+        w = unlist(w)
+      )
+    
+    return(outcomes_df)
+  }
+```
+
+```{r plot_theme, include=F}
+project_theme <- 
+  theme(
+    axis.line = element_line(size = 3, lineend = 'round'), 
+    legend.position = 'none',
+    plot.title.position = 'plot', 
+    panel.grid.minor = element_blank(),
+    axis.title.x = element_text(size = 18),
+    axis.text = element_text(size = 16),
+    axis.title.y = element_text(size = 20),
+    plot.title = element_text(size = 25),
+    strip.text = element_text(size = 25),
+  )
+```
+
+# Simulating data
+
+We have 15 level 1 units, 71 level 2 units. The level 1 intercept of the outcome is 4.25 with a main effect of 1.25 for x, 2.00 for z, and 0.75 for their interaction. The function also makes a nuisance variable `w`, which does not contribute to the outcome at all. 
+
+```{r simulate}
+sim_dat <- 
+  simulate_interaction_w_2_levels(
+    n = 15, ## number level 1 units at each level 2
+    j = 71, ## number level 2 units
+    intercept_lv1 = 4.25, ## intercept at level 1
+    main_x = 1.25, ## main effect of x
+    main_z = 2.00, ## main effect of z
+    interaction = 0.75, ## interaction of x and z
+    residual_var_sd_lv1 = 2.00, ## standard deviation of residuals at level 1
+    random_int_mean_lv2 = 0, ## mean of random intercept at level 2
+    random_int_sd_lv2 = 1.00, ## standard deviation of random intercept at level 2,
+    start_seed = 123 ## ensure you can reproduce 
+  ) %>% 
+  tibble()
+```
+
+# Describing data & verifying simulation results
+
+Here are the overall averages for the `r nrow(sim_dat)` cases, with `r length(unique(sim_dat$id))` level two units.
+
+```{r describe}
+sim_dat %>% 
+  summarize(
+    x_mean = mean(x), 
+    x_sd = sd(x),
+    z_mean = mean(z),
+    z_sd = sd(z),
+    outcome_mean = mean(outcome), 
+    outcome_sd = sd(outcome), 
+    w_mean = mean(w), # w has no relation to outcome
+    w_sd = sd(w) # w has no relation to outcome
+  )
+```
+
+## Distribution of Variables 
+
+```{r figure 1, fig.width = 8, fig.height = 6}
+figure_1 <- 
+  sim_dat %>% 
+  pivot_longer(
+    cols = -id, 
+    names_to = 'variable',
+    values_to = 'statistic'
+    ) %>% 
+  group_by(variable) %>% 
+  mutate(average_value = mean(statistic)) %>% 
+  ungroup() %>% 
+  ggplot(
+    aes(
+      x = statistic, 
+      fill = variable)
+  ) +
+  colorblindr::scale_fill_OkabeIto() +
+  colorblindr::scale_color_OkabeIto() +
+  geom_vline(aes(xintercept = average_value), size = 1.25, linetype = 2) +
+  geom_density(alpha = 0.7, color = 'black', size = 2) +
+  facet_wrap(~variable, scales = 'free') +
+  labs(
+    y = element_blank(),
+    x = 'Distribution of Simulated Values', 
+    title = 'Figure 1. Distribution of Simulated Variables', 
+    caption = 'Note the scales are free on each plot\nDotted Lines = Average Values') +
+  theme_minimal() +
+  project_theme + 
+  theme(axis.text.y = element_blank())
+figure_1
+```
+
+When you group by the `id`, the simulated averages are normally distributed around the values (Figure 1). 
+
+## Distribution of Group Averages
+
+```{r figure 2, fig.width = 8, fig.height = 6}
+figure_2 <- 
+  sim_dat %>% 
+  group_by(id) %>% 
+  summarize(
+    x = mean(x), 
+    z = mean(z),
+    outcome = mean(outcome), 
+    w = mean(w)
+    ) %>% 
+  pivot_longer(
+    cols = -id, 
+    names_to = 'variable',
+    values_to = 'statistic'
+    ) %>% 
+  group_by(variable) %>% 
+  mutate(average_value = mean(statistic)) %>% 
+  ungroup() %>% 
+  ggplot(
+    aes(
+      x = statistic, 
+      fill = variable)
+  ) +
+  colorblindr::scale_fill_OkabeIto() +
+  colorblindr::scale_color_OkabeIto() +
+  geom_vline(aes(xintercept = average_value), size = 1.25, linetype = 2) +
+  geom_density(alpha = 0.7, color = 'black', size = 2) +
+  facet_wrap(~variable, scales = 'free') +
+  labs(
+    y = element_blank(),
+    x = 'Distribution of Simulated Values (group averages)', 
+    title = 'Figure 2. Distribution of Group Averages for\nSimulated Variables', 
+    caption = 'Note the scales are free on each plot') +
+  theme_minimal() +
+  project_theme + 
+  theme(axis.text.y = element_blank())
+figure_2
+```
+
+# Fitting multilevel model to the data
+
+The simulation looks to have worked as planned. With larger samples, the effects becomes closer to what we specified, obviously, but that was omitted for brevity. Let's see what this data looks like with an `{lme4}` to be sure. 
+
+```{r lmer}
+confirmation_lmer <- 
+  lmer(
+    data = sim_dat, 
+    formula = outcome ~ x * z + w + # equivalent to x + z + x : z
+      (1 | id)
+  )
+summary(confirmation_lmer)
+```
+
+We see how closely the MLM estimates identify the simulated effects. We see small standard errors and large t-values for these estimates, too. As we'd like to see, `w` does not have significant associations with the outcome.
+
+All right. This will be the data we're using in the [next post](www.christopherloan.com/blog/apa-2021/)

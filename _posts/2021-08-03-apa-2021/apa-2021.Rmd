@@ -1,0 +1,246 @@
+---
+title: "APA 2021 Supplemental Material"
+description: 
+  "Supplmental Material for the Application of Generalized Linear Mixed-Effects Model Regression Trees with Multi-Modal Data poster presented at APA 2021, co-authored with Matthew C. Graham, Edwin M. Zorilla, Idalis Villanueva Alarcon, Jenefer Husman, & Keith Zvoch"
+author:
+  - name: Christopher M. Loan
+    url: {}
+date: 2021-08-03
+categories:
+  - Collaboration
+  - Conference
+  - Machine Learning
+  - Multi-Level Modeling
+  - MLM
+  - Plotting
+  - Simulated Data
+  - Tutorial 
+output:
+  distill::distill_article:
+    self_contained: false
+    code_folding: show code
+    toc: true
+draft: true
+---
+
+The purpose of these supplemental materials is to walk users through using the `{glmertree}` package and provide references/supplemental reading for our poster. Refer to the Table of Contents (or scroll down) if you're just here for references. 
+
+For readability, code is included but can be hidden by clicking `show code`
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+I default to writing code in the style of the [`{tidyverse}`](https://www.tidyverse.org/), so please see that if you're unfamiliar with this style of coding. Essentially, you can "pipe" objects—typically data—from one function to another. If you're using `R` these days, you've probably seen it, even if you don't use it. 
+
+So everything will be done with `{tidyverse}` functions and the`{glmertree}` package. I'll compare some `{glmertree}` results to `{lme4}`, but this is loaded via `{glmertree}`  anyways. I'll try and use `::` operator to "namespace" functions that aren't from the aforementioned packages, so you know what to install and from where it's originating
+
+# libraries
+
+```{r libs}
+library(glmertree)
+library(tidyverse)
+```
+
+# simulating data: skip this if you just want `{glmertree}` model specification
+
+In a perfect world, I'd be able to share the data with you and use the same data used on the poster without anything bad happening; however, we have data privacy for a reason. I still want to show you how to specify these models, and I want you to have the option to follow along. The supplemental data can be simulated on your machine if you follow the instructions on [another blog post of mine](www.christopherloan.com/simulating-2-level-data-for-apa-2021-supplemental/). 
+
+If you don't care about the simulation and just want to see model specification, you're in the right place.   
+
+We're simulating some with similar size level 1 and level 2 units as our poster, but we're going to omit the cross-classified design just to make this process a bit simpler to follow.
+
+## function to simulate 2 level data with an interaction
+
+There's a million ways to do this, but so you can see every step in simulating multilevel data, I've written it here as a function. This function allows you to specify sample sizes, two main effects, an interaction, and other features of the data. 
+
+```{r functions, include = FALSE}
+simulate_interaction_w_2_levels <-
+  function(
+    n, ## number level 1 units
+    j, ## number level 2 units
+    intercept_lv1, ## intercept at level 1
+    main_x, ## main effect of x
+    main_z, ## main effect of z
+    interaction, ## interaction of x and z
+    residual_var_sd_lv1, ## standard deviation of residuals at level 1
+    random_int_mean_lv2, ## mean of random intercept at level 2
+    random_int_sd_lv2, ## standard deviation of random intercept at level 2,
+    start_seed = 123
+  ){
+    
+    ## placeholder for level 2 outcomes
+    outcomes_j <- vector("list", j)
+    
+    ## for each variable, make list 
+    ## as long as level 2
+    ## fill each element with a list of level 1 outcomes
+    
+    
+    x <- vector("list", j) 
+    z <- vector("list", j) 
+    w <- vector("list", j) 
+    
+    ## School distribution (intercept at level 2)
+    ## Standard deviation of random intercept at level 2
+    set.seed(start_seed)
+    
+    a_j <- rnorm(j, random_int_mean_lv2, random_int_sd_lv2)
+    
+    for(i in 1:j) {
+      
+      ## make a level 1 predictor variable:
+      ## set multiple seeds that change each iteration
+      ## prevents identical cases with seed
+      
+      set.seed(start_seed+i)
+      x[[i]] <- rnorm(n)
+      set.seed(start_seed-i)
+      z[[i]] <- rnorm(n)
+      set.seed(-start_seed + i)
+      outcomes_j[[i]] <- 
+        rnorm(
+          n, 
+          intercept_lv1 + 
+            interaction*z[[i]]*x[[i]] + 
+            main_x*x[[i]] + 
+            main_z*z[[i]] + 
+            a_j[i], 
+          ## standard deviation of residual variance
+          residual_var_sd_lv1
+        )
+      set.seed(start_seed*197+197*i)
+      w[[i]] <- rnorm(n)
+    }
+    
+    outcomes_df <- 
+      data.frame(
+        id = rep(1:j, each = n),
+        x = unlist(x),
+        z = unlist(z),
+        outcome = unlist(outcomes_j),
+        w = unlist(w)
+      )
+    
+    return(outcomes_df)
+  }
+```
+
+```{r plot_theme, include=F}
+project_theme <- 
+  theme(
+    axis.line = element_line(size = 3, lineend = 'round'), 
+    legend.position = 'none',
+    plot.title.position = 'plot', 
+    panel.grid.minor = element_blank(),
+    axis.title.x = element_text(size = 18),
+    axis.text = element_text(size = 16),
+    axis.title.y = element_text(size = 20),
+    plot.title = element_text(size = 25),
+    strip.text = element_text(size = 25),
+  )
+  
+```
+
+## making the simulation call
+
+We have 15 level 1 units (number of question in our poster), 71 level 2 units (students in our poster). The level 1 intercept of the outcome is 4.25 with a main effect of 1.25 for x, 2.00 for z, and 0.75 for their interaction. The function also makes a nuisance variable `w`, which does not contribute to the outcome at all. 
+
+```{r simulate}
+sim_dat <- 
+  simulate_interaction_w_2_levels(
+    n = 15, ## number level 1 units at each level 2
+    j = 71, ## number level 2 units
+    intercept_lv1 = 4.25, ## intercept at level 1
+    main_x = 1.25, ## main effect of x
+    main_z = 2.00, ## main effect of z
+    interaction = 0.75, ## interaction of x and z
+    residual_var_sd_lv1 = 2.00, ## standard deviation of residuals at level 1
+    random_int_mean_lv2 = 0, ## mean of random intercept at level 2
+    random_int_sd_lv2 = 1.00, ## standard deviation of random intercept at level 2,
+    start_seed = 123 ## ensure you can reproduce 
+  ) %>% 
+  tibble()
+```
+
+```{r lmer}
+confirmation_lmer <- 
+  lmer(
+    data = sim_dat, 
+    formula = outcome ~ x * z + w + # equivalent to x + z + x : z
+      (1 | id)
+  )
+summary(confirmation_lmer)
+```
+
+We see how closely the MLM estimates identify the simulated effects. We see small standard errors and large t-values for these estimates, too. As we'd like to see, `w` does not have significant associations with the outcome.
+
+# glmertrees
+
+Specifying models with `{glmertree}` is very similar to `{lme4}`. 
+
+The formula is slightly different; rather than adding random effects, you specify the model as follows: `forumla = fixed effects | random effects | splitting variables`
+
+Another consideration is that you're using parameter instability tests in addition to MLMs, so you want to specify the `id` variable to the `cluster = id` argument as well. 
+
+Let's run a very exploratory model here. This is everything but the kitchen sink: an intercept-only model, with random intercept for each level 2 unit, and allowing splits to be made by any of the variables in the data.
+
+```{r tree 1}
+tree_1 <- 
+  lmertree(
+    data = sim_dat, 
+    formula = 
+      outcome ~ 1 | (1 | id) | x + z + w, 
+    cluster = id, 
+  )
+```
+
+Let's look at plotted results first; adding `ask = FALSE` to your code lets you see the plotted decision tree and the random effects caterpillar plot without having to click `<return>` on your keyboard.
+
+```{r plot tree 1, fig.width = 8, fig.height = 6}
+plot(tree_1, ask = FALSE)
+```
+
+Our model correctly identified the influence of `z` and `x`, but we should probably   
+
+```{r tree 2}
+tree_2 <- 
+  lmertree(
+    data = sim_dat, 
+    formula = 
+      outcome ~ 1 | (1 | id) | x + z + w, 
+    cluster = id, 
+    minsize = 0.20*nrow(sim_dat),
+    bonferroni = T,
+    alpha = 0.001
+  )
+```
+
+```{r plot tree 2, fig.width = 8, fig.height = 6}
+plot(tree_2$tree, ask = F)
+```
+
+```{r tree 3}
+tree_3 <- 
+  lmertree(
+    data = sim_dat, 
+    formula = 
+      outcome ~ x * z | (1 | id) | w, 
+    cluster = id, 
+    #minsize = 0.50*nrow(sim_dat),
+    alpha = 0.001
+  )
+```
+
+```{r plot tree 3, fig.width = 8, fig.height = 6}
+plot(tree_3$tree, ask = F)
+```
+
+```{r}
+summary(tree_3$lmer)
+```
+
+```{r}
+summary(tree_3$tree)
+```
+
