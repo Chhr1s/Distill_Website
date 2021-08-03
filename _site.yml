@@ -24,6 +24,8 @@ navbar:
           href: https://chhr1s.github.io/GA_DOE_Public/index.html
         - text: Shiny App Neural Net (Beta)
           href: https://chhr1s.shinyapps.io/Neural_Net_Predictions/
+        - text: Data & Plot Downloader
+          href: https://chhr1s.shinyapps.io/Loan_Merly_EDLD653_FInal/
     - icon: fa fa-github
       href: https://github.com/Chhr1s
     - icon: fa fa-linkedin
