@@ -18,7 +18,6 @@ output:
     self_contained: false
     code_folding: show code
     toc: true
-draft: false
 ---
 
 
