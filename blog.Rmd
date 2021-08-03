@@ -1,6 +1,6 @@
 ---
 title: "Blog"
-listing: posts
+listing: blog
 output_dir: "docs"
 output: distill::distill_article
 ---

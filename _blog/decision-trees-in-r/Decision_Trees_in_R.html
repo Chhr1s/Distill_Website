@@ -1,0 +1,2552 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007ba5; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #007ba5; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #007ba5; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #5e5e5e; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
+  <!--radix_placeholder_meta_tags-->
+  <title>An introduction to `{Tidymodels}`: Decision Tree Learning in R</title>
+
+  <meta property="description" itemprop="description" content="Exploring Decision Tree Variants in `{tidymodels}`."/>
+
+
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2020-06-02"/>
+  <meta property="article:created" itemprop="dateCreated" content="2020-06-02"/>
+  <meta name="article:author" content="Cianna Bedford-Petersen"/>
+  <meta name="article:author" content="Christopher Loan"/>
+  <meta name="article:author" content="Brendan Cullen"/>
+
+  <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+  <meta property="og:title" content="An introduction to `{Tidymodels}`: Decision Tree Learning in R"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Exploring Decision Tree Variants in `{tidymodels}`."/>
+  <meta property="og:locale" content="en_US"/>
+
+  <!--  https://dev.twitter.com/cards/types/summary -->
+  <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:title" content="An introduction to `{Tidymodels}`: Decision Tree Learning in R"/>
+  <meta property="twitter:description" content="Exploring Decision Tree Variants in `{tidymodels}`."/>
+
+  <!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+  <script type="text/json" id="radix-rmarkdown-metadata">
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","categories"]}},"value":[{"type":"character","attributes":{},"value":["An introduction to `{Tidymodels}`: Decision Tree Learning in R"]},{"type":"character","attributes":{},"value":["Exploring Decision Tree Variants in `{tidymodels}`.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Cianna Bedford-Petersen"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Christopher Loan"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Brendan Cullen"]}]}]},{"type":"character","attributes":{},"value":["2020-06-02"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","code_folding","toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"character","attributes":{},"value":["show code"]},{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["Machine Learning","Decision Trees","Model Comparisons","Plotting","Public Data","Collaboration","Tutorial"]}]}
+  </script>
+  <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["Decision_Trees_in_R_files/anchor-4.2.2/anchor.min.js","Decision_Trees_in_R_files/bowser-1.9.3/bowser.min.js","Decision_Trees_in_R_files/distill-2.2.21/template.v2.js","Decision_Trees_in_R_files/figure-html5/unnamed-chunk-11-1.png","Decision_Trees_in_R_files/figure-html5/unnamed-chunk-12-1.png","Decision_Trees_in_R_files/figure-html5/unnamed-chunk-15-1.png","Decision_Trees_in_R_files/figure-html5/unnamed-chunk-16-1.png","Decision_Trees_in_R_files/figure-html5/unnamed-chunk-5-1.png","Decision_Trees_in_R_files/figure-html5/unnamed-chunk-6-1.png","Decision_Trees_in_R_files/header-attrs-2.6/header-attrs.js","Decision_Trees_in_R_files/jquery-1.11.3/jquery.min.js","Decision_Trees_in_R_files/popper-2.6.0/popper.min.js","Decision_Trees_in_R_files/tippy-6.2.7/tippy-bundle.umd.min.js","Decision_Trees_in_R_files/tippy-6.2.7/tippy-light-border.css","Decision_Trees_in_R_files/tippy-6.2.7/tippy.css","Decision_Trees_in_R_files/tippy-6.2.7/tippy.umd.min.js","Decision_Trees_in_R_files/webcomponents-2.0.0/webcomponents.js","fallmembershipreport_20192020.xlsx","train.csv"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+  <!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+  <style type="text/css">
+
+  body {
+    background-color: white;
+  }
+
+  .pandoc-table {
+    width: 100%;
+  }
+
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
+
+  .pandoc-table th:not([align]) {
+    text-align: left;
+  }
+
+  .pagedtable-footer {
+    font-size: 15px;
+  }
+
+  d-byline .byline {
+    grid-template-columns: 2fr 2fr;
+  }
+
+  d-byline .byline h3 {
+    margin-block-start: 1.5em;
+  }
+
+  d-byline .byline .authors-affiliations h3 {
+    margin-block-start: 0.5em;
+  }
+
+  .authors-affiliations .orcid-id {
+    width: 16px;
+    height:16px;
+    margin-left: 4px;
+    margin-right: 4px;
+    vertical-align: middle;
+    padding-bottom: 2px;
+  }
+
+  d-title .dt-tags {
+    margin-top: 1em;
+    grid-column: text;
+  }
+
+  .dt-tags .dt-tag {
+    text-decoration: none;
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0em 0.4em;
+    margin-right: 0.5em;
+    margin-bottom: 0.4em;
+    font-size: 70%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  d-article table.gt_table td,
+  d-article table.gt_table th {
+    border-bottom: none;
+  }
+
+  .html-widget {
+    margin-bottom: 2.0em;
+  }
+
+  .l-screen-inset {
+    padding-right: 16px;
+  }
+
+  .l-screen .caption {
+    margin-left: 10px;
+  }
+
+  .shaded {
+    background: rgb(247, 247, 247);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .html-widget {
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .shaded-content {
+    background: white;
+  }
+
+  .text-output {
+    margin-top: 0;
+    line-height: 1.5em;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  d-article {
+    padding-top: 2.5rem;
+    padding-bottom: 30px;
+  }
+
+  d-appendix {
+    padding-top: 30px;
+  }
+
+  d-article>p>img {
+    width: 100%;
+  }
+
+  d-article h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  d-article h3 {
+    margin-top: 1.5rem;
+  }
+
+  d-article iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.0em;
+    width: 100%;
+  }
+
+  /* Tweak code blocks */
+
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: auto;
+  }
+
+  d-article div.sourceCode {
+    background-color: white;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 10px;
+    font-size: 12px;
+    border-left: 2px solid rgba(0,0,0,0.1);
+  }
+
+  d-article pre {
+    font-size: 12px;
+    color: black;
+    background: none;
+    margin-top: 0;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  d-article pre a {
+    border-bottom: none;
+  }
+
+  d-article pre a:hover {
+    border-bottom: none;
+    text-decoration: underline;
+  }
+
+  d-article details {
+    grid-column: text;
+    margin-bottom: 0.8em;
+  }
+
+  @media(min-width: 768px) {
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: visible !important;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 18px;
+    font-size: 14px;
+  }
+
+  d-article pre {
+    font-size: 14px;
+  }
+
+  }
+
+  figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  /* CSS for d-contents */
+
+  .d-contents {
+    grid-column: text;
+    color: rgba(0,0,0,0.8);
+    font-size: 0.9em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    padding-left: 0.25em;
+    justify-self: start;
+  }
+
+  @media(min-width: 1000px) {
+    .d-contents.d-contents-float {
+      height: 0;
+      grid-column-start: 1;
+      grid-column-end: 4;
+      justify-self: center;
+      padding-right: 3em;
+      padding-left: 2em;
+    }
+  }
+
+  .d-contents nav h3 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+
+  .d-contents li {
+    list-style-type: none
+  }
+
+  .d-contents nav > ul {
+    padding-left: 0;
+  }
+
+  .d-contents ul {
+    padding-left: 1em
+  }
+
+  .d-contents nav ul li {
+    margin-top: 0.6em;
+    margin-bottom: 0.2em;
+  }
+
+  .d-contents nav a {
+    font-size: 13px;
+    border-bottom: none;
+    text-decoration: none
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .d-contents nav a:hover {
+    text-decoration: underline solid rgba(0, 0, 0, 0.6)
+  }
+
+  .d-contents nav > ul > li > a {
+    font-weight: 600;
+  }
+
+  .d-contents nav > ul > li > ul {
+    font-weight: inherit;
+  }
+
+  .d-contents nav > ul > li > ul > li {
+    margin-top: 0.2em;
+  }
+
+
+  .d-contents nav ul {
+    margin-top: 0;
+    margin-bottom: 0.25em;
+  }
+
+  .d-article-with-toc h2:nth-child(2) {
+    margin-top: 0;
+  }
+
+
+  /* Figure */
+
+  .figure {
+    position: relative;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+  }
+
+  .figure img {
+    width: 100%;
+  }
+
+  .figure .caption {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+
+  .figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  .figure .caption a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .figure .caption b,
+  .figure .caption strong, {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 1.0);
+  }
+
+  /* Citations */
+
+  d-article .citation {
+    color: inherit;
+    cursor: inherit;
+  }
+
+  div.hanging-indent{
+    margin-left: 1em; text-indent: -1em;
+  }
+
+  /* Citation hover box */
+
+  .tippy-box[data-theme~=light-border] {
+    background-color: rgba(250, 250, 250, 0.95);
+  }
+
+  .tippy-content > p {
+    margin-bottom: 0;
+    padding: 2px;
+  }
+
+
+  /* Tweak 1000px media break to show more text */
+
+  @media(min-width: 1000px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 16px;
+    }
+
+    .grid {
+      grid-column-gap: 16px;
+    }
+
+    d-article {
+      font-size: 1.06rem;
+      line-height: 1.7em;
+    }
+    figure .caption, .figure .caption, figure figcaption {
+      font-size: 13px;
+    }
+  }
+
+  @media(min-width: 1180px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 32px;
+    }
+
+    .grid {
+      grid-column-gap: 32px;
+    }
+  }
+
+
+  /* Get the citation styles for the appendix (not auto-injected on render since
+     we do our own rendering of the citation appendix) */
+
+  d-appendix .citation-appendix,
+  .d-appendix .citation-appendix {
+    font-size: 11px;
+    line-height: 15px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 18px;
+    border-radius: 3px;
+    color: rgba(150, 150, 150, 1);
+    overflow: hidden;
+    margin-top: -12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Include appendix styles here so they can be overridden */
+
+  d-appendix {
+    contain: layout style;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-top: 60px;
+    margin-bottom: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0,0,0,0.5);
+    padding-top: 60px;
+    padding-bottom: 48px;
+  }
+
+  d-appendix h3 {
+    grid-column: page-start / text-start;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 1em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.65);
+  }
+
+  d-appendix h3 + * {
+    margin-top: 1em;
+  }
+
+  d-appendix ol {
+    padding: 0 0 0 15px;
+  }
+
+  @media (min-width: 768px) {
+    d-appendix ol {
+      padding: 0 0 0 30px;
+      margin-left: -30px;
+    }
+  }
+
+  d-appendix li {
+    margin-bottom: 1em;
+  }
+
+  d-appendix a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  d-appendix > * {
+    grid-column: text;
+  }
+
+  d-appendix > d-footnote-list,
+  d-appendix > d-citation-list,
+  d-appendix > distill-appendix {
+    grid-column: screen;
+  }
+
+  /* Include footnote styles here so they can be overridden */
+
+  d-footnote-list {
+    contain: layout style;
+  }
+
+  d-footnote-list > * {
+    grid-column: text;
+  }
+
+  d-footnote-list a.footnote-backlink {
+    color: rgba(0,0,0,0.3);
+    padding-left: 0.5em;
+  }
+
+
+
+  /* Anchor.js */
+
+  .anchorjs-link {
+    /*transition: all .25s linear; */
+    text-decoration: none;
+    border-bottom: none;
+  }
+  *:hover > .anchorjs-link {
+    margin-left: -1.125em !important;
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  /* Social footer */
+
+  .social_footer {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.67);
+  }
+
+  .disqus-comments {
+    margin-right: 30px;
+  }
+
+  .disqus-comment-count {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+
+  #disqus_thread {
+    margin-top: 30px;
+  }
+
+  .article-sharing a {
+    border-bottom: none;
+    margin-right: 8px;
+  }
+
+  .article-sharing a:hover {
+    border-bottom: none;
+  }
+
+  .sidebar-section.subscribe {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .subscribe p {
+    margin-bottom: 0.5em;
+  }
+
+
+  .article-footer .subscribe {
+    font-size: 15px;
+    margin-top: 45px;
+  }
+
+
+  .sidebar-section.custom {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .custom p {
+    margin-bottom: 0.5em;
+  }
+
+  /* Styles for listing layout (hide title) */
+  .layout-listing d-title, .layout-listing .d-title {
+    display: none;
+  }
+
+  /* Styles for posts lists (not auto-injected) */
+
+
+  .posts-with-sidebar {
+    padding-left: 45px;
+    padding-right: 45px;
+  }
+
+  .posts-list .description h2,
+  .posts-list .description p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .posts-list .description h2 {
+    font-weight: 700;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .posts-list h2.post-tag {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 12px;
+  }
+  .posts-list {
+    margin-top: 60px;
+    margin-bottom: 24px;
+  }
+
+  .posts-list .post-preview {
+    text-decoration: none;
+    overflow: hidden;
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 24px 0;
+  }
+
+  .post-preview-last {
+    border-bottom: none !important;
+  }
+
+  .posts-list .posts-list-caption {
+    grid-column: screen;
+    font-weight: 400;
+  }
+
+  .posts-list .post-preview h2 {
+    margin: 0 0 6px 0;
+    line-height: 1.2em;
+    font-style: normal;
+    font-size: 24px;
+  }
+
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.4em;
+    font-size: 16px;
+  }
+
+  .posts-list .post-preview .thumbnail {
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    position: relative;
+    max-width: 500px;
+  }
+  .posts-list .post-preview img {
+    width: 100%;
+    display: block;
+  }
+
+  .posts-list .metadata {
+    font-size: 12px;
+    line-height: 1.4em;
+    margin-bottom: 18px;
+  }
+
+  .posts-list .metadata > * {
+    display: inline-block;
+  }
+
+  .posts-list .metadata .publishedDate {
+    margin-right: 2em;
+  }
+
+  .posts-list .metadata .dt-authors {
+    display: block;
+    margin-top: 0.3em;
+    margin-right: 2em;
+  }
+
+  .posts-list .dt-tags {
+    display: block;
+    line-height: 1em;
+  }
+
+  .posts-list .dt-tags .dt-tag {
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0.3em 0.4em;
+    margin-right: 0.2em;
+    margin-bottom: 0.4em;
+    font-size: 60%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .posts-list img {
+    opacity: 1;
+  }
+
+  .posts-list img[data-src] {
+    opacity: 0;
+  }
+
+  .posts-more {
+    clear: both;
+  }
+
+
+  .posts-sidebar {
+    font-size: 16px;
+  }
+
+  .posts-sidebar h3 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .sidebar-section {
+    margin-bottom: 30px;
+  }
+
+  .categories ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .categories li {
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 0;
+  }
+
+  .categories li>a {
+    border-bottom: none;
+  }
+
+  .categories li>a:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  }
+
+  .categories .active {
+    font-weight: 600;
+  }
+
+  .categories .category-count {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+
+  @media(min-width: 768px) {
+    .posts-list .post-preview h2 {
+      font-size: 26px;
+    }
+    .posts-list .post-preview .thumbnail {
+      float: right;
+      width: 30%;
+      margin-bottom: 0;
+    }
+    .posts-list .post-preview .description {
+      float: left;
+      width: 45%;
+    }
+    .posts-list .post-preview .metadata {
+      float: left;
+      width: 20%;
+      margin-top: 8px;
+    }
+    .posts-list .post-preview p {
+      margin: 0 0 12px 0;
+      line-height: 1.5em;
+      font-size: 16px;
+    }
+    .posts-with-sidebar .posts-list {
+      float: left;
+      width: 75%;
+    }
+    .posts-with-sidebar .posts-sidebar {
+      float: right;
+      width: 20%;
+      margin-top: 60px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+  }
+
+
+  /* Improve display for browsers without grid (IE/Edge <= 15) */
+
+  .downlevel {
+    line-height: 1.6em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+  }
+
+  .downlevel .d-title {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .downlevel .d-title h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+    margin: 0 0 0.5rem;
+  }
+
+  .downlevel .d-title p {
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.55em;
+    margin-top: 0;
+  }
+
+  .downlevel .d-byline {
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    font-size: 0.8rem;
+    line-height: 1.8em;
+  }
+
+  .downlevel .section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .downlevel .d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+
+  .downlevel .d-appendix {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.5);
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+
+  .downlevel .footnotes ol {
+    padding-left: 13px;
+  }
+
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  @media(min-width: 768px) {
+    .downlevel .base-grid,
+    .downlevel .distill-header,
+    .downlevel .d-title,
+    .downlevel .d-abstract,
+    .downlevel .d-article,
+    .downlevel .d-appendix,
+    .downlevel .distill-appendix,
+    .downlevel .d-byline,
+    .downlevel .d-footnote-list,
+    .downlevel .d-citation-list,
+    .downlevel .distill-footer,
+    .downlevel .appendix-bottom,
+    .downlevel .posts-container {
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 900px;
+  }
+  }
+
+  .downlevel pre code {
+    display: block;
+    border-left: 2px solid rgba(0, 0, 0, .1);
+    padding: 0 0 0 20px;
+    font-size: 14px;
+  }
+
+  .downlevel code, .downlevel pre {
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  .downlevel .posts-list .post-preview {
+    color: inherit;
+  }
+
+
+
+  </style>
+
+  <script type="application/javascript">
+
+  function is_downlevel_browser() {
+    if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                   window.navigator.userAgent)) {
+      return true;
+    } else {
+      return window.load_distill_framework === undefined;
+    }
+  }
+
+  // show body when load is complete
+  function on_load_complete() {
+
+    // add anchors
+    if (window.anchors) {
+      window.anchors.options.placement = 'left';
+      window.anchors.add('d-article > h2, d-article > h3, d-article > h4, d-article > h5');
+    }
+
+
+    // set body to visible
+    document.body.style.visibility = 'visible';
+
+    // force redraw for leaflet widgets
+    if (window.HTMLWidgets) {
+      var maps = window.HTMLWidgets.findAll(".leaflet");
+      $.each(maps, function(i, el) {
+        var map = this.getMap();
+        map.invalidateSize();
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.TileLayer)
+            layer.redraw();
+        });
+      });
+    }
+
+    // trigger 'shown' so htmlwidgets resize
+    $('d-article').trigger('shown');
+  }
+
+  function init_distill() {
+
+    init_common();
+
+    // create front matter
+    var front_matter = $('<d-front-matter></d-front-matter>');
+    $('#distill-front-matter').wrap(front_matter);
+
+    // create d-title
+    $('.d-title').changeElementType('d-title');
+
+    // create d-byline
+    var byline = $('<d-byline></d-byline>');
+    $('.d-byline').replaceWith(byline);
+
+    // create d-article
+    var article = $('<d-article></d-article>');
+    $('.d-article').wrap(article).children().unwrap();
+
+    // move posts container into article
+    $('.posts-container').appendTo($('d-article'));
+
+    // create d-appendix
+    $('.d-appendix').changeElementType('d-appendix');
+
+    // flag indicating that we have appendix items
+    var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+    // replace footnotes with <d-footnote>
+    $('.footnote-ref').each(function(i, val) {
+      appendix = true;
+      var href = $(this).attr('href');
+      var id = href.replace('#', '');
+      var fn = $('#' + id);
+      var fn_p = $('#' + id + '>p');
+      fn_p.find('.footnote-back').remove();
+      var text = fn_p.html();
+      var dtfn = $('<d-footnote></d-footnote>');
+      dtfn.html(text);
+      $(this).replaceWith(dtfn);
+    });
+    // remove footnotes
+    $('.footnotes').remove();
+
+    // move refs into #references-listing
+    $('#references-listing').replaceWith($('#refs'));
+
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      var id = $(this).attr('id');
+      $('.d-contents a[href="#' + id + '"]').parent().remove();
+      appendix = true;
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+    });
+
+    // show d-appendix if we have appendix content
+    $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+    // localize layout chunks to just output
+    $('.layout-chunk').each(function(i, val) {
+
+      // capture layout
+      var layout = $(this).attr('data-layout');
+
+      // apply layout to markdown level block elements
+      var elements = $(this).children().not('details, div.sourceCode, pre, script');
+      elements.each(function(i, el) {
+        var layout_div = $('<div class="' + layout + '"></div>');
+        if (layout_div.hasClass('shaded')) {
+          var shaded_content = $('<div class="shaded-content"></div>');
+          $(this).wrap(shaded_content);
+          $(this).parent().wrap(layout_div);
+        } else {
+          $(this).wrap(layout_div);
+        }
+      });
+
+
+      // unwrap the layout-chunk div
+      $(this).children().unwrap();
+    });
+
+    // remove code block used to force  highlighting css
+    $('.distill-force-highlighting-css').parent().remove();
+
+    // remove empty line numbers inserted by pandoc when using a
+    // custom syntax highlighting theme
+    $('code.sourceCode a:empty').remove();
+
+    // load distill framework
+    load_distill_framework();
+
+    // wait for window.distillRunlevel == 4 to do post processing
+    function distill_post_process() {
+
+      if (!window.distillRunlevel || window.distillRunlevel < 4)
+        return;
+
+      // hide author/affiliations entirely if we have no authors
+      var front_matter = JSON.parse($("#distill-front-matter").html());
+      var have_authors = front_matter.authors && front_matter.authors.length > 0;
+      if (!have_authors)
+        $('d-byline').addClass('hidden');
+
+      // article with toc class
+      $('.d-contents').parent().addClass('d-article-with-toc');
+
+      // strip links that point to #
+      $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+      // add orcid ids
+      $('.authors-affiliations').find('.author').each(function(i, el) {
+        var orcid_id = front_matter.authors[i].orcidID;
+        if (orcid_id) {
+          var a = $('<a></a>');
+          a.attr('href', 'https://orcid.org/' + orcid_id);
+          var img = $('<img></img>');
+          img.addClass('orcid-id');
+          img.attr('alt', 'ORCID ID');
+          img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
+          a.append(img);
+          $(this).append(a);
+        }
+      });
+
+      // hide elements of author/affiliations grid that have no value
+      function hide_byline_column(caption) {
+        $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+      }
+
+      // affiliations
+      var have_affiliations = false;
+      for (var i = 0; i<front_matter.authors.length; ++i) {
+        var author = front_matter.authors[i];
+        if (author.affiliation !== "&nbsp;") {
+          have_affiliations = true;
+          break;
+        }
+      }
+      if (!have_affiliations)
+        $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+      // published date
+      if (!front_matter.publishedDate)
+        hide_byline_column("Published");
+
+      // document object identifier
+      var doi = $('d-byline').find('h3:contains("DOI")');
+      var doi_p = doi.next().empty();
+      if (!front_matter.doi) {
+        // if we have a citation and valid citationText then link to that
+        if ($('#citation').length > 0 && front_matter.citationText) {
+          doi.html('Citation');
+          $('<a href="#citation"></a>')
+            .text(front_matter.citationText)
+            .appendTo(doi_p);
+        } else {
+          hide_byline_column("DOI");
+        }
+      } else {
+        $('<a></a>')
+           .attr('href', "https://doi.org/" + front_matter.doi)
+           .html(front_matter.doi)
+           .appendTo(doi_p);
+      }
+
+       // change plural form of authors/affiliations
+      if (front_matter.authors.length === 1) {
+        var grid = $('.authors-affiliations');
+        grid.children('h3:contains("Authors")').text('Author');
+        grid.children('h3:contains("Affiliations")').text('Affiliation');
+      }
+
+      // remove d-appendix and d-footnote-list local styles
+      $('d-appendix > style:first-child').remove();
+      $('d-footnote-list > style:first-child').remove();
+
+      // move appendix-bottom entries to the bottom
+      $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+      $('.appendix-bottom').remove();
+
+      // hoverable references
+      $('span.citation[data-cites]').each(function() {
+        var refs = $(this).attr('data-cites').split(" ");
+        var refHtml = refs.map(function(ref) {
+          return "<p>" + $('#ref-' + ref).html() + "</p>";
+        }).join("\n");
+        window.tippy(this, {
+          allowHTML: true,
+          content: refHtml,
+          maxWidth: 500,
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        });
+      });
+
+      // clear polling timer
+      clearInterval(tid);
+
+      // show body now that everything is ready
+      on_load_complete();
+    }
+
+    var tid = setInterval(distill_post_process, 50);
+    distill_post_process();
+
+  }
+
+  function init_downlevel() {
+
+    init_common();
+
+     // insert hr after d-title
+    $('.d-title').after($('<hr class="section-separator"/>'));
+
+    // check if we have authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+    // manage byline/border
+    if (!have_authors)
+      $('.d-byline').remove();
+    $('.d-byline').after($('<hr class="section-separator"/>'));
+    $('.d-byline a').remove();
+
+    // remove toc
+    $('.d-contents').remove();
+
+    // move appendix elements
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+    });
+
+
+    // inject headers into references and footnotes
+    var refs_header = $('<h3></h3>');
+    refs_header.text('References');
+    $('#refs').prepend(refs_header);
+
+    var footnotes_header = $('<h3></h3');
+    footnotes_header.text('Footnotes');
+    $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // remove appendix if it's empty
+    if ($('.d-appendix').children().length === 0)
+      $('.d-appendix').remove();
+
+    // prepend separator above appendix
+    $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+    // trim code
+    $('pre>code').each(function(i, val) {
+      $(this).html($.trim($(this).html()));
+    });
+
+    // move posts-container right before article
+    $('.posts-container').insertBefore($('.d-article'));
+
+    $('body').addClass('downlevel');
+
+    on_load_complete();
+  }
+
+
+  function init_common() {
+
+    // jquery plugin to change element types
+    (function($) {
+      $.fn.changeElementType = function(newType) {
+        var attrs = {};
+
+        $.each(this[0].attributes, function(idx, attr) {
+          attrs[attr.nodeName] = attr.nodeValue;
+        });
+
+        this.replaceWith(function() {
+          return $("<" + newType + "/>", attrs).append($(this).contents());
+        });
+      };
+    })(jQuery);
+
+    // prevent underline for linked images
+    $('a > img').parent().css({'border-bottom' : 'none'});
+
+    // mark non-body figures created by knitr chunks as 100% width
+    $('.layout-chunk').each(function(i, val) {
+      var figures = $(this).find('img, .html-widget');
+      if ($(this).attr('data-layout') !== "l-body") {
+        figures.css('width', '100%');
+      } else {
+        figures.css('max-width', '100%');
+        figures.filter("[width]").each(function(i, val) {
+          var fig = $(this);
+          fig.css('width', fig.attr('width') + 'px');
+        });
+
+      }
+    });
+
+    // auto-append index.html to post-preview links in file: protocol
+    // and in rstudio ide preview
+    $('.post-preview').each(function(i, val) {
+      if (window.location.protocol === "file:")
+        $(this).attr('href', $(this).attr('href') + "index.html");
+    });
+
+    // get rid of index.html references in header
+    if (window.location.protocol !== "file:") {
+      $('.distill-site-header a[href]').each(function(i,val) {
+        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+      });
+    }
+
+    // add class to pandoc style tables
+    $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+    $('.kable-table').children('table').addClass('pandoc-table');
+
+    // add figcaption style to table captions
+    $('caption').parent('table').addClass("figcaption");
+
+    // initialize posts list
+    if (window.init_posts_list)
+      window.init_posts_list();
+
+    // implmement disqus comment link
+    $('.disqus-comment-count').click(function() {
+      window.headroom_prevent_pin = true;
+      $('#disqus_thread').toggleClass('hidden');
+      if (!$('#disqus_thread').hasClass('hidden')) {
+        var offset = $(this).offset();
+        $(window).resize();
+        $('html, body').animate({
+          scrollTop: offset.top - 35
+        });
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (is_downlevel_browser())
+      init_downlevel();
+    else
+      window.addEventListener('WebComponentsReady', init_distill);
+  });
+
+  </script>
+
+  <!--/radix_placeholder_distill-->
+  <script src="Decision_Trees_in_R_files/header-attrs-2.6/header-attrs.js"></script>
+  <script src="Decision_Trees_in_R_files/jquery-1.11.3/jquery.min.js"></script>
+  <script src="Decision_Trees_in_R_files/popper-2.6.0/popper.min.js"></script>
+  <link href="Decision_Trees_in_R_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="Decision_Trees_in_R_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="Decision_Trees_in_R_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="Decision_Trees_in_R_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="Decision_Trees_in_R_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="Decision_Trees_in_R_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="Decision_Trees_in_R_files/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+  <!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"An introduction to `{Tidymodels}`: Decision Tree Learning in R","description":"Exploring Decision Tree Variants in `{tidymodels}`.","authors":[{"author":"Cianna Bedford-Petersen","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""},{"author":"Christopher Loan","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""},{"author":"Brendan Cullen","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2020-06-02T00:00:00.000-07:00","citationText":"Bedford-Petersen, et al., 2020"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>An introduction to {Tidymodels}: Decision Tree Learning in R</h1>
+<!--radix_placeholder_categories-->
+<div class="dt-tags">
+<div class="dt=tag">Machine Learning</div>
+<div class="dt=tag">Decision Trees</div>
+<div class="dt=tag">Model Comparisons</div>
+<div class="dt=tag">Plotting</div>
+<div class="dt=tag">Public Data</div>
+<div class="dt=tag">Collaboration</div>
+<div class="dt=tag">Tutorial</div>
+</div>
+<!--/radix_placeholder_categories-->
+<p><p>Exploring Decision Tree Variants in <code>{tidymodels}</code>.</p></p>
+</div>
+
+<div class="d-byline">
+  Cianna Bedford-Petersen  
+  
+,   Christopher Loan  
+  
+,   Brendan Cullen  
+  
+<br/>2020-06-02
+</div>
+
+<div class="d-article">
+<div class="d-contents">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#intro">Intro</a></li>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#import-the-data">Import the data</a></li>
+<li><a href="#explore-the-data">Explore the data</a></li>
+<li><a href="#split-data-and-resample">Split data and resample</a></li>
+<li><a href="#pre-processing">Pre-processing</a></li>
+<li><a href="#create-a-model">Create a model</a>
+<ul>
+<li><a href="#the-type-of-model">The type of model</a></li>
+<li><a href="#the-engine">The engine</a></li>
+<li><a href="#the-mode">The mode</a></li>
+<li><a href="#the-arguments">The arguments</a></li>
+</ul></li>
+<li><a href="#create-a-workflow">Create a workflow</a></li>
+<li><a href="#model-examples">Model Examples</a>
+<ul>
+<li><a href="#bagged-trees">Bagged trees</a>
+<ul>
+<li><a href="#specify-model">Specify model</a></li>
+<li><a href="#create-workflow">Create workflow</a></li>
+<li><a href="#fit-the-model">Fit the model</a></li>
+<li><a href="#visualize">Visualize</a></li>
+</ul></li>
+<li><a href="#random-forest">Random forest</a>
+<ul>
+<li><a href="#specify-the-model">Specify the model</a></li>
+<li><a href="#create-workflow-1">Create workflow</a></li>
+<li><a href="#fit-the-model-1">Fit the model</a></li>
+<li><a href="#visualize-1">Visualize</a></li>
+</ul></li>
+<li><a href="#boosted-trees">Boosted trees</a>
+<ul>
+<li><a href="#specify-the-model-1">Specify the model</a></li>
+<li><a href="#create-workflow-2">Create workflow</a></li>
+<li><a href="#fit-the-model-2">Fit the model</a></li>
+<li><a href="#visualize-2">Visualize</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#evaluate-metrics">Evaluate metrics</a></li>
+<li><a href="#out-of-sample-performance">Out-of-sample performance</a></li>
+</ul>
+</nav>
+</div>
+<div class="layout-chunk" data-layout="l-screen-inset">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/include_graphics.html'>include_graphics</a></span><span class='op'>(</span><span class='fu'>here</span><span class='fu'>::</span><span class='fu'><a href='https://here.r-lib.org//reference/here.html'>here</a></span><span class='op'>(</span><span class='st'>"images"</span>, <span class='st'>"tree.jpeg"</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<p><img src="/Users/christopherloan/Documents/Distill_Website/images/tree.jpeg" width="608" /></p>
+</div>
+<h1 id="intro">Intro</h1>
+<p>Tidyverse’s newest release has recently come together to form a cohesive suite of packages for modeling and machine learning, called <code>{tidymodels}</code>. The successor to Max Kuhn’s <code>{caret}</code> package, <code>{tidymodels}</code> allows for a tidy approach to your data from start to finish. We’re going to walk through the basics for getting off the ground with <code>{tidymodels}</code> and demonstrate its application to three different tree-based methods for predicting student test scores. For further information about the package, you can visit <a href="https://www.tidymodels.org/" class="uri">https://www.tidymodels.org/</a>.</p>
+<p>I’d also like to add here that I couldn’t have done this post without collaboration with other UO doctoral students Cianna Bedford-Petersen &amp; Brendan Cullen (Psychology PhD program, specifically). Last I checked, they also hosted this exact tutorial on <a href="https://bcullen.rbind.io/post/2020-06-02-tidymodels-decision-tree-learning-in-r/">Brendan’s</a> and <a href="https://ciannabp.com/post/tidymodels-decision-tree-learning-in-r/">Cianna’s</a> websites, so if you liked this, check out some of their work.</p>
+<h1 id="setup">Setup</h1>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span>scipen <span class='op'>=</span> <span class='fl'>17</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<p>Load both the <code>{tidyverse}</code> and <code>{tidymodels}</code> packages into your environment. We’ll also load in the <code>{skimr}</code> package to help us with some descriptives for our data and a host of other packages that will be required to run our machine learning models.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidymodels.tidymodels.org'>tidymodels</a></span><span class='op'>)</span> 
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span> <span class='co'># manipulating data</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/skimr'>skimr</a></span><span class='op'>)</span> <span class='co'># data visualization</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/tidymodels/baguette'>baguette</a></span><span class='op'>)</span> <span class='co'># bagged trees</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/HenrikBengtsson/future'>future</a></span><span class='op'>)</span> <span class='co'># parallel processing &amp; decrease computation time</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/dmlc/xgboost'>xgboost</a></span><span class='op'>)</span> <span class='co'># boosted trees</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/jrnold/ggthemes'>ggthemes</a></span><span class='op'>)</span>
+<span class='fu'>theme_set</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/ggthemes/man/theme_economist.html'>theme_economist</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h1 id="import-the-data">Import the data</h1>
+<p>We use simulated data which approximates reading and math scores for ~189,000 3rd-8th grade students in Oregon public schools see <a href="https://www.kaggle.com/c/edld-654-spring-2020">this Kaggle page</a> for details. For the purpose of demonstration, we’ll be sampling 1% of the data with <code>sample_frac()</code> to keep computer processing time manageable. All school IDs in the data are real, so we can use that information to link the data with other sources. Specifically, we’re also going to pull in some data on student enrollment in free and reduced lunch from the National Center for Education Statistics and some ethnicity data from the Oregon Department of Education.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>
+<span class='co'># import data and perform initial cleaning</span>
+<span class='co'># initial cleaning steps include: </span>
+<span class='co'># *recode NA's for lang_cd and ayp_lep to more meaningful values</span>
+<span class='co'># *remove vars with entirely missing data</span>
+<span class='co'># Note: the data is called 'train.csv', but we will actually further split this into its own training and testing data</span>
+<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'>read_csv</span><span class='op'>(</span><span class='st'>"train.csv"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>classification</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># remove this variable because it's redundant with `score`</span>
+  <span class='fu'>mutate</span><span class='op'>(</span>lang_cd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>lang_cd</span><span class='op'>)</span>, <span class='st'>"E"</span>, <span class='va'>lang_cd</span><span class='op'>)</span>, 
+         ayp_lep <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>ayp_lep</span><span class='op'>)</span>, <span class='st'>"G"</span>, <span class='va'>ayp_lep</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>sample_frac</span><span class='op'>(</span><span class='fl'>.01</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># sample 1% of the data to reduce run time</span>
+  <span class='fu'>janitor</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/janitor/man/remove_empty.html'>remove_empty</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"rows"</span>, <span class='st'>"cols"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>drop_na</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select_if</span><span class='op'>(</span><span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>.x</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='co'># import fall membership report ethcnicity data and do some basic cleaning and renaming</span>
+<span class='va'>sheets</span> <span class='op'>&lt;-</span> <span class='fu'>readxl</span><span class='fu'>::</span><span class='fu'><a href='https://readxl.tidyverse.org/reference/excel_sheets.html'>excel_sheets</a></span><span class='op'>(</span><span class='st'>"fallmembershipreport_20192020.xlsx"</span><span class='op'>)</span>
+<span class='va'>ode_schools</span> <span class='op'>&lt;-</span> <span class='fu'>readxl</span><span class='fu'>::</span><span class='fu'><a href='https://readxl.tidyverse.org/reference/read_excel.html'>read_xlsx</a></span><span class='op'>(</span><span class='st'>"fallmembershipreport_20192020.xlsx"</span>,
+                                 sheet <span class='op'>=</span> <span class='va'>sheets</span><span class='op'>[</span><span class='fl'>4</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>ethnicities</span> <span class='op'>&lt;-</span> <span class='va'>ode_schools</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>select</span><span class='op'>(</span>attnd_schl_inst_id <span class='op'>=</span> <span class='va'>`Attending School ID`</span>,
+         attnd_dist_inst_id <span class='op'>=</span> <span class='va'>`Attending District Institution ID`</span>,
+         sch_name <span class='op'>=</span> <span class='va'>`School Name`</span>,
+         <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>contains</a></span><span class='op'>(</span><span class='st'>"%"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>janitor</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/janitor/man/clean_names.html'>clean_names</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>ethnicities</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"x2019_20_percent"</span>, <span class='st'>"p"</span>, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>ethnicities</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'># join ethnicity data with original dataset</span>
+<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'>left_join</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>ethnicities</span><span class='op'>)</span>
+<span class='co'># import and tidy free and reduced lunch data </span>
+<span class='va'>frl</span> <span class='op'>&lt;-</span> <span class='fu'>rio</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/rio/man/import.html'>import</a></span><span class='op'>(</span><span class='st'>"https://nces.ed.gov/ccd/Data/zip/ccd_sch_033_1718_l_1a_083118.zip"</span>,
+              setclass <span class='op'>=</span> <span class='st'>"tbl_df"</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='fu'>janitor</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/janitor/man/clean_names.html'>clean_names</a></span><span class='op'>(</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>st</span> <span class='op'>==</span> <span class='st'>"OR"</span><span class='op'>)</span>  <span class='op'>%&gt;%</span>
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>ncessch</span>, <span class='va'>lunch_program</span>, <span class='va'>student_count</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>student_count <span class='op'>=</span> <span class='fu'>replace_na</span><span class='op'>(</span><span class='va'>student_count</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='fu'>pivot_wider</span><span class='op'>(</span>names_from <span class='op'>=</span> <span class='va'>lunch_program</span>,
+              values_from <span class='op'>=</span> <span class='va'>student_count</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='fu'>janitor</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/janitor/man/clean_names.html'>clean_names</a></span><span class='op'>(</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>ncessch <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/double.html'>as.double</a></span><span class='op'>(</span><span class='va'>ncessch</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'># import student counts for each school across grades</span>
+<span class='va'>stu_counts</span> <span class='op'>&lt;-</span> <span class='fu'>rio</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/rio/man/import.html'>import</a></span><span class='op'>(</span><span class='st'>"https://github.com/datalorax/ach-gap-variability/raw/master/data/achievement-gaps-geocoded.csv"</span>, setclass <span class='op'>=</span> <span class='st'>"tbl_df"</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>state</span> <span class='op'>==</span> <span class='st'>"OR"</span> <span class='op'>&amp;</span> <span class='va'>year</span> <span class='op'>==</span> <span class='fl'>1718</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='fu'>count</span><span class='op'>(</span><span class='va'>ncessch</span>, wt <span class='op'>=</span> <span class='va'>n</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>ncessch <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/double.html'>as.double</a></span><span class='op'>(</span><span class='va'>ncessch</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'># join frl and stu_counts data</span>
+<span class='va'>frl</span> <span class='op'>&lt;-</span> <span class='fu'>left_join</span><span class='op'>(</span><span class='va'>frl</span>, <span class='va'>stu_counts</span><span class='op'>)</span>
+<span class='co'># add frl data to train data</span>
+<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'>left_join</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>frl</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<p>After loading in our three datasets, we’ll join them together to make one cohesive data set to use for modelling. After joining, the data contains both student-level variables (e.g. gender, ethnicity, enrollment in special education/talented and gifted programs, etc.) and district-level variables (e.g. school longitude and latitude, proportion of students who qualify for free and reduced-price lunch, etc.), all of which will be included for each 3 of our <code>{tidymodels}</code> tree-based examples.</p>
+<p>For a more complete description of the variables, you can download the data dictionary <a href="data_dictionary.csv">here</a>.</p>
+<h1 id="explore-the-data">Explore the data</h1>
+<p>We’ll use the <code>skim()</code> function from <code>{skimr}</code> to take a closer look at our variables. Many numeric predictors are clearly non-normal (see histograms below), but this is no problem as tree-based methods are robust to non-normality.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dat</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>contains</a></span><span class='op'>(</span><span class='st'>"id"</span><span class='op'>)</span>, <span class='op'>-</span><span class='va'>ncessch</span>, <span class='op'>-</span><span class='va'>missing</span>, <span class='op'>-</span><span class='va'>not_applicable</span><span class='op'>)</span> <span class='op'>%&gt;%</span>  <span class='co'># remove ID and irrelevant variables</span>
+  <span class='fu'>mutate</span><span class='op'>(</span>tst_dt <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/as_date.html'>as_date</a></span><span class='op'>(</span><span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>mdy_hms</a></span><span class='op'>(</span><span class='va'>tst_dt</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># covert test date to date</span>
+  <span class='fu'>modify_if</span><span class='op'>(</span><span class='va'>is.character</span>, <span class='va'>as.factor</span><span class='op'>)</span> <span class='op'>%&gt;%</span>  <span class='co'># convert character vars to factors</span>
+  <span class='fu'><a href='https://docs.ropensci.org/skimr/reference/skim.html'>skim</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"numeric.p"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># remove quartiles</span>
+</code></pre>
+</div>
+</details>
+<table>
+<caption><span id="tab:unnamed-chunk-5">Table 1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">Piped data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">1857</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">41</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Date</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">factor</td>
+<td style="text-align: left;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: Date</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: left;">min</th>
+<th style="text-align: left;">max</th>
+<th style="text-align: left;">median</th>
+<th style="text-align: right;">n_unique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">tst_dt</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2018-03-16</td>
+<td style="text-align: left;">2018-06-07</td>
+<td style="text-align: left;">2018-05-18</td>
+<td style="text-align: right;">47</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: left;">ordered</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: left;">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">gndr</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">M: 939, F: 918</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ethnic_cd</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">W: 1151, H: 458, M: 100, A: 79</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tst_bnch</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">G6: 343, 1B: 330, G4: 304, G7: 304</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">migrant_ed_fg</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">N: 1793, Y: 64</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ind_ed_fg</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">N: 1842, Y: 15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sp_ed_fg</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">N: 1614, Y: 243</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tag_ed_fg</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">N: 1759, Y: 98</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">econ_dsvntg</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1100, N: 757</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ayp_lep</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">G: 1471, F: 164, Y: 72, E: 58</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">stay_in_dist</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1811, N: 46</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">stay_in_schl</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1803, N: 54</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">dist_sped</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">N: 1846, Y: 11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">trgt_assist_fg</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">N: 1773, Y: 83, y: 1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ayp_schl_partic</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1846, N: 11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ayp_dist_prfrm</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1803, N: 54</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ayp_schl_prfrm</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1785, N: 72</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">rc_schl_partic</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1846, N: 11</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rc_dist_prfrm</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1803, N: 54</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">rc_schl_prfrm</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1785, N: 72</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lang_cd</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">E: 1815, S: 42</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tst_atmpt_fg</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1853, P: 4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">grp_rpt_schl_partic</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1846, N: 11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">grp_rpt_dist_prfrm</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1845, N: 12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">grp_rpt_schl_prfrm</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y: 1834, N: 23</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sch_name</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">699</td>
+<td style="text-align: left;">Hig: 14, Jud: 14, Hou: 13, Fiv: 11</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">enrl_grd</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.44</td>
+<td style="text-align: right;">1.69</td>
+<td style="text-align: left;">▇▃▅▃▃</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">score</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2495.34</td>
+<td style="text-align: right;">115.19</td>
+<td style="text-align: left;">▁▁▂▇▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lat</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">44.79</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: left;">▂▁▂▅▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lon</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-122.51</td>
+<td style="text-align: right;">1.16</td>
+<td style="text-align: left;">▅▇▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">p_american_indian_alaska_native</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">p_asian</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.07</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">p_native_hawaiian_pacific_islander</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">p_black_african_american</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">p_hispanic_latino</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.25</td>
+<td style="text-align: right;">0.18</td>
+<td style="text-align: left;">▇▅▂▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">p_white</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">0.20</td>
+<td style="text-align: left;">▁▃▅▇▅</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">p_multiracial</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: left;">▇▆▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">free_lunch_qualified</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">231.23</td>
+<td style="text-align: right;">147.55</td>
+<td style="text-align: left;">▇▇▃▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">reduced_price_lunch_qualified</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">39.86</td>
+<td style="text-align: right;">24.77</td>
+<td style="text-align: left;">▆▇▃▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">no_category_codes</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">271.09</td>
+<td style="text-align: right;">165.44</td>
+<td style="text-align: left;">▆▇▃▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">n</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">816.07</td>
+<td style="text-align: right;">536.55</td>
+<td style="text-align: left;">▇▃▂▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>While most of our predictors are categorical, we can use <code>{corrplot}</code> to better visualize the relationships among the numeric variables.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dat</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>contains</a></span><span class='op'>(</span><span class='st'>"id"</span><span class='op'>)</span>, <span class='op'>-</span><span class='va'>ncessch</span>, <span class='op'>-</span><span class='va'>missing</span>, <span class='op'>-</span><span class='va'>not_applicable</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select_if</span><span class='op'>(</span><span class='va'>is.numeric</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>score</span>, <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span>use <span class='op'>=</span> <span class='st'>"complete.obs"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>corrplot</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/corrplot/man/corrplot.html'>corrplot</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<p><img src="Decision_Trees_in_R_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+</div>
+<h1 id="split-data-and-resample">Split data and resample</h1>
+<p>The first step of our analysis is to split our data into two separate sets: a “training” set and a “testing” set. The training set is used to train a model and, if desired, to adjust (i.e., “tune”) the model’s hyperparameters before evaluating its final performance on our test data. By allowing us to test a model on a new sample, we assess “out of sample” accuracy (i.e., unseen data-—what all predictive models are interested in) and limit overfitting to the training set. We can do this efficiently with the <code>initial_split()</code> function. This comes from the <code>{rsample}</code> package, which is part of the <code>{tidymodels}</code> package that we already loaded. Defaults put 75% of the data in the training set and 25% in the test set, but this can be adjusted with the <code>prop</code> argument. Then, we’ll extract the training data from our split object and assign it a name.</p>
+<p>To further prevent over-fitting, we’ll resample our data using <code>vfold_cv()</code>. This function outputs k-<em>fold</em> cross-validated versions of our training data, where k = the number of times we resample (unsure why v- is used instead of k- here). By using k = 10 data sets, we get a better estimate of the model’s out-of-sample accuracy. On top of decreasing bias from over-fitting, this is essential when tuning hyperparameters (though we plan to apply defaults and not tune here, for brevity). Though our use of 10-fold cross validation is both frequently used and effective, it should be noted that other methods (e.g., bootstrap resampling) or other k-values are sometimes used to accomplish the same goal.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># split the data</span>
+<span class='va'>split</span> <span class='op'>&lt;-</span> <span class='fu'>initial_split</span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>
+<span class='co'># extract the training data</span>
+<span class='va'>train</span> <span class='op'>&lt;-</span> <span class='fu'>training</span><span class='op'>(</span><span class='va'>split</span><span class='op'>)</span>
+<span class='co'># resample the data with 10-fold cross-validation (10-fold by default)</span>
+<span class='va'>cv</span> <span class='op'>&lt;-</span> <span class='fu'>vfold_cv</span><span class='op'>(</span><span class='va'>train</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h1 id="pre-processing">Pre-processing</h1>
+<p>Before we add in our data to the model, we’re going to set up an object that pre-processes our data. This is called a <em>recipe</em>. To create a recipe, you’ll first specify a formula for your model, indicating which variable is your outcome and which are your predictors. Using <code>~.</code> here will indicate that we want to use all variables other than <code>score</code> as predictors. Then, we can specify a series of pre-processing steps for our data that directs our recipe to assign our variables a role or performs feature engineering steps. Pre-processing may be sound uncommon, but if you’ve ever used <code>lm()</code> (or several other <code>R</code> functions) you’ve done some of this by simply calling the function (e.g., automatic dummy-coding to handle categorical data). This is beneficial because it gives the analyst more control, despite adding complexity to the process.</p>
+<p>A complete list of possible pre-processing steps can be found here: <a href="https://www.tidymodels.org/find/recipes/" class="uri">https://www.tidymodels.org/find/recipes/</a></p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>rec</span> <span class='op'>&lt;-</span> <span class='fu'>recipe</span><span class='op'>(</span><span class='va'>score</span> <span class='op'>~</span> <span class='va'>.</span>, <span class='va'>train</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>step_mutate</span><span class='op'>(</span>tst_dt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>mdy_hms</a></span><span class='op'>(</span><span class='va'>tst_dt</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># convert `test date` variable to a date </span>
+  <span class='fu'>update_role</span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>contains</a></span><span class='op'>(</span><span class='st'>"id"</span><span class='op'>)</span>, <span class='va'>ncessch</span>, new_role <span class='op'>=</span> <span class='st'>"id vars"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># declare ID variables</span>
+  <span class='fu'>step_nzv</span><span class='op'>(</span><span class='fu'>all_predictors</span><span class='op'>(</span><span class='op'>)</span>, freq_cut <span class='op'>=</span> <span class='fl'>0</span>, unique_cut <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># remove variables with zero variances</span>
+  <span class='fu'>step_novel</span><span class='op'>(</span><span class='fu'>all_nominal</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># prepares test data to handle previously unseen factor levels </span>
+  <span class='fu'>step_unknown</span><span class='op'>(</span><span class='fu'>all_nominal</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># categorizes missing categorical data (NA's) as `unknown`</span>
+  <span class='fu'>step_medianimpute</span><span class='op'>(</span><span class='fu'>all_numeric</span><span class='op'>(</span><span class='op'>)</span>, <span class='op'>-</span><span class='fu'>all_outcomes</span><span class='op'>(</span><span class='op'>)</span>, <span class='op'>-</span><span class='fu'>has_role</span><span class='op'>(</span><span class='st'>"id vars"</span><span class='op'>)</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> <span class='co'># replaces missing numeric observations with the median</span>
+  <span class='fu'>step_dummy</span><span class='op'>(</span><span class='fu'>all_nominal</span><span class='op'>(</span><span class='op'>)</span>, <span class='op'>-</span><span class='fu'>has_role</span><span class='op'>(</span><span class='st'>"id vars"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># dummy codes categorical variables</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h1 id="create-a-model">Create a model</h1>
+<p>The last step before bringing in our data is to specify our model. This will call upon functions from the <code>{parsnip}</code> package, which standardizes language for specifying a multitude of statistical models. There are a few core elements that you will need to specify for each model</p>
+<h2 id="the-type-of-model">The type of model</h2>
+<p>This indicates what type of model you choose to fit, each of which will be a different function. We’ll be focusing on decision tree methods using <code>bag_tree()</code>, <code>random_forest()</code>, and <code>boost_tree()</code>. A full list of models can be found here <a href="https://www.tidymodels.org/find/parsnip/" class="uri">https://www.tidymodels.org/find/parsnip/</a></p>
+<h2 id="the-engine">The engine</h2>
+<p><code>set_engine()</code> calls the package to support the model you specified above.</p>
+<h2 id="the-mode">The mode</h2>
+<p><code>set_mode()</code> indicates the type of prediction you’d like to use in your model, you’ll choose between regression and classification. Since we are looking to predict student scores, which is a continuous predictor, we’ll be choosing regression.</p>
+<h2 id="the-arguments">The arguments</h2>
+<p><code>set_args()</code> allows you to set values for various parameters for your model, each model type will have a specific set of parameters that can be altered. For these parameters, you can either set a particular value or you can use the tune function to search for the optimal value of each parameter. Tuning requires a few extra steps, so we will leave the default arguments for clarity. For more information on tuning check out <a href="https://tune.tidymodels.org/" class="uri">https://tune.tidymodels.org/</a>.</p>
+<h1 id="create-a-workflow">Create a workflow</h1>
+<p>Up to this point we’ve been setting up a lot of individual elements and now it is time to combine them to create a cohesive framework, called a <em>workflow</em>, so we can run our desired models. First, we’ll use the <code>workflow()</code> command and then we’ll pulling the recipe and model we already created. The next section shows three examples of specifying models and creating a workflow for different decision tree methods.</p>
+<h1 id="model-examples">Model Examples</h1>
+<h2 id="bagged-trees">Bagged trees</h2>
+<p>A bagged tree approach creates multiple subsets of data from the training set which are randomly chosen with replacement. Each subset of data is used to train a given decision tree. In the end, we have an ensemble of different models. The predictions from all the different trees are averaged together, giving us a stronger prediction than one tree could independently.</p>
+<h3 id="specify-model">Specify model</h3>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>
+<span class='va'>mod_bag</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/baguette/man/bag_tree.html'>bag_tree</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>set_mode</span><span class='op'>(</span><span class='st'>"regression"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"rpart"</span>, times <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span> <span class='co'># 10 bootstrap resamples</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h3 id="create-workflow">Create workflow</h3>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wflow_bag</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>rec</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>mod_bag</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h3 id="fit-the-model">Fit the model</h3>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='va'>multisession</span><span class='op'>)</span>
+<span class='va'>fit_bag</span> <span class='op'>&lt;-</span> <span class='fu'>fit_resamples</span><span class='op'>(</span>
+  <span class='va'>wflow_bag</span>,
+  <span class='va'>cv</span>,
+  metrics <span class='op'>=</span> <span class='fu'>metric_set</span><span class='op'>(</span><span class='va'>rmse</span>, <span class='va'>rsq</span><span class='op'>)</span>,
+  control <span class='op'>=</span> <span class='fu'>control_resamples</span><span class='op'>(</span>verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                              save_pred <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                              extract <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'>extract_model</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h3 id="visualize">Visualize</h3>
+<p>The plot below shows the root nodes from a bagged tree made of 100 trees (10 folds x 10 bootstrapped resamples). Root nodes are the 1st node in a decision tree, and they are determined by which variable best optimizes a loss function (e.g., minimizes mean square error [MSE] for continuous outcomes or Gini Index for categorical outcomes). Put roughly, the most common root nodes can be thought of as the most “important” predictors.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># extract roots</span>
+<span class='va'>bag_roots</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='va'>x</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>.extracts</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>unnest</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>.extracts</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>models <span class='op'>=</span> <span class='fu'>map</span><span class='op'>(</span><span class='va'>.extracts</span>,
+                  <span class='op'>~</span><span class='va'>.x</span><span class='op'>$</span><span class='va'>model_df</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>.extracts</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>unnest</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>models</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>root <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>model</span>,
+                     <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>.x</span><span class='op'>$</span><span class='va'>fit</span><span class='op'>$</span><span class='va'>frame</span><span class='op'>[</span><span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>root</span><span class='op'>)</span>  
+<span class='op'>}</span>
+<span class='co'># plot</span>
+<span class='fu'>bag_roots</span><span class='op'>(</span><span class='va'>fit_bag</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'>fct_rev</span><span class='op'>(</span><span class='fu'>fct_infreq</span><span class='op'>(</span><span class='va'>root</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'>geom_bar</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'>coord_flip</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"root"</span>, y <span class='op'>=</span> <span class='st'>"count"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme</span><span class='op'>(</span>axis.text.y <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>9</span>, angle <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<p><img src="Decision_Trees_in_R_files/figure-html5/unnamed-chunk-12-1.png" width="624" /></p>
+</div>
+<h2 id="random-forest">Random forest</h2>
+<p>Random forest is similar to bagged tree methodology but goes one step further. In addition to taking random subsets of data, the model also draws a random selection of features. Instead of utilizing all features, the random subset of features allows more predictors to be eligible root nodes. This is particularly useful for handling high dimensionality data (e.g., have more variables than participants/cases).</p>
+<h3 id="specify-the-model">Specify the model</h3>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>
+<span class='va'>mod_rf</span> <span class='op'>&lt;-</span><span class='fu'>rand_forest</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"ranger"</span>,
+             num.threads <span class='op'>=</span> <span class='fu'>parallel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/parallel/detectCores.html'>detectCores</a></span><span class='op'>(</span><span class='op'>)</span>, 
+             importance <span class='op'>=</span> <span class='st'>"permutation"</span>, 
+             verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>set_mode</span><span class='op'>(</span><span class='st'>"regression"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>set_args</span><span class='op'>(</span>trees <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h3 id="create-workflow-1">Create workflow</h3>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wflow_rf</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>mod_rf</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>rec</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h3 id="fit-the-model-1">Fit the model</h3>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='va'>multisession</span><span class='op'>)</span>
+<span class='va'>fit_rf</span> <span class='op'>&lt;-</span> <span class='fu'>fit_resamples</span><span class='op'>(</span>
+  <span class='va'>wflow_rf</span>,
+  <span class='va'>cv</span>,
+  metrics <span class='op'>=</span> <span class='fu'>metric_set</span><span class='op'>(</span><span class='va'>rmse</span>, <span class='va'>rsq</span><span class='op'>)</span>,
+  control <span class='op'>=</span> <span class='fu'>control_resamples</span><span class='op'>(</span>verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                              save_pred <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                              extract <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span><span class='op'>)</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h3 id="visualize-1">Visualize</h3>
+<p>The plot below shows the root nodes from a random forest with 1000 trees (specified using <code>set_args(trees = 1000)</code> in the parsnip model object).</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># extract roots</span>
+<span class='va'>rf_tree_roots</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='fu'>map_chr</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>1000</span>, 
+           <span class='op'>~</span><span class='fu'>ranger</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ranger/man/treeInfo.html'>treeInfo</a></span><span class='op'>(</span><span class='va'>x</span>, tree <span class='op'>=</span> <span class='va'>.</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span>, <span class='st'>"splitvarName"</span><span class='op'>]</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='va'>rf_roots</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='va'>x</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>.extracts</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>unnest</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>.extracts</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>fit <span class='op'>=</span> <span class='fu'>map</span><span class='op'>(</span><span class='va'>.extracts</span>,
+                   <span class='op'>~</span><span class='va'>.x</span><span class='op'>$</span><span class='va'>fit</span><span class='op'>$</span><span class='va'>fit</span><span class='op'>$</span><span class='va'>fit</span><span class='op'>)</span>,
+         oob_rmse <span class='op'>=</span> <span class='fu'>map_dbl</span><span class='op'>(</span><span class='va'>fit</span>,
+                         <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>.x</span><span class='op'>$</span><span class='va'>prediction.error</span><span class='op'>)</span><span class='op'>)</span>,
+         roots <span class='op'>=</span> <span class='fu'>map</span><span class='op'>(</span><span class='va'>fit</span>, 
+                        <span class='op'>~</span><span class='fu'>rf_tree_roots</span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span><span class='op'>)</span>
+         <span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>roots</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>unnest</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>roots</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='co'># plot</span>
+<span class='fu'>rf_roots</span><span class='op'>(</span><span class='va'>fit_rf</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>roots</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>count</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>arrange</span><span class='op'>(</span><span class='fu'>desc</span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>n</span> <span class='op'>&gt;</span> <span class='fl'>75</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='fu'>fct_reorder</span><span class='op'>(</span><span class='va'>roots</span>, <span class='va'>n</span><span class='op'>)</span>, <span class='va'>n</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+           <span class='fu'>geom_col</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
+           <span class='fu'>coord_flip</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"root"</span>, y <span class='op'>=</span> <span class='st'>"count"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/ggthemes/man/theme_economist.html'>theme_economist</a></span><span class='op'>(</span>horizontal <span class='op'>=</span> <span class='cn'>F</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme</span><span class='op'>(</span>axis.text.y <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>8</span><span class='op'>)</span><span class='op'>)</span> 
+</code></pre>
+</div>
+</details>
+<p><img src="Decision_Trees_in_R_files/figure-html5/unnamed-chunk-16-1.png" width="624" data-distill-preview=1 /></p>
+</div>
+<h2 id="boosted-trees">Boosted trees</h2>
+<p>Boosted trees, like bagged trees, are an ensemble model. Instead of applying successive models to resampled data and pooling estimates, boosted trees fit the next tree to the residuals (i.e., error term) of the prior tree. The goal is to minimize residual error through multiple trees, and is typically done with fairly “shallow” decision tree (i.e., 1-6 splits in each tree). Though each model is only slightly improving the error rate, the sequential use of many shallow trees makes computationally efficient (i.e. reduced run time) and highly accurate predictions.</p>
+<h3 id="specify-the-model-1">Specify the model</h3>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mod_boost</span> <span class='op'>&lt;-</span> <span class='fu'>boost_tree</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"xgboost"</span>, nthreads <span class='op'>=</span> <span class='fu'>parallel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/parallel/detectCores.html'>detectCores</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>set_mode</span><span class='op'>(</span><span class='st'>"regression"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h3 id="create-workflow-2">Create workflow</h3>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wflow_boost</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>rec</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>mod_boost</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h3 id="fit-the-model-2">Fit the model</h3>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='va'>multisession</span><span class='op'>)</span>
+<span class='va'>fit_boost</span> <span class='op'>&lt;-</span> <span class='fu'>fit_resamples</span><span class='op'>(</span>
+  <span class='va'>wflow_boost</span>, 
+  <span class='va'>cv</span>,
+  metrics <span class='op'>=</span> <span class='fu'>metric_set</span><span class='op'>(</span><span class='va'>rmse</span>, <span class='va'>rsq</span><span class='op'>)</span>,
+  control <span class='op'>=</span> <span class='fu'>control_resamples</span><span class='op'>(</span>verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                              save_pred <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h3 id="visualize-2">Visualize</h3>
+<p>One of the few downfalls of <code>{tidymodels}</code> is its (current) inability to plot these tree-based models. For the past two models, it was simpler to extract root nodes and plot them, but their interpretation (as we’re fitting to residuals instead of data sets) are not straightforward. For that reason, we don’t have any pretty plots here. Instead, we’ll skip to evaluating the metrics of all models.</p>
+<h1 id="evaluate-metrics">Evaluate metrics</h1>
+<p>After running these three models, it’s time to evaluate their performance. We can do this with <code>tune::collect_metrics()</code>. The table below shows the estimate of the out-of-sample performance for each of our 3 models.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>collect_metrics</span><span class='op'>(</span><span class='va'>fit_bag</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>bind_rows</span><span class='op'>(</span><span class='fu'>collect_metrics</span><span class='op'>(</span><span class='va'>fit_rf</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>bind_rows</span><span class='op'>(</span><span class='fu'>collect_metrics</span><span class='op'>(</span><span class='va'>fit_boost</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>.metric</span> <span class='op'>==</span> <span class='st'>"rmse"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>model <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bag"</span>, <span class='st'>"rf"</span>, <span class='st'>"boost"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>model</span>, <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">std_err</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">bag</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">98.39324</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">2.618597</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rf</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">96.16870</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">2.248261</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">boost</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">95.35888</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">2.764773</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Here, we are faced with a common problem in the machine learning world: choosing between models that perform similarly (see overlapping standard errors). Whether we would prefer random forests or bagged trees may depend on computational efficiency (i.e., time) or other factors. In practice, tuning several hyperparameters may have made one model clearly preferable over the others, but in our case - relying on all defaults - we would probably have similar performance with both models on a new data set and would prefer random forest or boosted tree models for their efficiency.</p>
+<h1 id="out-of-sample-performance">Out-of-sample performance</h1>
+<p>The final step is to apply each trained model to our test data using <code>last_fit()</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># bagged trees</span>
+<span class='va'>final_fit_bag</span> <span class='op'>&lt;-</span> <span class='fu'>last_fit</span><span class='op'>(</span>
+  <span class='va'>wflow_bag</span>,
+  split <span class='op'>=</span> <span class='va'>split</span>
+<span class='op'>)</span>
+<span class='co'># random forest</span>
+<span class='va'>final_fit_rf</span> <span class='op'>&lt;-</span> <span class='fu'>last_fit</span><span class='op'>(</span>
+  <span class='va'>wflow_rf</span>,
+  split <span class='op'>=</span> <span class='va'>split</span>
+<span class='op'>)</span>
+<span class='co'># boosted trees</span>
+<span class='va'>final_fit_boost</span> <span class='op'>&lt;-</span> <span class='fu'>last_fit</span><span class='op'>(</span>
+  <span class='va'>wflow_boost</span>,
+  split <span class='op'>=</span> <span class='va'>split</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<p>The table below shows the actual out-of-sample performance for each of our 3 models.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># show performance on test data</span>
+<span class='fu'>collect_metrics</span><span class='op'>(</span><span class='va'>final_fit_bag</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>bind_rows</span><span class='op'>(</span><span class='fu'>collect_metrics</span><span class='op'>(</span><span class='va'>final_fit_rf</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>bind_rows</span><span class='op'>(</span><span class='fu'>collect_metrics</span><span class='op'>(</span><span class='va'>final_fit_boost</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>.metric</span> <span class='op'>==</span> <span class='st'>"rmse"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>model <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bag"</span>, <span class='st'>"rf"</span>, <span class='st'>"boost"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>model</span>, <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">bag</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">93.36504</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rf</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">91.18114</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">boost</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">94.22609</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>After applying our 3 trained models to the unseen test data, it looks like random forest is the winner since it has the lowest RMSE. In this example, we only used 1% of the data to train these models, which could make it difficult to meaningfully compare their performance. However, the random forest model also results in the best out-of-sample prediction (RMSE = 83.47) when using all of the available data, which we did for the <a href="https://www.kaggle.com/c/edld-654-spring-2020/leaderboard">Kaggle competition</a>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom"></div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>
