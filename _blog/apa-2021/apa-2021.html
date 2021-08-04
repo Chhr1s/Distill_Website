@@ -116,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["apa-2021_files/anchor-4.2.2/anchor.min.js","apa-2021_files/bowser-1.9.3/bowser.min.js","apa-2021_files/distill-2.2.21/template.v2.js","apa-2021_files/figure-html5/figure 1-1.png","apa-2021_files/figure-html5/figure 2-1.png","apa-2021_files/figure-html5/plot tree 1-1.png","apa-2021_files/figure-html5/plot tree 1-2.png","apa-2021_files/figure-html5/plot tree 2-1.png","apa-2021_files/figure-html5/plot tree 3-1.png","apa-2021_files/figure-html5/unnamed-chunk-1-1.png","apa-2021_files/figure-html5/unnamed-chunk-1-2.png","apa-2021_files/figure-html5/unnamed-chunk-2-1.png","apa-2021_files/figure-html5/unnamed-chunk-2-2.png","apa-2021_files/figure-html5/unnamed-chunk-3-1.png","apa-2021_files/figure-html5/unnamed-chunk-3-2.png","apa-2021_files/header-attrs-2.6/header-attrs.js","apa-2021_files/jquery-1.11.3/jquery.min.js","apa-2021_files/popper-2.6.0/popper.min.js","apa-2021_files/tippy-6.2.7/tippy-bundle.umd.min.js","apa-2021_files/tippy-6.2.7/tippy-light-border.css","apa-2021_files/tippy-6.2.7/tippy.css","apa-2021_files/tippy-6.2.7/tippy.umd.min.js","apa-2021_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["apa-2021_files/anchor-4.2.2/anchor.min.js","apa-2021_files/bowser-1.9.3/bowser.min.js","apa-2021_files/distill-2.2.21/template.v2.js","apa-2021_files/figure-html5/figure 1-1.png","apa-2021_files/figure-html5/figure 2-1.png","apa-2021_files/figure-html5/plot ranef 1-1.png","apa-2021_files/figure-html5/plot tree 1-1.pdf","apa-2021_files/figure-html5/plot tree 1-1.png","apa-2021_files/figure-html5/plot tree 1-2.png","apa-2021_files/figure-html5/plot tree 1, l-page-1.png","apa-2021_files/figure-html5/plot tree 2-1.pdf","apa-2021_files/figure-html5/plot tree 2-1.png","apa-2021_files/figure-html5/plot tree 3-1.pdf","apa-2021_files/figure-html5/plot tree 3-1.png","apa-2021_files/figure-html5/plot tree 4-1.png","apa-2021_files/figure-html5/unnamed-chunk-1-1.pdf","apa-2021_files/figure-html5/unnamed-chunk-1-1.png","apa-2021_files/figure-html5/unnamed-chunk-1-2.png","apa-2021_files/figure-html5/unnamed-chunk-2-1.png","apa-2021_files/figure-html5/unnamed-chunk-2-2.png","apa-2021_files/figure-html5/unnamed-chunk-3-1.png","apa-2021_files/figure-html5/unnamed-chunk-3-2.png","apa-2021_files/header-attrs-2.6/header-attrs.js","apa-2021_files/jquery-1.11.3/jquery.min.js","apa-2021_files/popper-2.6.0/popper.min.js","apa-2021_files/tippy-6.2.7/tippy-bundle.umd.min.js","apa-2021_files/tippy-6.2.7/tippy-light-border.css","apa-2021_files/tippy-6.2.7/tippy.css","apa-2021_files/tippy-6.2.7/tippy.umd.min.js","apa-2021_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1495,20 +1495,28 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#libraries">libraries</a></li>
-<li><a href="#simulating-data-skip-this-if-you-just-want-glmertree-model-specification">simulating data: skip this if you just want <code>{glmertree}</code> model specification</a>
+<li><a href="#background">Background</a>
 <ul>
-<li><a href="#mlm-parameters-with-this-data-via-lme4">MLM parameters with this data, via <code>{lme4}</code></a></li>
+<li><a href="#load-libraries">load libraries</a></li>
+<li><a href="#simulating-data">simulating data</a></li>
 </ul></li>
-<li><a href="#glmertrees">glmertrees</a></li>
+<li><a href="#fitting-glmm-trees-via-glmertree">Fitting GLMM Trees via <code>{glmertree}</code></a>
+<ul>
+<li><a href="#model-1-fully-exploratory">Model 1: Fully Exploratory</a>
+<ul>
+<li><a href="#add-hyperparameters">Add hyperparameters</a></li>
+<li><a href="#add-fixed-effects">Add Fixed Effects</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#mlms-via-lme4">MLMs via <code>{lme4}</code></a></li>
 </ul>
 </nav>
 </div>
 <p>The purpose of these supplemental materials is to walk users through using the <code>{glmertree}</code> package and provide references/supplemental reading for our poster. Refer to the Table of Contents (or scroll down) if you’re just here for references.</p>
 <p>For readability, code is included but can be hidden by clicking <code>show code</code></p>
-<p>I default to writing code in the style of the <a href="https://www.tidyverse.org/"><code>{tidyverse}</code></a>, so please see that if you’re unfamiliar with this style of coding. Essentially, you can “pipe” objects—typically data—from one function to another. If you’re using <code>R</code> these days, you’ve probably seen it, even if you don’t use it.</p>
-<p>So everything will be done with <code>{tidyverse}</code> functions and the<code>{glmertree}</code> package. I’ll compare some <code>{glmertree}</code> results to <code>{lme4}</code>, but this is loaded via <code>{glmertree}</code> anyways. I’ll try and use <code>::</code> operator to “namespace” functions that aren’t from the aforementioned packages, so you know what to install and from where it’s originating</p>
-<h1 id="libraries">libraries</h1>
+<p>Everything will be done with <code>{tidyverse}</code> functions and the<code>{glmertree}</code> package. I’ll compare some <code>{glmertree}</code> results to <code>{lme4}</code>, but this is loaded via <code>{glmertree}</code>. I’ll try and use the <code>::</code> operator to namespace functions that aren’t from the aforementioned packages. That way you know what packages call any other function I use.</p>
+<h1 id="background">Background</h1>
+<h2 id="load-libraries">load libraries</h2>
 <div class="layout-chunk" data-layout="l-body">
 <details>
 <summary>
@@ -1517,15 +1525,15 @@ show code
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>glmertree</span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/martin-borkovec/ggparty'>ggparty</a></span><span class='op'>)</span>
 </code></pre>
 </div>
 </details>
 </div>
-<h1 id="simulating-data-skip-this-if-you-just-want-glmertree-model-specification">simulating data: skip this if you just want <code>{glmertree}</code> model specification</h1>
-<p>In a perfect world, I’d be able to share the data with you and use the same data used on the poster without anything bad happening; however, we have data privacy for a reason. I still want to show you how to specify these models, and I want you to have the option to follow along. The supplemental data can be simulated on your machine if you follow the instructions on <a href="www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/">another blog post of mine</a>.</p>
-<p>If you don’t care about the simulation and just want to see model specification, you’re in the right place.</p>
-<p>The short of it: I simulate some with similar size level 1 and level 2 units as our poster, but we’re going to omit the cross-classified design just to make this process a bit simpler to follow.</p>
-<p>We have 15 level 1 units (number of question in our poster), 71 level 2 units (students in our poster). The level 1 intercept of the outcome is 4.25 with a main effect of 1.25 for x, 2.00 for z, and 0.75 for their interaction. The function also makes a nuisance variable <code>w</code>, which does not contribute to the outcome at all.</p>
+<h2 id="simulating-data">simulating data</h2>
+<p>In a perfect world, I’d be able to share the data with you and use the same data used on the poster without anything bad happening; however, we have data privacy for a reason. I still want to show you how to specify these models, and I want you to have the option to follow along. If you don’t care about the simulation and just want to see model specification: Keep reading—you’re in the right place!</p>
+<p>To see how the simulation occurs and/or follow along, check out <a href="www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/">another blog post of mine</a> that provides you with the function and describes data explored with it.</p>
+<p>The short of it: I simulated N = 1065 cases — the same number of as the APA 2021 poster. However, I did not simulate random effects for items across participants. This simplifies the cross-classified design to be a simple two-level design that has n = 71 level 2 units, each with n = 15 level 1 units. Each level 2 unit has an outcome (<code>outcome</code>), two variables that are related to the outcome (<code>x</code> and <code>z</code>), and a variable that is <em>not</em> associated with the outcome (<code>w</code>).</p>
 <div class="layout-chunk" data-layout="l-body">
 <details>
 <summary>
@@ -1550,7 +1558,320 @@ show code
 </div>
 </details>
 </div>
-<h2 id="mlm-parameters-with-this-data-via-lme4">MLM parameters with this data, via <code>{lme4}</code></h2>
+<p>Put formally, we’re simulating:</p>
+<p><span class="math display">\[
+\begin{aligned}
+  \operatorname{outcome}_{i}  &amp;\sim N \left(\mu, \sigma^2 \right) \\
+    \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{x}) + \beta_{2}(\operatorname{z}) + \beta_{3}(\operatorname{w}) + \beta_{4}(\operatorname{x} \times \operatorname{z}) \\
+    \alpha_{j}  &amp;\sim N \left(\mu_{\alpha_{j}}, \sigma^2_{\alpha_{j}} \right)
+    \text{, for id j = 1,} \dots \text{,J}
+\end{aligned}
+\]</span> where</p>
+<p><span class="math display">\[\mu = 4.25\]</span> <span class="math display">\[\sigma = 2.00\]</span> <span class="math display">\[\beta_{1} = 1.25\]</span> <span class="math display">\[\beta_{2} = 2.00\]</span> <span class="math display">\[\beta_{3} = 0\]</span> <span class="math display">\[\beta_{4} = 0.75\]</span> <span class="math display">\[J = 71\]</span> <span class="math display">\[\mu_{\alpha_{j}} = 0\]</span> <span class="math display">\[\sigma_{\alpha_{j}}= 1.00\]</span></p>
+<h1 id="fitting-glmm-trees-via-glmertree">Fitting GLMM Trees via <code>{glmertree}</code></h1>
+<p>Specifying models with <code>{glmertree}</code> is similar to <code>{lme4}</code>. However, rather than <em>adding</em> random effects, you specify the model as follows: <code>forumla = outcome ~ fixed effects | random effects | splitting variables</code>.</p>
+<p>A second consideration when fitting generalized mixed effects regression (GLMM) trees is the model’s use of parameter instability tests; therefore, we need to account for cluster covariances in this process, so you want to specify the <code>id</code> variable to the <code>cluster = id</code> argument as well as in the specified formula.</p>
+<h2 id="model-1-fully-exploratory">Model 1: Fully Exploratory</h2>
+<p>Let’s run a very exploratory model here. This is everything but the kitchen sink: an intercept-only model, with random intercept for each level 2 unit, and allowing splits to be made by any of the variables in the data.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tree_1</span> <span class='op'>&lt;-</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/glmertree/man/glmertree.html'>lmertree</a></span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='va'>sim_dat</span>, 
+    formula <span class='op'>=</span> 
+      <span class='va'>outcome</span> <span class='op'>~</span> <span class='fl'>1</span> <span class='op'>|</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>id</span><span class='op'>)</span> <span class='op'>|</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span> <span class='op'>+</span> <span class='va'>w</span>, 
+    cluster <span class='op'>=</span> <span class='va'>id</span>, 
+  <span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<p>Let’s look at plotted results first. Here are the random effects, presented as a caterpillar plot</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>tree_1</span>, which <span class='op'>=</span> <span class='st'>'ranef'</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<pre><code>$id</code></pre>
+<p><img src="apa-2021_files/figure-html5/plot%20ranef%201-1.png" width="624" /></p>
+</div>
+<p>Here is the model presented as a decision tree. With the number of splits we observe here, there is too much information to be very informative about individual nodes (there was actually so much information that I had to use another package <code>{ggparty}</code> to render the plot on this website in a more careful way than the default <code>plot(tree_1, which = 'tree')</code> method. We can see, however, that the model is identifying ranges of <code>z</code> and <code>x</code> that have different intercepts. The model is never presenting <code>w</code> as a variable influencing splitting when there is so much more heterogeneity in levels of <code>z</code> and <code>x</code>. So that’s good!</p>
+<div class="layout-chunk" data-layout="l-screen">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#plot(tree_1, which = 'tree')</span>
+<span class='va'>significance_level</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>p_value</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='va'>p_value</span> <span class='op'>&lt;</span> <span class='fl'>0.001</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"p_value &lt; 0.001"</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='va'>p_value</span> <span class='op'>&lt;</span> <span class='fl'>0.01</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"p_value &lt; 0.01"</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='va'>p_value</span> <span class='op'>&lt;</span> <span class='fl'>0.05</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"p_value &lt; 0.05"</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='kw'>else</span> <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='st'>""</span><span class='op'>)</span><span class='op'>}</span>
+
+
+<span class='fu'>ggparty</span><span class='op'>(</span><span class='va'>tree_1</span><span class='op'>$</span><span class='va'>tree</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>geom_edge</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>1.2</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>geom_node_label</span><span class='op'>(</span>
+      <span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>splitvar</span><span class='op'>)</span>,
+      ids <span class='op'>=</span> <span class='st'>"inner"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_node_plot</span><span class='op'>(</span>
+      gglist <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'>geom_boxplot</span><span class='op'>(</span>
+          <span class='fu'>aes</span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>outcome</span><span class='op'>)</span>, 
+          size <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
+        <span class='fu'>theme_minimal</span><span class='op'>(</span>base_size <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>,
+        <span class='fu'>theme</span><span class='op'>(</span>
+          axis.title.y <span class='op'>=</span> <span class='fu'>element_blank</span><span class='op'>(</span><span class='op'>)</span>,
+          axis.text.y <span class='op'>=</span> <span class='fu'>element_blank</span><span class='op'>(</span><span class='op'>)</span>,
+          axis.line.y <span class='op'>=</span> <span class='fu'>element_line</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>1.5</span><span class='op'>)</span>,
+          panel.grid.minor.y <span class='op'>=</span> <span class='fu'>element_blank</span><span class='op'>(</span><span class='op'>)</span>
+          <span class='op'>)</span><span class='op'>)</span>,
+      shared_axis_labels <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>+</span>
+  <span class='fu'>geom_node_label</span><span class='op'>(</span>
+    line_list <span class='op'>=</span> 
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>splitvar</span><span class='op'>)</span>,
+        <span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>'N = '</span> , <span class='va'>nodesize</span><span class='op'>)</span><span class='op'>)</span>,
+        <span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='fu'>significance_level</span><span class='op'>(</span><span class='va'>p.value</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
+    line_gpar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>80</span><span class='op'>)</span>,
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>,
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span>,
+    ids <span class='op'>=</span> <span class='st'>"inner"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_node_label</span><span class='op'>(</span>
+    <span class='fu'>aes</span><span class='op'>(</span>
+      label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"N = "</span>, <span class='va'>nodesize</span><span class='op'>)</span>
+      <span class='op'>)</span>,
+    ids <span class='op'>=</span> <span class='st'>"terminal"</span>, 
+    line_gpar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<p><img src="apa-2021_files/figure-html5/plot%20tree%201-1.png" width="6144" /></p>
+</div>
+<p>There are two ways we could begin working to make results which can be interpreted.</p>
+<h3 id="add-hyperparameters">Add hyperparameters</h3>
+<p>Hyperparameters are parameters that can be specified by the researcher; these parameters influence the estimation of the parameters in the model. These are common for machine learning, and those relevant to GLMM trees are any that are relevant to decision trees or parameter instability tests (see <a href="https://cran.r-project.org/web/packages/partykit/partykit.pdf"><code>{partykit}</code></a>).</p>
+<p>I’ll point you towards a few and their defaults.</p>
+<ul>
+<li><code>bonferroni = TRUE</code>: Bonferroni corrects <em>p</em>-values. Recommended to leave on.</li>
+<li><code>alpha = 0.05</code>: <em>p</em>-value indicated significant parameter stability. This is typically the first parameter I change, making the threshold more stringent (e.g., <code>alpha = 0.001</code>).</li>
+<li><code>minsize = NULL</code>: the minimum cases allowed in the terminal node. The larger you make this, the more of the sample has to be in a node for you to trust there is generalize-able heterogeneity and not just noise in your data (e.g., <code>minsize = 0.10*nrow(your_data_set)</code>)</li>
+<li><code>trim = NULL</code>: this specifies the percentage (if &lt; 0) or number (if &gt; 0) of outliers to be be omitted from the parameter instability tests. This is done to prevent undue influence of outliers, and does not influence group assignment/splitting; it is just used in testing.</li>
+<li><code>maxdepth = Inf</code>: the depth of the tree that’s allowed to grow. This functionally decreases the level of interactions you allow the data to find.</li>
+</ul>
+<p>These should be tuned carefully and resulting models are ideally discussed with content experts and compared to prior research for validity.</p>
+<p>Let’s re-run this with some more stringent hyperparameters and see if <code>x</code> and <code>z</code> are still contributing:</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tree_2</span> <span class='op'>&lt;-</span> 
+  <span class='fu'>lmertree</span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='va'>sim_dat</span>, 
+    formula <span class='op'>=</span> 
+      <span class='va'>outcome</span> <span class='op'>~</span> <span class='fl'>1</span> <span class='op'>|</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>id</span><span class='op'>)</span> <span class='op'>|</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span> <span class='op'>+</span> <span class='va'>w</span>, 
+    cluster <span class='op'>=</span> <span class='va'>id</span>, 
+    alpha <span class='op'>=</span> <span class='fl'>0.001</span>, 
+    minsize <span class='op'>=</span> <span class='fl'>0.15</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>sim_dat</span><span class='op'>)</span>, 
+    trim <span class='op'>=</span> <span class='fl'>0.1</span>
+  <span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>tree_2</span>, which <span class='op'>=</span> <span class='st'>'tree'</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<p><img src="apa-2021_files/figure-html5/plot%20tree%202-1.png" width="768" /></p>
+</div>
+<p>These groups do not seem too small to interpret the effects, but we in a world so comfortable with inferential statistics, we could estimate fixed effects for these variables and see if we can still find subgroup effects.</p>
+<h3 id="add-fixed-effects">Add Fixed Effects</h3>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tree_3</span> <span class='op'>&lt;-</span> 
+  <span class='fu'>lmertree</span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='va'>sim_dat</span>, 
+    formula <span class='op'>=</span> 
+      <span class='va'>outcome</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>|</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>id</span><span class='op'>)</span> <span class='op'>|</span> <span class='va'>w</span> <span class='op'>+</span> <span class='va'>z</span> <span class='op'>+</span> <span class='va'>x</span>, 
+    cluster <span class='op'>=</span> <span class='va'>id</span>, 
+    alpha <span class='op'>=</span> <span class='fl'>0.001</span>, 
+    minsize <span class='op'>=</span> <span class='fl'>0.15</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>sim_dat</span><span class='op'>)</span>, 
+    trim <span class='op'>=</span> <span class='fl'>0.1</span>
+  <span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>tree_3</span>, which <span class='op'>=</span> <span class='st'>'tree'</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<p><img src="apa-2021_files/figure-html5/plot%20tree%203-1.png" width="768" /></p>
+</div>
+<p>This figure suggests the association of <code>x</code> varies by level of <code>z</code>, such that higher levels of <code>z</code> correspond to greater average levels of <code>outcome</code> and greater associations between <code>x</code> and <code>outcome</code> (i.e., higher intercepts and slopes).</p>
+<p>In other words, when <code>z</code> increases, both <code>outcome</code> increases and the influence of <code>x</code> on <code>outcome</code> increases.</p>
+<p>Of course, you could then add the fixed effect of z, to control for it’s influence.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tree_4</span> <span class='op'>&lt;-</span> 
+  <span class='fu'>lmertree</span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='va'>sim_dat</span>, 
+    formula <span class='op'>=</span> 
+      <span class='va'>outcome</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span> <span class='op'>|</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>id</span><span class='op'>)</span> <span class='op'>|</span> <span class='va'>w</span> <span class='op'>+</span> <span class='va'>z</span> <span class='op'>+</span> <span class='va'>x</span>, 
+    cluster <span class='op'>=</span> <span class='va'>id</span>, 
+    alpha <span class='op'>=</span> <span class='fl'>0.001</span>, 
+    minsize <span class='op'>=</span> <span class='fl'>0.15</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>sim_dat</span><span class='op'>)</span>, 
+    trim <span class='op'>=</span> <span class='fl'>0.1</span>
+  <span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>tree_4</span>, which <span class='op'>=</span> <span class='st'>'tree'</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<p><img src="apa-2021_files/figure-html5/plot%20tree%204-1.png" width="768" /></p>
+</div>
+<p>You see, even controlling for level of <code>z</code>, the interaction is observed here. the relation of <code>z</code> to <code>outcome</code> is fairly constant.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>tree_4</span><span class='op'>$</span><span class='va'>tree</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<pre><code>$`3`
+
+Call:
+lm(formula = outcome ~ x + z, offset = .ranef)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-5.3404 -1.2599  0.0785  1.2732  4.7351 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   4.6483     0.5171   8.989 4.10e-16 ***
+x            -0.3152     0.1677  -1.880   0.0618 .  
+z             2.2098     0.3268   6.763 1.98e-10 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.928 on 174 degrees of freedom
+Multiple R-squared:  0.3212,    Adjusted R-squared:  0.3134 
+F-statistic: 41.17 on 2 and 174 DF,  p-value: 2.299e-15
+
+
+$`4`
+
+Call:
+lm(formula = outcome ~ x + z, offset = .ranef)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-7.5024 -1.4009 -0.0512  1.3477  6.3827 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  4.41059    0.10961  40.239  &lt; 2e-16 ***
+x            0.86367    0.09952   8.678  &lt; 2e-16 ***
+z            1.93628    0.23708   8.167 2.33e-15 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.129 on 529 degrees of freedom
+Multiple R-squared:  0.271, Adjusted R-squared:  0.2682 
+F-statistic: 98.31 on 2 and 529 DF,  p-value: &lt; 2.2e-16
+
+
+$`5`
+
+Call:
+lm(formula = outcome ~ x + z, offset = .ranef)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-5.518 -1.488  0.064  1.462  6.366 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   4.3452     0.2463  17.642   &lt;2e-16 ***
+x             2.0237     0.1094  18.493   &lt;2e-16 ***
+z             1.9798     0.2070   9.563   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.073 on 353 degrees of freedom
+Multiple R-squared:  0.5984,    Adjusted R-squared:  0.5962 
+F-statistic:   263 on 2 and 353 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tree_5</span> <span class='op'>&lt;-</span> 
+  <span class='fu'>lmertree</span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='va'>sim_dat</span>, 
+    formula <span class='op'>=</span> 
+      <span class='va'>outcome</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>*</span> <span class='va'>z</span> <span class='op'>|</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>id</span><span class='op'>)</span> <span class='op'>|</span> <span class='va'>w</span> <span class='op'>+</span> <span class='va'>z</span>, 
+    cluster <span class='op'>=</span> <span class='va'>id</span>, 
+    alpha <span class='op'>=</span> <span class='fl'>0.001</span>, 
+    minsize <span class='op'>=</span> <span class='fl'>0.15</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>sim_dat</span><span class='op'>)</span>, 
+    trim <span class='op'>=</span> <span class='fl'>0.1</span>
+  <span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+</div>
+<h1 id="mlms-via-lme4">MLMs via <code>{lme4}</code></h1>
+<p>If we run a traditional multilevel model (MLM) on this data, we see how closely the MLM estimates identify the simulated effects. We can see the nuisance variable <code>w</code> correctly does not have significant associations with the outcome</p>
 <div class="layout-chunk" data-layout="l-body">
 <details>
 <summary>
@@ -1598,181 +1919,7 @@ z    0.012 -0.014
 w    0.013 -0.024 -0.027       
 x:z -0.005 -0.049 -0.141 -0.003</code></pre>
 </div>
-<p>We see how closely the MLM estimates identify the simulated effects. We see small standard errors and large t-values for these estimates, too. As we’d like to see, <code>w</code> does not have significant associations with the outcome.</p>
-<h1 id="glmertrees">glmertrees</h1>
-<p>Specifying models with <code>{glmertree}</code> is very similar to <code>{lme4}</code>.</p>
-<p>The formula is slightly different; rather than adding random effects, you specify the model as follows: <code>forumla = fixed effects | random effects | splitting variables</code></p>
-<p>Another consideration is that you’re using parameter instability tests in addition to MLMs, so you want to specify the <code>id</code> variable to the <code>cluster = id</code> argument as well.</p>
-<p>Let’s run a very exploratory model here. This is everything but the kitchen sink: an intercept-only model, with random intercept for each level 2 unit, and allowing splits to be made by any of the variables in the data.</p>
-<div class="layout-chunk" data-layout="l-body">
-<details>
-<summary>
-show code
-</summary>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tree_1</span> <span class='op'>&lt;-</span> 
-  <span class='fu'><a href='https://rdrr.io/pkg/glmertree/man/glmertree.html'>lmertree</a></span><span class='op'>(</span>
-    data <span class='op'>=</span> <span class='va'>sim_dat</span>, 
-    formula <span class='op'>=</span> 
-      <span class='va'>outcome</span> <span class='op'>~</span> <span class='fl'>1</span> <span class='op'>|</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>id</span><span class='op'>)</span> <span class='op'>|</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span> <span class='op'>+</span> <span class='va'>w</span>, 
-    cluster <span class='op'>=</span> <span class='va'>id</span>, 
-  <span class='op'>)</span>
-</code></pre>
-</div>
-</details>
-</div>
-<p>Let’s look at plotted results first; adding <code>ask = FALSE</code> to your code lets you see the plotted decision tree and the random effects caterpillar plot without having to click <code>&lt;return&gt;</code> on your keyboard.</p>
-<div class="layout-chunk" data-layout="l-body">
-<details>
-<summary>
-show code
-</summary>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>tree_1</span>, ask <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</code></pre>
-</div>
-</details>
-<p><img src="apa-2021_files/figure-html5/plot%20tree%201-1.png" width="768" /></p>
-<pre><code>$id</code></pre>
-<p><img src="apa-2021_files/figure-html5/plot%20tree%201-2.png" width="768" /></p>
-</div>
-<p>Our model correctly identified the influence of <code>z</code> and <code>x</code>, but we should probably</p>
-<div class="layout-chunk" data-layout="l-body">
-<details>
-<summary>
-show code
-</summary>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tree_2</span> <span class='op'>&lt;-</span> 
-  <span class='fu'><a href='https://rdrr.io/pkg/glmertree/man/glmertree.html'>lmertree</a></span><span class='op'>(</span>
-    data <span class='op'>=</span> <span class='va'>sim_dat</span>, 
-    formula <span class='op'>=</span> 
-      <span class='va'>outcome</span> <span class='op'>~</span> <span class='fl'>1</span> <span class='op'>|</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>id</span><span class='op'>)</span> <span class='op'>|</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span> <span class='op'>+</span> <span class='va'>w</span>, 
-    cluster <span class='op'>=</span> <span class='va'>id</span>, 
-    minsize <span class='op'>=</span> <span class='fl'>0.20</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>sim_dat</span><span class='op'>)</span>,
-    bonferroni <span class='op'>=</span> <span class='cn'>T</span>,
-    alpha <span class='op'>=</span> <span class='fl'>0.001</span>
-  <span class='op'>)</span>
-</code></pre>
-</div>
-</details>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<details>
-<summary>
-show code
-</summary>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>tree_2</span><span class='op'>$</span><span class='va'>tree</span>, ask <span class='op'>=</span> <span class='cn'>F</span><span class='op'>)</span>
-</code></pre>
-</div>
-</details>
-<p><img src="apa-2021_files/figure-html5/plot%20tree%202-1.png" width="768" /></p>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<details>
-<summary>
-show code
-</summary>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tree_3</span> <span class='op'>&lt;-</span> 
-  <span class='fu'><a href='https://rdrr.io/pkg/glmertree/man/glmertree.html'>lmertree</a></span><span class='op'>(</span>
-    data <span class='op'>=</span> <span class='va'>sim_dat</span>, 
-    formula <span class='op'>=</span> 
-      <span class='va'>outcome</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>*</span> <span class='va'>z</span> <span class='op'>|</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>id</span><span class='op'>)</span> <span class='op'>|</span> <span class='va'>w</span>, 
-    cluster <span class='op'>=</span> <span class='va'>id</span>, 
-    <span class='co'>#minsize = 0.50*nrow(sim_dat),</span>
-    alpha <span class='op'>=</span> <span class='fl'>0.001</span>
-  <span class='op'>)</span>
-</code></pre>
-</div>
-</details>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<details>
-<summary>
-show code
-</summary>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>tree_3</span><span class='op'>$</span><span class='va'>tree</span>, ask <span class='op'>=</span> <span class='cn'>F</span><span class='op'>)</span>
-</code></pre>
-</div>
-</details>
-<p><img src="apa-2021_files/figure-html5/plot%20tree%203-1.png" width="768" /></p>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<details>
-<summary>
-show code
-</summary>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>tree_3</span><span class='op'>$</span><span class='va'>lmer</span><span class='op'>)</span>
-</code></pre>
-</div>
-</details>
-<pre><code>Linear mixed model fit by REML [&#39;lmerMod&#39;]
-Formula: outcome ~ x * z + (1 | id)
-   Data: data
-Weights: .weights
-Control: lmer.control
-
-REML criterion at convergence: 4727.3
-
-Scaled residuals: 
-    Min      1Q  Median      3Q     Max 
--3.5375 -0.6599 -0.0292  0.6700  2.9903 
-
-Random effects:
- Groups   Name        Variance Std.Dev.
- id       (Intercept) 0.7395   0.8599  
- Residual             4.5268   2.1276  
-Number of obs: 1065, groups:  id, 71
-
-Fixed effects:
-            Estimate Std. Error t value
-(Intercept)  4.37401    0.12128   36.06
-x            1.09975    0.07133   15.42
-z            1.95631    0.06734   29.05
-x:z          0.80696    0.07160   11.27
-
-Correlation of Fixed Effects:
-    (Intr) x      z     
-x   -0.053              
-z    0.012 -0.014       
-x:z -0.005 -0.049 -0.141</code></pre>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<details>
-<summary>
-show code
-</summary>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>tree_3</span><span class='op'>$</span><span class='va'>tree</span><span class='op'>)</span>
-</code></pre>
-</div>
-</details>
-<pre><code>
-Call:
-lm(formula = outcome ~ x * z, offset = .ranef)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--7.5264 -1.4039 -0.0621  1.4255  6.3622 
-
-Coefficients:
-              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  4.374e+00  6.396e-02   68.39   &lt;2e-16 ***
-x            9.951e-16  6.738e-02    0.00        1    
-z            1.896e-15  6.431e-02    0.00        1    
-x:z         -1.217e-15  6.818e-02    0.00        1    
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-Residual standard error: 2.077 on 1061 degrees of freedom
-Multiple R-squared:  0.608, Adjusted R-squared:  0.6069 
-F-statistic: 548.5 on 3 and 1061 DF,  p-value: &lt; 2.2e-16</code></pre>
-</div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -1780,6 +1927,15 @@ F-statistic: 548.5 on 3 and 1061 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
