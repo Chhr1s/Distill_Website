@@ -1,12 +1,11 @@
 ---
-title: "Simulating Multilevel Linear Data"
+title: "Simulating Multilevel Linear Data with Interaction"
 description: |
-  A short description of the post.
+  function to simulate multilevel data with interaction.
 author:
   - name: Christopher Loan
 date: 2021-07-28
 categories:
-  - Conference
   - Multi-Level Modeling
   - MLM
   - Plotting
