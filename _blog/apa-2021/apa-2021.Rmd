@@ -179,6 +179,47 @@ Specifying models with `{glmertree}` is similar to multilevel models (MLM) with 
 
 A second consideration when fitting generalized mixed effects regression (GLMM) trees is the model's use of parameter instability tests; therefore, we need to account for cluster covariances in this process, so you want to specify the `id` variable to the `cluster = id` argument as well as in the specified formula. As far as I know, the current implementation only allows a 2 level structure, even if the MLM 
 
+
+# Fitting multilevel model to the nonlinear interaction
+
+When we fit an MLM to the data, it is unable to find a significant effect. You see this from the small t-values in the MLM results.
+
+```{r lmer misspecified}
+misspecified_lmer <- 
+  lmer(
+    data = nonlinear_dat, 
+    formula = outcome ~ x * z + w + 
+      (1 | id)
+  )
+summary(misspecified_lmer)
+```
+
+If you had a highly experienced theorist or a whiz analyst, they perhaps could figure out how to correctly specify an MLM, but it would not be quick. This is a three-way interaction, and one where any two-way interaction would either eat away statistical power (or even result in a type I error). that would be specified with this formula: ` outcome ~ x + z + x * z * dummy_code + w +  (1 | id)`, which estimates 4 unnecessary effects. In a smaller sample, potential issues with this are amplified
+
+Below is the correctly specified model, which technically provides statistical test that the slope of each dummy coded group, formed with the condition `x * z < 0`, is different from 0. This would be a very difficult model to simply happen upon. Let's see how GLMM trees act in my [next post](www.christopherloan.com/blog/apa-2021/)
+
+
+```{r lmer3}
+nonlinear_dat <- 
+  nonlinear_dat %>% 
+  mutate(
+    dummy_code = 
+      factor(if_else(x*z < 0, 0, 1))
+      )
+
+confirmation_lmer2 <- 
+  lmer(
+    data = nonlinear_dat, 
+    formula = 
+      outcome ~ x + z + x:z:dummy_code + w +  
+      (1 | id)
+  )
+summary(confirmation_lmer2)
+```
+
+
+
+
 ## Model 1: Fully Exploratory
 
 Let's run a very exploratory model here. This is everything but the kitchen sink: an intercept-only model, with random intercept for each level 2 unit, and allowing splits to be made by any of the variables in the data.

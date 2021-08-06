@@ -132,7 +132,7 @@ project_theme <-
 
 # Simulating data
 
-We have 15 level 1 units, 71 level 2 units. The level 1 intercept of the outcome is 4.25 with a main effect of 1.25 for x, 2.00 for z, and 0.75 for their interaction. The function also makes a nuisance variable `w`, which does not contribute to the outcome at all. 
+We have 15 level 1 units, 71 level 2 units. The level 1 intercept of the outcome is 4.25 with a main effect of 1.25 for `x`, 2.00 for `z`, and 0.75 for their `interaction`. The function also makes a nuisance variable `w`, which does not contribute to `outcome` at all. 
 
 ```{r simulate}
 sim_dat <- 
