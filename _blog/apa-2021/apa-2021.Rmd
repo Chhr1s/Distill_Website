@@ -183,9 +183,8 @@ tree_1 <-
 
 Let's look at plotted results first. Here are the random effects, presented as a caterpillar plot. These random effects will be used as offsets in the linear models fit within each node, if you interpret the model from the one-level with multiple node framework (i.e., from `summary(tree_1$tree)`)
 
-```{r plot ranef 1}
+```{r plot_ranef_1}
 plot(tree_1, which = 'ranef')
-
 ```
 
 ```{r boxplot function}

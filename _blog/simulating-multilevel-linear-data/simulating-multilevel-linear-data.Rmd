@@ -194,7 +194,7 @@ sim_dat %>%
 
 ## Distribution of Variables 
 
-```{r figure 1, fig.width = 8, fig.height = 6}
+```{r figure 1 wwwww, fig.width = 8, fig.height = 6}
 figure_1 <- 
   sim_dat %>% 
   pivot_longer(

@@ -165,7 +165,7 @@ nonlinear_dat <-
 
 # Plotting the Simulated Data
 
-```{r figure 4, layout = "l-body", fig.height=12, fig.width = 16}
+```{r figure 1asdf, layout = "l-body", fig.height=12, fig.width = 16}
 figure_1a <-   
   nonlinear_dat %>% 
   ggplot(aes(x = x, y = outcome)) + 
