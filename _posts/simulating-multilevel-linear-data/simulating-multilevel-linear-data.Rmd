@@ -1,11 +1,10 @@
 ---
-title: "Simulating Multilevel Data"
+title: "Simulating Multilevel Linear Data"
 description: |
-  Simulating 2-level data for APA 2021 Supplemental, so others can follow along.
+  A short description of the post.
 author:
   - name: Christopher Loan
-    url: {}
-date: 2021-08-03
+date: 2021-07-28
 categories:
   - Conference
   - Multi-Level Modeling
@@ -18,6 +17,7 @@ output:
     self_contained: false
     code_folding: show code
     toc: true
+    draft: true
 ---
 
 
@@ -30,23 +30,18 @@ library(tidyverse)
 library(glmertree)
 ```
 
-This post is meant for two audiences:
 
-1) anyone who wants to follow along with my [APA 2021 Supplemental Material](www.christopherloan.com/blog/apa-2021/) or see descriptive statistics on simulated variables
-2) someone looking to simulate their own interaction with nested data
+# Disclaimer 
 
-My code is available for use and alteration, but please give credit via citations. Anyways, let's get into it!
+My code is available for use and alteration, but please give credit with a citation & link to the page. 
 
 # Goal
 
-Simulate data to use in my [APA 2021 Supplemental Material Post](www.christopherloan.com/blog/apa-2021/)
-
-**NUANCE:**
-We're simulating some data with a similar size to the data used in the APA 2021 poster (N = 1065), but with a simpler structure so it's easier to understand. In the poster, we used a cross-classified design which took into account participant-level and item-level variance. The simpler structure we specify here is just using participant-level variance (our hypothetical level 2 unit). Each of the 15 items — our theoretical level 1 unit — is nested within a participant (n = 71), meaning we only estimate 1 random effect instead of the 2 we had in our poster.
+Share code for simulating multilevel data, with optional interaction term.
 
 # Function to simulate 2 level data with an interaction
 
-There's a million ways to do this, but so you can see every step in simulating multilevel data, I've written it here as a function. This function allows you to specify sample sizes, two main effects, an interaction, and other features of the data. 
+This function allows you to specify sample sizes, two main effects (`main_x` & `main_z`), an `interaction`, and other features of the data. If you specify `interaction = 0`, you can simply specify multilevel data with no interaction term. Of course the code could be extended to include as many effects as you need. It also provides a variable (`w`) that's not associated with the outcome (`outcome`). 
 
 ```{r functions, include = TRUE}
 simulate_interaction_w_2_levels <-
@@ -120,7 +115,8 @@ simulate_interaction_w_2_levels <-
   }
 ```
 
-```{r plot_theme, include=F}
+```{r plot_theme}
+# baseline theme for plots here
 project_theme <- 
   theme(
     axis.line = element_line(size = 3, lineend = 'round'), 
@@ -311,7 +307,6 @@ figure_3c <-
 ggpubr::ggarrange(figure_3a, figure_3b, figure_3c, ncol = 1)
 ```
 
-
 # Fitting multilevel model to the data
 
 The simulation looks to have worked as planned. With larger samples, the effects becomes closer to what we specified, obviously, but that was omitted for brevity. Let's see what this data looks like with an `{lme4}` to be sure. 
@@ -327,178 +322,3 @@ summary(confirmation_lmer)
 ```
 
 We see how closely the MLM estimates identify the simulated effects. We see small standard errors and large t-values for these estimates, too. As we'd like to see, `w` does not have significant associations with the outcome.
-
-# non-linear interaction
-
-So that is a simple simulation with a linear interaction term. If we change just one bit of code, specifically replacing the contribution of the interaction in the previous function with an `if_else()` statement. Specifically, replacing  `interaction*z[[i]]*x[[i]]` for 
-`if_else(z[[i]]*x[[i]] < 0, interaction1*z[[i]]*x[[i]], interaction2*z[[i]]*x[[i]])`.
-This is one type of circumstance where MLMs may struggle without substantial theoretical understanding to guide exploration of data. 
-
-```{r function non-linear, include = FALSE}
-simulate_nonlinear_intx <-
-  function(
-    n, ## number level 1 units
-    j, ## number level 2 units
-    intercept_lv1, ## intercept at level 1
-    main_x, ## main effect of x
-    main_z, ## main effect of z
-    interaction1, ## interaction of x and z when product < 0
-    interaction2, ## interaction of x and z when product >= 0
-    residual_var_sd_lv1, ## standard deviation of residuals at level 1
-    random_int_mean_lv2, ## mean of random intercept at level 2
-    random_int_sd_lv2, ## standard deviation of random intercept at level 2,
-    start_seed = 123
-  ){
-    
-    ## placeholder for level 2 outcomes
-    outcomes_j <- vector("list", j)
-    
-    ## for each variable, make list 
-    ## as long as level 2
-    ## fill each element with a list of level 1 outcomes
-    
-    
-    x <- vector("list", j) 
-    z <- vector("list", j) 
-    w <- vector("list", j) 
-    
-    ## School distribution (intercept at level 2)
-    ## Standard deviation of random intercept at level 2
-    set.seed(start_seed)
-    
-    a_j <- rnorm(j, random_int_mean_lv2, random_int_sd_lv2)
-    
-    for(i in 1:j) {
-      
-      ## make a level 1 predictor variable:
-      ## set multiple seeds that change each iteration
-      ## prevents identical cases with seed
-      
-      set.seed(start_seed+i)
-      x[[i]] <- rnorm(n)
-      set.seed(start_seed-i)
-      z[[i]] <- rnorm(n)
-      set.seed(-start_seed + i)
-      outcomes_j[[i]] <- 
-        rnorm(
-          n, 
-          intercept_lv1 + 
-            #interaction*z[[i]]*x[[i]] + 
-            if_else(z[[i]]*x[[i]] < 0, 
-                    interaction1*z[[i]]*x[[i]], 
-                    interaction2*z[[i]]*x[[i]]) +
-            main_x*x[[i]] + 
-            main_z*z[[i]] + 
-            a_j[i], 
-          ## standard deviation of residual variance
-          residual_var_sd_lv1
-        )
-      set.seed(start_seed*197+197*i)
-      w[[i]] <- rnorm(n)
-    }
-    
-    outcomes_df <- 
-      data.frame(
-        id = rep(1:j, each = n),
-        x = unlist(x),
-        z = unlist(z),
-        outcome = unlist(outcomes_j),
-        w = unlist(w)
-      )
-    
-    return(outcomes_df)
-  }
-```
-
-```{r simulate nonlinear data}
-nonlinear_dat <-
-  simulate_nonlinear_intx(
-    n = 15, ## number level 1 units at each level 2
-    j = 71, ## number level 2 units
-    intercept_lv1 = 4.25, ## intercept at level 1
-    main_x = 1.25, ## main effect of x
-    main_z = 2.00, ## main effect of z
-    interaction1 = -4, ## interaction of x and z when product < 0
-    interaction2 = 4, ## interaction of x and z when product >= 0
-    residual_var_sd_lv1 = 2.00, ## standard deviation of residuals at level 1
-    random_int_mean_lv2 = 0, ## mean of random intercept at level 2
-    random_int_sd_lv2 = 1.00, ## standard deviation of random intercept at level 2,
-    start_seed = 123 ## ensure you can reproduce 
-  )
-```
-
-
-```{r figure 4, layout = "l-body", fig.height=12, fig.width = 16}
-figure_4a <-   
-  nonlinear_dat %>% 
-  ggplot(aes(x = x, y = outcome)) + 
-  geom_point() +
-  geom_smooth(method = 'lm') +
-  theme_minimal() +
-  project_theme +
-  labs(
-    title = 'Figure 4. Association of Outcome & Each Covariate (non-linear intx)',
-    subtitle = '4a. Association of Outcome & x'
-    ) +
-  theme(plot.subtitle = element_text(size = 15))
-
-figure_4b <-   
-  nonlinear_dat %>%
-  ggplot(aes(x = z, y = outcome)) + 
-  geom_point() +
-  geom_smooth(method = 'lm') +
-  theme_minimal() +
-  project_theme +
-  labs(subtitle = '4b. Association of Outcome & z') +
-  theme(plot.subtitle = element_text(size = 15))
-
-figure_4c <- 
-  nonlinear_dat %>% 
-  ggplot(aes(x = x*z, y = outcome)) + 
-  geom_point() +
-  geom_smooth(method = 'lm', aes(group = x*z < 0)) +
-  theme_minimal() +
-  project_theme +
-  labs(subtitle = '4c. Association of Outcome & Interaction') +
-  theme(plot.subtitle = element_text(size = 15))
-
-ggpubr::ggarrange(figure_4a, figure_4b, figure_4c, ncol = 1)
-```
-
-# Fitting multilevel model to the nonlinear interaction
-
-When we fit an MLM to the data, it is unable to find a significant effect. You see this from the small t-values in the MLM results.
-
-```{r lmer misspecified}
-misspecified_lmer <- 
-  lmer(
-    data = nonlinear_dat, 
-    formula = outcome ~ x * z + w + 
-      (1 | id)
-  )
-summary(misspecified_lmer)
-```
-
-If you had a highly experienced theorist or a whiz analyst, they perhaps could figure out how to correctly specify an MLM, but it would not be quick. This is a three-way interaction, and one where any two-way interaction would either eat away statistical power (or even result in a type I error). that would be specified with this formula: ` outcome ~ x + z + x * z * dummy_code + w +  (1 | id)`, which estimates 4 unnecessary effects. In a smaller sample, potential issues with this are amplified
-
-Below is the correctly specified model, which technically provides statistical test that the slope of each dummy coded group, formed with the condition `x * z < 0`, is different from 0. This would be a very difficult model to simply happen upon. Let's see how GLMM trees act in my [next post](www.christopherloan.com/blog/apa-2021/)
-
-
-```{r lmer3}
-nonlinear_dat <- 
-  nonlinear_dat %>% 
-  mutate(
-    dummy_code = 
-      factor(if_else(x*z < 0, 0, 1))
-      )
-
-confirmation_lmer2 <- 
-  lmer(
-    data = nonlinear_dat, 
-    formula = 
-      outcome ~ x + z + x:z:dummy_code + w +  
-      (1 | id)
-  )
-summary(confirmation_lmer2)
-```
-

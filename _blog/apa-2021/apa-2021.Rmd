@@ -23,17 +23,15 @@ output:
 draft: true
 ---
 
-The purpose of these supplemental materials is to walk users through using the `{glmertree}` package and provide references/supplemental reading for our poster. Refer to the Table of Contents (or scroll down) if you're just here for references. 
-
-For readability, code is included but can be hidden by clicking `show code`
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, cache = T)
 ```
 
-Everything will be done with `{tidyverse}` functions and the`{glmertree}` package. I'll compare some `{glmertree}` results to `{lme4}`, but this is loaded via `{glmertree}`. I'll try and use the `::` operator to namespace functions that aren't from the aforementioned packages. That way you know what packages call any other function I use.
-
 # Background
+
+The purpose of these supplemental materials is to walk users through a few models and technical details associated with the `{glmertree}` package and provide references/supplemental reading for our poster. Refer to the Table of Contents (or scroll down) if you're just here for references. 
+
+For readability, code is included but can be shown/hidden by clicking `show code`.
 
 ## load libraries
 
@@ -45,11 +43,9 @@ library(ggparty)
 
 ## simulating data
 
-In a perfect world, I'd be able to share the data with you and use the same data used on the poster without anything bad happening; however, we have data privacy for a reason. I still want to show you how to specify these models, and I want you to have the option to follow along. If you don't care about the simulation and just want to see model specification: Keep reading—you're in the right place! 
+For data privacy, I'm using simulated data to walk you through these models. If you don't care about the simulation and just want to see model specification, keep reading; you're in the right place! If you're interested in knowing how I simulated the data, check out [this blog post of mine](www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/).
 
-To see how the simulation occurs and/or follow along, check out [another blog post of mine](www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/) that provides you with the function and describes data explored with it.
-
-The short of it: I simulated N = 1065 cases — the same number of as the APA 2021 poster. However, I did not simulate random effects for items across participants. This simplifies the cross-classified design to be a simple two-level design that has n = 71 level 2 units, each with n = 15 level 1 units. Each level 2 unit has an outcome (`outcome`), two variables that are related to the outcome (`x` and `z`), and a variable that is *not* associated with the outcome (`w`). 
+The short of it: I simulated N = 1065 cases — the same number of as the APA 2021 poster. However, I did not simulate random effects for items across participants. This simplifies the cross-classified design of our poster to a simpler two-level design that has n = 71 level 2 units, each with n = 15 level 1 units. Each level 2 unit has an outcome (`outcome`), two variables that are related to the outcome (`x` and `z`), and a variable that is *not* associated with the outcome (`w`). 
 
 ```{r functions, include = FALSE}
 simulate_interaction_w_2_levels <-
@@ -177,12 +173,11 @@ $$J = 71$$
 $$\mu_{\alpha_{j}} = 0$$
 $$\sigma_{\alpha_{j}}= 1.00$$
 
+# Fitting Generalized Linear Mixed Effects Model Regression (GLMM) Trees via `{glmertree}`
 
-# Fitting GLMM Trees via `{glmertree}`
+Specifying models with `{glmertree}` is similar to multilevel models (MLM) with `{lme4}`. However, rather than *adding* random effects with `{lme4}`, you specify the model as follows: `forumla = outcome ~ fixed effects | random effects | splitting variables`.
 
-Specifying models with `{glmertree}` is similar to `{lme4}`. However, rather than *adding* random effects, you specify the model as follows: `forumla = outcome ~ fixed effects | random effects | splitting variables`.
-
-A second consideration when fitting generalized mixed effects regression (GLMM) trees is the model's use of parameter instability tests; therefore, we need to account for cluster covariances in this process, so you want to specify the `id` variable to the `cluster = id` argument as well as in the specified formula. 
+A second consideration when fitting generalized mixed effects regression (GLMM) trees is the model's use of parameter instability tests; therefore, we need to account for cluster covariances in this process, so you want to specify the `id` variable to the `cluster = id` argument as well as in the specified formula. As far as I know, the current implementation only allows a 2 level structure, even if the MLM 
 
 ## Model 1: Fully Exploratory
 
@@ -255,6 +250,80 @@ ggparty(tree_1$tree[1]) +
 
 There are two ways we could begin working to make results which can be interpreted. 
 
+
+
+```{r}
+tree_0 <- 
+  lmertree(
+    data = nonlinear_dat, 
+    formula = 
+      outcome ~ x | (1 | id) | w + z + x, 
+    cluster = id, 
+  )
+
+
+tree_00 <- 
+  lmertree(
+    data = nonlinear_dat, 
+    formula = 
+      outcome ~ x | (1 | id) | w + z + x, 
+    cluster = id, 
+    maxdepth = 3
+  )
+summary(tree_00$tree)
+```
+
+```{r plot tree 1, layout = "l-body", fig.width = 64, fig.height=48}
+
+significance_level <- function(p_value) {
+  if (p_value < 0.001) return(c("p_value < 0.001"))
+  if (p_value < 0.01) return(c("p_value < 0.01"))
+  if (p_value < 0.05) return(c("p_value < 0.05"))
+  else return("")}
+
+
+ggparty(tree_00$tree[1]) +
+    geom_edge(size = 1.2) +
+  geom_edge_label() +
+    geom_node_label(
+      aes(label = splitvar),
+      ids = "inner") +
+  geom_node_plot(
+      gglist = list(
+        geom_point(
+          aes(y = outcome, x = x), 
+          size = 2),
+        geom_smooth(method = 'lm', aes(y = outcome, x = x)),
+        theme_minimal(base_size = 30),
+        theme(
+          axis.title.y = element_blank(),
+          axis.text.y = element_blank(),
+          axis.line.y = element_line(size = 1.5),
+          panel.grid.minor.y = element_blank()
+          )),
+      shared_axis_labels = TRUE)+
+  geom_node_label(
+    line_list = 
+      list(
+        aes(label = splitvar),
+        aes(label = paste('N = ' , nodesize)),
+        aes(label = significance_level(p.value))),
+    line_gpar = list(
+      list(size = 20),
+      list(size = 20),
+      list(size = 20)),
+    ids = "inner") +
+  geom_node_label(
+    aes(
+      label = paste0("N = ", nodesize)
+      ),
+    ids = "terminal", 
+    line_gpar = list(list(size = 20))
+    )
+```
+
+
+
 ### Add hyperparameters
 
 Hyperparameters are parameters that can be specified by the researcher; these parameters influence the estimation of the parameters in the model. These are common for machine learning, and those relevant to GLMM trees are any that are relevant to decision trees or parameter instability tests (see [`{partykit}`](https://cran.r-project.org/web/packages/partykit/partykit.pdf)). 
@@ -271,16 +340,29 @@ These should be tuned carefully and resulting models are ideally discussed with 
 
 Let's re-run this with some more stringent hyperparameters and see if `x` and `z` are still contributing:
 
+
+
 ```{r tree 2}
 tree_2 <- 
   lmertree(
-    data = sim_dat, 
+    data = dat2, 
     formula = 
-      outcome ~ 1 | (1 | id) | x + z + w, 
+      outcome ~ 1 | (1 | id) | x + z + w + a + b + c + d, 
     cluster = id, 
     alpha = 0.001, 
     minsize = 0.15*nrow(sim_dat), 
-    trim = 0.1
+    trim = 0.1, 
+    #mtry = 3
+  )
+plot(tree_2$tree)
+
+dat2 <- 
+  sim_dat %>% 
+  mutate(
+    a = rnorm(nrow(sim_dat)),
+    b = rnorm(nrow(sim_dat)),
+    c = rnorm(nrow(sim_dat)), 
+    d = rnorm(nrow(sim_dat))
   )
 ```
 
@@ -360,9 +442,32 @@ If we run a traditional multilevel model (MLM) on this data, we see how closely 
 confirmation_lmer <- 
   lmer(
     data = sim_dat, 
-    formula = outcome ~ x * z + w + # equivalent to x + z + x : z
+    formula = outcome ~ x * z + w +
       (1 | id)
   )
 summary(confirmation_lmer)
 ```
 
+# References & Recommended Reading
+
+Bates, D., Maechler, M., Bolker, B., & Walker, S. (2015). Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1), 1-48. doi:10.18637/jss.v067.i01.
+
+Fokkema, M., Edbrooke-Childs, J., & Wolpert, M. (2020). Generalized linear mixed-model (GLMM) trees: A flexible decision-tree method for multilevel and longitudinal data. Psychotherapy Research, 31(3), 329-341.
+
+Fokkema, M., Smits, N., Zeileis, A., Hothorn, T., & Kelderman, H. (2018). Detecting treatment-subgroup interactions in clustered data with generalized linear mixed-effects model trees. Behavior research methods, 50(5), 2016-2034.
+
+Hothorn, T. & Zeileis, A. (2015). partykit: A Modular Toolkit for Recursive Partytioning in R. Journal of Machine Learning Research, 16, 3905-3909. 
+
+Hothorn, T., Hornik, K., & Zeileis, A. (2006). Unbiased recursive partitioning: A conditional inference framework. Journal of Computational and Graphical statistics, 15(3), 651-674.
+
+Hulleman, C. S., Godes, O., Hendricks, B. L., & Harackiewicz, J. M. (2010). Enhancing interest and performance with a utility value intervention. Journal of educational psychology, 102(4), 880.
+
+Borkovec, M. & Madin, N. (2019). ggparty: 'ggplot' Visualizations for the 'partykit' Package. R package version 1.0.0.
+
+Villanueva, I., Husman, J., Christensen, D., Youmans, K., Khan, M.T., Vicioso, P., Lampkins, S. and Graham, M.C., 2019. A Cross-Disciplinary and Multi-Modal Experimental Design for Studying Near-Real-Time Authentic Examination Experiences. JoVE (Journal of Visualized Experiments), (151), p.e60037.
+
+Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, 
+
+Zeileis, A. (2001). strucchange: Testing for structural change in linear regression relationships. R News, 1(3), 8-11.
+
+Zeileis, A., Hothorn, T., & Hornik, K. (2008). Model-based recursive partitioning. Journal of Computational and Graphical Statistics, 17(2), 492-514.
