@@ -2152,6 +2152,8 @@ Links to Additional Projects
 <li><a href="#function">Function</a></li>
 <li><a href="#simulating-data">Simulating data</a></li>
 <li><a href="#plotting-the-simulated-data">Plotting the Simulated Data</a></li>
+<li><a href="#fitting-multilevel-model-to-the-nonlinear-interaction">Fitting multilevel model to the nonlinear interaction</a></li>
+<li><a href="#exploring-the-data-with-the-glmertree-package">Exploring the Data with the <code>{glmertree}</code> package</a></li>
 </ul>
 </nav>
 </div>
@@ -2178,7 +2180,7 @@ show code
 <p>Simulate data to use in my <a href="www.christopherloan.com/blog/apa-2021/">APA 2021 Supplemental Material Post</a>.</p>
 <h1 id="function">Function</h1>
 <h1 id="simulating-data">Simulating data</h1>
-<p>By modifying the interaction in the previous data simulation function (www.christopherloan.com/blog/simulating-multilevel-linear-data/) with an <code>if_else()</code> statement, we can make a more complex interaction term that would not be easily detected by traditional multilevel models (MLMs). I am coding the interaction’s influence as conditional on it’s value, more specifically the interaction’s effect is: <code>if_else(z[[i]]*x[[i]] &lt; 0, interaction1*z[[i]]*x[[i]], interaction2*z[[i]]*x[[i]])</code>. This is one type of circumstance where MLMs may struggle without substantial theoretical understanding to guide exploration of data.</p>
+<p>By modifying the interaction in the previous <a href="www.christopherloan.com/blog/simulating-multilevel-linear-data/">data simulation function</a> with an <code>if_else()</code> statement, we can make a more complex interaction term that would not be easily detected by traditional multilevel models (MLMs). I am coding the interaction’s influence as conditional on it’s value, more specifically the interaction’s effect is: <code>if_else(z[[i]]*x[[i]] &lt; 0, interaction1*z[[i]]*x[[i]], interaction2*z[[i]]*x[[i]])</code>. This is one type of circumstance where MLMs may struggle without substantial theoretical understanding to guide exploration of data.</p>
 <p>So that is a simple simulation with a complex interaction term. We have 15 level 1 units for each level 2 unit and 71 level 2 units (labeled with <code>id</code>). The level 1 intercept of <code>outcome</code> is 4.25 with a main effect of 1.25 for <code>x</code>, 2.00 for <code>z</code>. The function also makes a nuisance variable <code>w</code>, which does not contribute to <code>outcome</code> at all.</p>
 <div class="layout-chunk" data-layout="l-body">
 <details>
@@ -2250,7 +2252,117 @@ show code
 </details>
 <p><img src="simulating-2-level-data-for-apa-2021-supplemental_files/figure-html5/figure%204-1.png" width="1536" /></p>
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h1 id="fitting-multilevel-model-to-the-nonlinear-interaction">Fitting multilevel model to the nonlinear interaction</h1>
+<p>When we fit an MLM to the data, it is unable to find a significant effect. You see this from the small t-values in the MLM results.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>misspecified_lmer</span> <span class='op'>&lt;-</span> 
+  <span class='fu'>lmer</span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='va'>nonlinear_dat</span>, 
+    formula <span class='op'>=</span> <span class='va'>outcome</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>*</span> <span class='va'>z</span> <span class='op'>+</span> <span class='va'>w</span> <span class='op'>+</span> 
+      <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>id</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>misspecified_lmer</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<pre><code>Linear mixed model fit by REML [&#39;lmerMod&#39;]
+Formula: outcome ~ x * z + w + (1 | id)
+   Data: nonlinear_dat
+
+REML criterion at convergence: 5730
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.7929 -0.6616 -0.1518  0.4770  4.5718 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ id       (Intercept)  0.7794  0.8828  
+ Residual             12.0680  3.4739  
+Number of obs: 1065, groups:  id, 71
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)   6.7859     0.1498  45.312
+x             1.3789     0.1153  11.961
+z             2.0853     0.1093  19.087
+w             0.1155     0.1093   1.057
+x:z           0.1555     0.1160   1.341
+
+Correlation of Fixed Effects:
+    (Intr) x      z      w     
+x   -0.069                     
+z    0.016 -0.011              
+w    0.016 -0.023 -0.031       
+x:z -0.006 -0.049 -0.140 -0.004</code></pre>
+</div>
+<p>If you had a highly experienced theorist or a whiz analyst, they perhaps could figure out how to correctly specify an MLM, but it would not be quick. This is a three-way interaction, and one where any two-way interaction would either eat away statistical power (or even result in a type I error). that would be specified with this formula: <code>outcome ~ x + z + x * z * dummy_code + w +  (1 | id)</code>, which estimates 4 unnecessary effects. In a smaller sample, potential issues with this are amplified</p>
+<p>Below is the correctly specified model, which technically provides statistical test that the slope of each dummy coded group, formed with the condition <code>x * z &lt; 0</code>, is different from 0. This would be a very difficult model to simply happen upon.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nonlinear_dat</span> <span class='op'>&lt;-</span> 
+  <span class='va'>nonlinear_dat</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>
+    dummy_code <span class='op'>=</span> 
+      <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'>if_else</span><span class='op'>(</span><span class='va'>x</span><span class='op'>*</span><span class='va'>z</span> <span class='op'>&lt;</span> <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+      <span class='op'>)</span>
+
+<span class='va'>confirmation_lmer2</span> <span class='op'>&lt;-</span> 
+  <span class='fu'>lmer</span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='va'>nonlinear_dat</span>, 
+    formula <span class='op'>=</span> 
+      <span class='va'>outcome</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span> <span class='op'>+</span> <span class='va'>x</span><span class='op'>:</span><span class='va'>z</span><span class='op'>:</span><span class='va'>dummy_code</span> <span class='op'>+</span> <span class='va'>w</span> <span class='op'>+</span>  
+      <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>id</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>confirmation_lmer2</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<pre><code>Linear mixed model fit by REML [&#39;lmerMod&#39;]
+Formula: outcome ~ x + z + x:z:dummy_code + w + (1 | id)
+   Data: nonlinear_dat
+
+REML criterion at convergence: 4727.3
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5431 -0.6796 -0.0225  0.6703  2.9410 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ id       (Intercept) 0.7424   0.8616  
+ Residual             4.5122   2.1242  
+Number of obs: 1065, groups:  id, 71
+
+Fixed effects:
+                Estimate Std. Error t value
+(Intercept)      4.48729    0.13363  33.579
+x                1.11054    0.07152  15.528
+z                1.96038    0.06733  29.117
+w                0.07117    0.06740   1.056
+x:z:dummy_code0 -3.75376    0.11871 -31.621
+x:z:dummy_code1  3.87560    0.11535  33.598
+
+Correlation of Fixed Effects:
+            (Intr) x      z      w      x:z:_0
+x           -0.011                            
+z            0.029 -0.010                     
+w            0.016 -0.023 -0.027              
+x:z:dmmy_c0  0.331  0.041 -0.049  0.008       
+x:z:dmmy_c1 -0.331 -0.100 -0.122 -0.011 -0.253</code></pre>
+</div>
+<h1 id="exploring-the-data-with-the-glmertree-package">Exploring the Data with the <code>{glmertree}</code> package</h1>
+<p>Let’s see how GLMM trees act in my <a href="www.christopherloan.com/blog/apa-2021/">next post</a></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

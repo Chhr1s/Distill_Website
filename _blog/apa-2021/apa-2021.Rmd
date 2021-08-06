@@ -20,7 +20,7 @@ output:
     self_contained: false
     code_folding: show code
     toc: true
-draft: true
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
@@ -29,9 +29,25 @@ knitr::opts_chunk$set(echo = FALSE, cache = T)
 
 # Background
 
-The purpose of these supplemental materials is to walk users through a few models and technical details associated with the `{glmertree}` package and provide references/supplemental reading for our poster. Refer to the Table of Contents (or scroll down) if you're just here for references. 
+The purpose of these supplemental materials is to walk users through a few models and technical details associated with the `{glmertree}` package and provide references/supplemental reading for our poster. Refer to the Table of Contents (or scroll down) if you're just here for references & [recommended reading](# References & Recommended Reading). 
 
 For readability, code is included but can be shown/hidden by clicking `show code`.
+
+```{r plot_theme, include=F}
+project_theme <- 
+  theme(
+    axis.line = element_line(size = 3, lineend = 'round'), 
+    legend.position = 'none',
+    plot.title.position = 'plot', 
+    panel.grid.minor = element_blank(),
+    axis.title.x = element_text(size = 18),
+    axis.text = element_text(size = 16),
+    axis.title.y = element_text(size = 20),
+    plot.title = element_text(size = 25),
+    strip.text = element_text(size = 25),
+  )
+```
+
 
 ## load libraries
 
@@ -45,17 +61,18 @@ library(ggparty)
 
 For data privacy, I'm using simulated data to walk you through these models. If you don't care about the simulation and just want to see model specification, keep reading; you're in the right place! If you're interested in knowing how I simulated the data, check out [this blog post of mine](www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/).
 
-The short of it: I simulated N = 1065 cases — the same number of as the APA 2021 poster. However, I did not simulate random effects for items across participants. This simplifies the cross-classified design of our poster to a simpler two-level design that has n = 71 level 2 units, each with n = 15 level 1 units. Each level 2 unit has an outcome (`outcome`), two variables that are related to the outcome (`x` and `z`), and a variable that is *not* associated with the outcome (`w`). 
+I made a complex interaction term that would not be easily detected by a multilevel model (MLM), and showed how you would have to [specify the fixed effects](www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/) to appropriately approximate the data. This basically resulted in a 3-way interaction that would be highly unlikely to be theorized in multimodal approached, barring strong theoretical evidence or equally strong analyst capability (e.g., to draw associations from graphic exploration of the data).
 
-```{r functions, include = FALSE}
-simulate_interaction_w_2_levels <-
+```{r function non-linear, include = FALSE}
+simulate_nonlinear_intx <-
   function(
     n, ## number level 1 units
     j, ## number level 2 units
     intercept_lv1, ## intercept at level 1
     main_x, ## main effect of x
     main_z, ## main effect of z
-    interaction, ## interaction of x and z
+    interaction1, ## interaction of x and z when product < 0
+    interaction2, ## interaction of x and z when product >= 0
     residual_var_sd_lv1, ## standard deviation of residuals at level 1
     random_int_mean_lv2, ## mean of random intercept at level 2
     random_int_sd_lv2, ## standard deviation of random intercept at level 2,
@@ -95,7 +112,10 @@ simulate_interaction_w_2_levels <-
         rnorm(
           n, 
           intercept_lv1 + 
-            interaction*z[[i]]*x[[i]] + 
+            #interaction*z[[i]]*x[[i]] + 
+            if_else(z[[i]]*x[[i]] < 0, 
+                    interaction1*z[[i]]*x[[i]], 
+                    interaction2*z[[i]]*x[[i]]) +
             main_x*x[[i]] + 
             main_z*z[[i]] + 
             a_j[i], 
@@ -119,106 +139,32 @@ simulate_interaction_w_2_levels <-
   }
 ```
 
-```{r plot_theme, include=F}
-project_theme <- 
-  theme(
-    axis.line = element_line(size = 3, lineend = 'round'), 
-    legend.position = 'none',
-    plot.title.position = 'plot', 
-    panel.grid.minor = element_blank(),
-    axis.title.x = element_text(size = 18),
-    axis.text = element_text(size = 16),
-    axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 25),
-    strip.text = element_text(size = 25),
-  )
-```
+We have 15 level 1 units for each level 2 unit and 71 level 2 units (labeled with `id`). The level 1 intercept of `outcome` is 4.25 with a main effect of 1.25 for `x`, 2.00 for `z`. The function also makes a nuisance variable `w`, which does not contribute to `outcome` at all. 
 
-```{r simulate}
-sim_dat <- 
-  simulate_interaction_w_2_levels(
+```{r simulate nonlinear data}
+sim_dat <-
+  simulate_nonlinear_intx(
     n = 15, ## number level 1 units at each level 2
     j = 71, ## number level 2 units
     intercept_lv1 = 4.25, ## intercept at level 1
     main_x = 1.25, ## main effect of x
     main_z = 2.00, ## main effect of z
-    interaction = 0.75, ## interaction of x and z
+    interaction1 = -4, ## interaction of x and z when product < 0
+    interaction2 = 4, ## interaction of x and z when product >= 0
     residual_var_sd_lv1 = 2.00, ## standard deviation of residuals at level 1
     random_int_mean_lv2 = 0, ## mean of random intercept at level 2
     random_int_sd_lv2 = 1.00, ## standard deviation of random intercept at level 2,
     start_seed = 123 ## ensure you can reproduce 
-  ) %>% 
-  tibble()
+  )
 ```
 
-Put formally, we're simulating: 
-
-$$
-\begin{aligned}
-  \operatorname{outcome}_{i}  &\sim N \left(\mu, \sigma^2 \right) \\
-    \mu &=\alpha_{j[i]} + \beta_{1}(\operatorname{x}) + \beta_{2}(\operatorname{z}) + \beta_{3}(\operatorname{w}) + \beta_{4}(\operatorname{x} \times \operatorname{z}) \\
-    \alpha_{j}  &\sim N \left(\mu_{\alpha_{j}}, \sigma^2_{\alpha_{j}} \right)
-    \text{, for id j = 1,} \dots \text{,J}
-\end{aligned}
-$$
-where 
-
-$$\mu = 4.25$$
-$$\sigma = 2.00$$
-$$\beta_{1} = 1.25$$ 
-$$\beta_{2} = 2.00$$ 
-$$\beta_{3} = 0$$ 
-$$\beta_{4} = 0.75$$
-$$J = 71$$
-$$\mu_{\alpha_{j}} = 0$$
-$$\sigma_{\alpha_{j}}= 1.00$$
+GLMM trees should be able to find heterogeneity in the association of `outcome` and `x` (or `z`, it doesn't matter) and explain differential effects of `z` and `x` without analyst knowledge of a complex higher-order interaction (i.e., *n*-way interactions when *n* > 2). 
 
 # Fitting Generalized Linear Mixed Effects Model Regression (GLMM) Trees via `{glmertree}`
 
 Specifying models with `{glmertree}` is similar to multilevel models (MLM) with `{lme4}`. However, rather than *adding* random effects with `{lme4}`, you specify the model as follows: `forumla = outcome ~ fixed effects | random effects | splitting variables`.
 
-A second consideration when fitting generalized mixed effects regression (GLMM) trees is the model's use of parameter instability tests; therefore, we need to account for cluster covariances in this process, so you want to specify the `id` variable to the `cluster = id` argument as well as in the specified formula. As far as I know, the current implementation only allows a 2 level structure, even if the MLM 
-
-
-# Fitting multilevel model to the nonlinear interaction
-
-When we fit an MLM to the data, it is unable to find a significant effect. You see this from the small t-values in the MLM results.
-
-```{r lmer misspecified}
-misspecified_lmer <- 
-  lmer(
-    data = nonlinear_dat, 
-    formula = outcome ~ x * z + w + 
-      (1 | id)
-  )
-summary(misspecified_lmer)
-```
-
-If you had a highly experienced theorist or a whiz analyst, they perhaps could figure out how to correctly specify an MLM, but it would not be quick. This is a three-way interaction, and one where any two-way interaction would either eat away statistical power (or even result in a type I error). that would be specified with this formula: ` outcome ~ x + z + x * z * dummy_code + w +  (1 | id)`, which estimates 4 unnecessary effects. In a smaller sample, potential issues with this are amplified
-
-Below is the correctly specified model, which technically provides statistical test that the slope of each dummy coded group, formed with the condition `x * z < 0`, is different from 0. This would be a very difficult model to simply happen upon. Let's see how GLMM trees act in my [next post](www.christopherloan.com/blog/apa-2021/)
-
-
-```{r lmer3}
-nonlinear_dat <- 
-  nonlinear_dat %>% 
-  mutate(
-    dummy_code = 
-      factor(if_else(x*z < 0, 0, 1))
-      )
-
-confirmation_lmer2 <- 
-  lmer(
-    data = nonlinear_dat, 
-    formula = 
-      outcome ~ x + z + x:z:dummy_code + w +  
-      (1 | id)
-  )
-summary(confirmation_lmer2)
-```
-
-
-
+A second consideration when fitting GLMM trees is the model's use of parameter instability tests; therefore, we need to account for cluster covariances in this process, so you want to specify the `id` variable to the `cluster = id` argument as well as in the specified formula. As far as I know, the current implementation only allows a 2 level structure, even if the MLM 
 
 ## Model 1: Fully Exploratory
 
@@ -230,102 +176,144 @@ tree_1 <-
     data = sim_dat, 
     formula = 
       outcome ~ 1 | (1 | id) | x + z + w, 
-    cluster = id, 
+    cluster = id
   )
 ```
 
-Let's look at plotted results first. Here are the random effects, presented as a caterpillar plot
+Let's look at plotted results first. Here are the random effects, presented as a caterpillar plot. These random effects will be used as offsets in the linear models fit within each node, if you interpret the model from the one-level with multiple node framework (i.e., from `summary(tree_1$tree)`)
 
 ```{r plot ranef 1}
 plot(tree_1, which = 'ranef')
+
 ```
 
-Here is the model presented as a decision tree. With the number of splits we observe here, there is too much information to be very informative about individual nodes (there was actually so much information that I had to use another package `{ggparty}` to render the plot on this website in a more careful way than the default `plot(tree_1, which = 'tree')` method. We can see, however, that the model is identifying ranges of `z` and `x` that have different intercepts. The model is never presenting `w` as a variable influencing splitting when there is so much more heterogeneity in levels of `z` and `x`. So that's good!
-
-```{r plot tree 1, layout = "l-screen", fig.width = 64, fig.height=48}
-#plot(tree_1, which = 'tree')
-significance_level <- function(p_value) {
-  if (p_value < 0.001) return(c("p_value < 0.001"))
-  if (p_value < 0.01) return(c("p_value < 0.01"))
-  if (p_value < 0.05) return(c("p_value < 0.05"))
-  else return("")}
-
-
-ggparty(tree_1$tree[1]) +
-    geom_edge(size = 1.2) +
+```{r boxplot function}
+custom_boxplot <- 
+  function(
+    glmertree_object,
+    write_labels = F
+  ){
+    format <- list(geom_edge(size = 1.2),
     geom_node_label(
       aes(label = splitvar),
-      ids = "inner") +
-  geom_node_plot(
-      gglist = list(
-        geom_boxplot(
-          aes(y = outcome), 
-          size = 2),
-        theme_minimal(base_size = 30),
-        theme(
-          axis.title.y = element_blank(),
-          axis.text.y = element_blank(),
-          axis.line.y = element_line(size = 1.5),
-          panel.grid.minor.y = element_blank()
-          )),
-      shared_axis_labels = TRUE)+
-  geom_node_label(
-    line_list = 
-      list(
-        aes(label = splitvar),
-        aes(label = paste('N = ' , nodesize)),
-        aes(label = significance_level(p.value))),
-    line_gpar = list(
-      list(size = 80),
-      list(size = 50),
-      list(size = 50)),
-    ids = "inner") +
-  geom_node_label(
-    aes(
-      label = paste0("N = ", nodesize)
-      ),
-    ids = "terminal", 
-    line_gpar = list(list(size = 50))
+      ids = "inner"),
+    geom_node_plot(
+        gglist = list(
+          geom_boxplot(
+            aes(y = outcome), 
+            size = 2),
+          theme_minimal(base_size = 12),
+          theme(
+            axis.title.x = element_blank(),
+            axis.text.x = element_blank(),
+            axis.line.y = element_line(size = 1.5),
+            panel.grid.minor.x = element_blank()
+            )),
+        shared_axis_labels = TRUE),
+    geom_node_label(
+      line_list = 
+        list(
+          aes(label = splitvar),
+          aes(label = paste('N = ' , nodesize)),
+          aes(label = if_else(p.value < 0.001, "p < 0.001", paste0('p = ', round(p.value, 3))))),
+      line_gpar = list(
+        list(size = 15),
+        list(size = 12),
+        list(size = 12)),
+      ids = "inner"),
+    geom_node_label(
+      aes(
+        label = paste0("N = ", nodesize)
+        ),
+      ids = "terminal", 
+      line_gpar = list(list(size = 15))
+      )
     )
+    if (write_labels == T) {
+      return(
+        ggparty(glmertree_object$tree[1]) + geom_edge_label() + format
+        )
+    }
+    else {return(ggparty(glmertree_object$tree[1]) + format)}
+  }
 ```
 
-There are two ways we could begin working to make results which can be interpreted. 
-
-
+Here's a printed (instead of plotted) tree diagram. This diagram is too large to print easily, so it's obviously more complex than we want: 
 
 ```{r}
-tree_0 <- 
-  lmertree(
-    data = nonlinear_dat, 
-    formula = 
-      outcome ~ x | (1 | id) | w + z + x, 
-    cluster = id, 
-  )
-
-
-tree_00 <- 
-  lmertree(
-    data = nonlinear_dat, 
-    formula = 
-      outcome ~ x | (1 | id) | w + z + x, 
-    cluster = id, 
-    maxdepth = 3
-  )
-summary(tree_00$tree)
+tree_1$tree
 ```
 
-```{r plot tree 1, layout = "l-body", fig.width = 64, fig.height=48}
+It looks like our model has identified too many splits for this to extract meaningful interpretations We gain knowledge that `x` and `z` are the variables that contribute to the outcome. The model is never presenting `w` as a variable influencing splitting when there is so much more heterogeneity in levels of `z` and `x`. We can prevent the model from building such a large tree with the `maxdepth` parameter. We'll get broader strokes of the process, but will be less likely to overfit the data.
 
-significance_level <- function(p_value) {
-  if (p_value < 0.001) return(c("p_value < 0.001"))
-  if (p_value < 0.01) return(c("p_value < 0.01"))
-  if (p_value < 0.05) return(c("p_value < 0.05"))
-  else return("")}
+```{r plot tree 1, eval=FALSE, fig.height=8, fig.width=8, include=FALSE, layout="l-body"}
+custom_boxplot(tree_1, write_labels = F)
+```
+
+**NOTE:** For consistency when knitting the document, I actually wrote a custom function (above) to make `{ggparty}` plotting easy across the project, but you can also just use `plot(tree_1, which = 'tree')`.
+
+There are two ways we could begin working to make results which can be interpreted. One is to just tune hyperparameters. The other is to add fixed effects, which we'll do later.
+
+## Model 2: Modify hyperparameters
+
+Hyperparameters are parameters that can be specified by the researcher; these parameters influence the estimation of the parameters in the model. These are common for machine learning, and those relevant to GLMM trees are any that are relevant to decision trees or parameter instability tests (see [`{partykit}`](https://cran.r-project.org/web/packages/partykit/partykit.pdf)). 
+
+I'll point you towards a few and their defaults.
+
+* `bonferroni = TRUE`: Bonferroni corrects *p*-values. Recommended to leave on.
+* `alpha = 0.05`: *p*-value indicated significant parameter stability (e.g., `alpha = 0.001`).
+* `minsize = NULL`: the minimum cases allowed in the terminal node. The larger you make this, the more of the sample has to be in a node for you to trust there is generalize-able heterogeneity and not just noise in your data (e.g., `minsize = 0.10*nrow(your_data_set)`)
+* `trim = NULL`: this specifies the percentage (if < 0) or number (if > 0) of outliers to be be omitted from the parameter instability tests. This is done to prevent undue influence of outliers, and does not influence group assignment/splitting; it is just used in testing.
+* `maxdepth = Inf`: the depth of the tree that's allowed to grow. This functionally decreases the level of interactions you allow the data to find.
+
+These should be tuned carefully and resulting models are ideally discussed with content experts and compared to prior research for validity. 
+
+Let's re-run this with some more stringent hyperparameters and see how the model explains relation of `x`, `z`, and `outcome`. Since this grew such a deep tree, that's the first hyperparameter I'll tune.
 
 
-ggparty(tree_00$tree[1]) +
+```{r tree_2}
+tree_2 <- 
+  lmertree(
+    data = sim_dat, 
+    formula = 
+      outcome ~ 1 | (1 | id) | w + z + x, 
+    cluster = id, 
+    maxdepth = 3, 
+  )
+```
+
+```{r plot tree 2, layout = "l-body", fig.width = 8, fig.height=8}
+custom_boxplot(tree_2, write_labels = T)
+```
+
+## Model 3: add fixed effects
+
+The `p < 0.001` on the nodes indicate the parameter instability test is significant and the 2 models explain more variance in the data than 1 model (repeated at subsequent nodes, too). The value for the test can be found via `partykit::sctest.modelparty(glmertree_model$tree, type = c("chow"), asymptotic = F) ` when your model name is `glmertree_model`. If these were barely *p* < 0.05, I would likely tune this next. Also, this model looks fairly interprettable. 
+
+This is saying `z` being ~1 standard deviation above its mean, the outcome is highest. When it's lower than that, it's lower. Within these cases, `outcome` appears to be higher when `x` is higher. This suggests an interaction of `x` and `z`. We could now see what the relationship of `x` to the outcome is for different values of `z`, by adding it as a fixed effect.
+
+```{r tree_3}
+tree_3 <- 
+  lmertree(
+    data = sim_dat, 
+    formula = 
+      outcome ~ x | (1 | id) | w + z + x, 
+    cluster = id, 
+    maxdepth = 3, 
+    trim = 0.1
+  )
+```
+
+
+```{r function}
+
+custom_scatter_lm <-
+  function(
+    glmertree_object
+  ){
+    ggparty(glmertree_object$tree[1]) +
     geom_edge(size = 1.2) +
-  geom_edge_label() +
+    geom_edge_label() +
     geom_node_label(
       aes(label = splitvar),
       ids = "inner") +
@@ -337,18 +325,17 @@ ggparty(tree_00$tree[1]) +
         geom_smooth(method = 'lm', aes(y = outcome, x = x)),
         theme_minimal(base_size = 30),
         theme(
-          axis.title.y = element_blank(),
-          axis.text.y = element_blank(),
           axis.line.y = element_line(size = 1.5),
           panel.grid.minor.y = element_blank()
           )),
-      shared_axis_labels = TRUE)+
+      shared_axis_labels = TRUE,
+      scales = 'free_x')+
   geom_node_label(
     line_list = 
       list(
         aes(label = splitvar),
         aes(label = paste('N = ' , nodesize)),
-        aes(label = significance_level(p.value))),
+        aes(label = if_else(p.value < 0.001, "p < 0.001", paste0('p = ', round(p.value, 3))))),
     line_gpar = list(
       list(size = 20),
       list(size = 20),
@@ -360,134 +347,63 @@ ggparty(tree_00$tree[1]) +
       ),
     ids = "terminal", 
     line_gpar = list(list(size = 20))
-    )
+  ) +
+      labs(caption = 'note x axes are free') +
+      theme(plot.caption = element_text(size = 20))
+  }
 ```
 
+```{r plot tree 3, layout = "l-body", fig.width = 8, fig.height=8}
+custom_scatter_lm(tree_3)
+```
 
+We now see a more nuanced description of the relationship of `x` to `outcome` at different levels of `z`, and the subgroups are slightly different than in `tree_2`. When `z` is large, we see larger average `outcome` (i.e., intercept) than when `z` is lower. On both halves of the plot, it looks like the relationship of `x` and `outcome` is negative when `x < 0`, but is positive when `x > 0`. Let's put these onto one plot and see what it looks like. 
 
-### Add hyperparameters
+# Visualizing the Data
 
-Hyperparameters are parameters that can be specified by the researcher; these parameters influence the estimation of the parameters in the model. These are common for machine learning, and those relevant to GLMM trees are any that are relevant to decision trees or parameter instability tests (see [`{partykit}`](https://cran.r-project.org/web/packages/partykit/partykit.pdf)). 
-
-I'll point you towards a few and their defaults.
-
-* `bonferroni = TRUE`: Bonferroni corrects *p*-values. Recommended to leave on.
-* `alpha = 0.05`: *p*-value indicated significant parameter stability. This is typically the first parameter I change, making the threshold more stringent (e.g., `alpha = 0.001`).
-* `minsize = NULL`: the minimum cases allowed in the terminal node. The larger you make this, the more of the sample has to be in a node for you to trust there is generalize-able heterogeneity and not just noise in your data (e.g., `minsize = 0.10*nrow(your_data_set)`)
-* `trim = NULL`: this specifies the percentage (if < 0) or number (if > 0) of outliers to be be omitted from the parameter instability tests. This is done to prevent undue influence of outliers, and does not influence group assignment/splitting; it is just used in testing.
-* `maxdepth = Inf`: the depth of the tree that's allowed to grow. This functionally decreases the level of interactions you allow the data to find.
-
-These should be tuned carefully and resulting models are ideally discussed with content experts and compared to prior research for validity. 
-
-Let's re-run this with some more stringent hyperparameters and see if `x` and `z` are still contributing:
-
-
-
-```{r tree 2}
-tree_2 <- 
-  lmertree(
-    data = dat2, 
-    formula = 
-      outcome ~ 1 | (1 | id) | x + z + w + a + b + c + d, 
-    cluster = id, 
-    alpha = 0.001, 
-    minsize = 0.15*nrow(sim_dat), 
-    trim = 0.1, 
-    #mtry = 3
-  )
-plot(tree_2$tree)
-
-dat2 <- 
+```{r glmertree plotted in ggplot, layout = "l-body", fig.height=12, fig.width = 16}
+figure_1a <-   
   sim_dat %>% 
-  mutate(
-    a = rnorm(nrow(sim_dat)),
-    b = rnorm(nrow(sim_dat)),
-    c = rnorm(nrow(sim_dat)), 
-    d = rnorm(nrow(sim_dat))
-  )
+  mutate(node = factor(as.vector(predict(tree_3, type = 'node')))) %>% 
+  ggplot(aes(x = x, y = outcome, group = node, color = node)) + 
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = 'lm') +
+  theme_minimal() +
+  project_theme +
+  labs(
+    title = 'Model fit by glmertree',
+    ) +
+  theme(plot.subtitle = element_text(size = 15)) 
+figure_1a
 ```
 
-```{r plot tree 2, fig.width = 8, fig.height = 6}
-plot(tree_2, which = 'tree')
+# Going beyond significance
+
+The plot above shows that we created 4 linear models that explain the data very well. We also see, though, that the two models on the left and the two models on the right share some overlap. This is where we would call in researchers that know the field. We would discuss the evidence in the data, compared to the theoretical possibilities of 4 versus 2 groups. 
+
+These 4 groups may be phenomena observed or the way the model is formed may influence the fact that we have 2 parallel lines. You see, since the tree structure is dependent upon the first split, the parameter instability tests do not go across nodes. 
+
+If an analyst were working with a theorist, they should discuss the implications of these four groups and find some way to demonstrate validity of 4 over 2 (as Occum's Razor would suggest 2 is more likely than 4). If an analyst were working alone, I would suggests following up this with one final parameter instability test, comparing the two models with negative slopes to one model with negative slopes, and doing the same for the ones with positive slopes. 
+
+Visually, two groups would look like this
+
+```{r dichot plot}
+sim_dat %>% 
+  mutate(node = factor(as.vector(predict(tree_3, type = 'node'))),
+         dichot_node = factor(if_else(node %in% c(4,7), 1, 0))
+         ) %>% 
+  ggplot(aes(x = x, y = outcome, group = dichot_node, color = dichot_node)) + 
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  theme_minimal() +
+  project_theme +
+  labs(
+    title = 'Collapsing Nodes',
+    ) +
+  theme(plot.subtitle = element_text(size = 15)) 
 ```
 
-These groups do not seem too small to interpret the effects, but we in a world so comfortable with inferential statistics, we could estimate fixed effects for these variables and see if we can still find subgroup effects. 
-
-### Add Fixed Effects
-
-```{r tree 3}
-tree_3 <- 
-  lmertree(
-    data = sim_dat, 
-    formula = 
-      outcome ~ x | (1 | id) | w + z + x, 
-    cluster = id, 
-    alpha = 0.001, 
-    minsize = 0.15*nrow(sim_dat), 
-    trim = 0.1
-  )
-```
-
-```{r plot tree 3, fig.width = 8, fig.height = 6}
-plot(tree_3, which = 'tree')
-```
-
-This figure suggests the association of `x` varies by level of `z`, such that higher levels of `z` correspond to greater average levels of `outcome` and greater associations between `x` and `outcome` (i.e., higher intercepts and slopes).
-
-In other words, when `z` increases, both `outcome` increases and the influence of `x` on `outcome` increases.  
-
-Of course, you could then add the fixed effect of z, to control for it's influence.
-
-```{r tree 4}
-tree_4 <- 
-  lmertree(
-    data = sim_dat, 
-    formula = 
-      outcome ~ x + z | (1 | id) | w + z + x, 
-    cluster = id, 
-    alpha = 0.001, 
-    minsize = 0.15*nrow(sim_dat), 
-    trim = 0.1
-  )
-```
-
-```{r plot tree 4, fig.width = 8, fig.height = 6}
-plot(tree_4, which = 'tree')
-```
-
-You see, even controlling for level of `z`, the interaction is observed here. the relation of `z` to `outcome` is fairly constant. 
-
-```{r}
-summary(tree_4$tree)
-```
-
-
-```{r tree 5}
-tree_5 <- 
-  lmertree(
-    data = sim_dat, 
-    formula = 
-      outcome ~ x * z | (1 | id) | w + z, 
-    cluster = id, 
-    alpha = 0.001, 
-    minsize = 0.15*nrow(sim_dat), 
-    trim = 0.1
-  )
-```
-
-# MLMs via `{lme4}`
-
-If we run a traditional multilevel model (MLM) on this data, we see how closely the MLM estimates identify the simulated effects. We can see the nuisance variable `w` correctly does not have significant associations with the outcome 
-
-```{r lmer}
-confirmation_lmer <- 
-  lmer(
-    data = sim_dat, 
-    formula = outcome ~ x * z + w +
-      (1 | id)
-  )
-summary(confirmation_lmer)
-```
+This looks like a reasonable model, which could explain not only the sample, but the population as it does for us (based on its similarity to the method of simulation). Random forest modifications could be useful to preventing such overfitting, but that will have to wait for another article. 
 
 # References & Recommended Reading
 

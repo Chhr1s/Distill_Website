@@ -62,7 +62,7 @@ project_theme <-
 
 # Simulating data
 
-By modifying the interaction in the previous data simulation function (www.christopherloan.com/blog/simulating-multilevel-linear-data/) with an `if_else()` statement, we can make a more complex interaction term that would not be easily detected by traditional multilevel models (MLMs). I am coding the interaction's influence as conditional on it's value, more specifically the interaction's effect is:
+By modifying the interaction in the previous [data simulation function](www.christopherloan.com/blog/simulating-multilevel-linear-data/) with an `if_else()` statement, we can make a more complex interaction term that would not be easily detected by traditional multilevel models (MLMs). I am coding the interaction's influence as conditional on it's value, more specifically the interaction's effect is:
 `if_else(z[[i]]*x[[i]] < 0, interaction1*z[[i]]*x[[i]], interaction2*z[[i]]*x[[i]])`.
 This is one type of circumstance where MLMs may struggle without substantial theoretical understanding to guide exploration of data. 
 
@@ -201,3 +201,44 @@ figure_1c <-
 
 ggpubr::ggarrange(figure_1a, figure_1b, figure_1c, ncol = 1)
 ```
+
+# Fitting multilevel model to the nonlinear interaction
+
+When we fit an MLM to the data, it is unable to find a significant effect. You see this from the small t-values in the MLM results.
+
+```{r lmer misspecified}
+misspecified_lmer <- 
+  lmer(
+    data = nonlinear_dat, 
+    formula = outcome ~ x * z + w + 
+      (1 | id)
+  )
+summary(misspecified_lmer)
+```
+
+If you had a highly experienced theorist or a whiz analyst, they perhaps could figure out how to correctly specify an MLM, but it would not be quick. This is a three-way interaction, and one where any two-way interaction would either eat away statistical power (or even result in a type I error). that would be specified with this formula: ` outcome ~ x + z + x * z * dummy_code + w +  (1 | id)`, which estimates 4 unnecessary effects. In a smaller sample, potential issues with this are amplified
+
+Below is the correctly specified model, which technically provides statistical test that the slope of each dummy coded group, formed with the condition `x * z < 0`, is different from 0. This would be a very difficult model to simply happen upon. 
+
+
+```{r lmer3}
+nonlinear_dat <- 
+  nonlinear_dat %>% 
+  mutate(
+    dummy_code = 
+      factor(if_else(x*z < 0, 0, 1))
+      )
+
+confirmation_lmer2 <- 
+  lmer(
+    data = nonlinear_dat, 
+    formula = 
+      outcome ~ x + z + x:z:dummy_code + w +  
+      (1 | id)
+  )
+summary(confirmation_lmer2)
+```
+
+# Exploring the Data with the `{glmertree}` package
+
+Let's see how GLMM trees act in my [next post](www.christopherloan.com/blog/apa-2021/)
