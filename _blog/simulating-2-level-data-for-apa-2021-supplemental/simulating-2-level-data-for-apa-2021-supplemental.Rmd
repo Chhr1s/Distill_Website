@@ -1,5 +1,5 @@
 ---
-title: "Simulating Non-Linear Data with Complex Interaction"
+title: "Simulating Non-Linear Interactions"
 description: |
   Simulating 2-level data for APA 2021 Supplemental, so others can follow along.
 author:
