@@ -1,0 +1,30 @@
+---
+title: "APA 2021 Poster"
+description: |
+  Poster Presented at APA 2021.
+author:
+  - name: Christopher Loan
+  - name: Matthew C. Graham
+  - name: Edwin M. Zorilla
+  - name: Idalis Villanueva Alarcon
+  - name: Jenefer Husman
+  - name: Keith Zvoch
+categories:
+  - Collaboration
+  - Conference
+  - Machine Learning
+  - Multi-Level Modeling
+  - MLM
+  - Plotting
+  - Simulated Data
+  - Tutorial 
+date: 2021-08-09
+output:
+  distill::distill_article:
+    self_contained: false
+    autosize: true
+---
+
+```{r echo=FALSE, layout='l-screen'}
+grid::grid.raster(png::readPNG(here::here('images', 'LOAN_ET_AL_2021_APA_POSTER.png')))
+```

@@ -1,5 +1,51 @@
 [
   {
+    "path": "blog/apa-2021-poster/",
+    "title": "APA 2021 Poster",
+    "description": "Poster Presented at APA 2021.",
+    "author": [
+      {
+        "name": "Christopher Loan",
+        "url": {}
+      },
+      {
+        "name": "Matthew C. Graham",
+        "url": {}
+      },
+      {
+        "name": "Edwin M. Zorilla",
+        "url": {}
+      },
+      {
+        "name": "Idalis Villanueva Alarcon",
+        "url": {}
+      },
+      {
+        "name": "Jenefer Husman",
+        "url": {}
+      },
+      {
+        "name": "Keith Zvoch",
+        "url": {}
+      }
+    ],
+    "date": "2021-08-09",
+    "categories": [
+      "Collaboration",
+      "Conference",
+      "Machine Learning",
+      "Multi-Level Modeling",
+      "MLM",
+      "Plotting",
+      "Simulated Data",
+      "Tutorial"
+    ],
+    "contents": "\n\n\n\n\n\n\n",
+    "preview": "blog/apa-2021-poster/apa-2021-poster_files/figure-html5/unnamed-chunk-1-1.png",
+    "last_modified": "2021-08-09T12:21:40-07:00",
+    "input_file": "apa-2021-poster.utf8.md"
+  },
+  {
     "path": "blog/apa-2021/",
     "title": "APA 2021 Supplemental Material",
     "description": "Supplmental Material for the Application of Generalized Linear Mixed-Effects Model Regression Trees with Multi-Modal Data poster presented at APA 2021, co-authored with Matthew C. Graham, Edwin M. Zorilla, Idalis Villanueva Alarcon, Jenefer Husman, & Keith Zvoch",
