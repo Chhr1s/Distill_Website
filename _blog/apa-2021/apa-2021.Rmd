@@ -30,7 +30,7 @@ knitr::opts_chunk$set(echo = FALSE, cache = T)
 
 # Background
 
-The purpose of these supplemental materials is to walk users through a few models and technical details associated with the `{glmertree}` package and provide references/supplemental reading for our poster. Refer to the Table of Contents (or scroll down) if you're just here for references & recommended reading. 
+The purpose of these supplemental materials is to walk users through a few models and technical details associated with the `{glmertree}` package and provide references/supplemental reading for our poster. Refer to the Table of Contents (or scroll down) if you're just here for references & recommended reading. Keep reading if you're looking to learn how to run and extract parameters from these models. Please refer to the referenced works of Dr. Fokkema & colleagues for detailed interpretation of model output, etc. 
 
 For readability, code is included but can be shown/hidden by clicking `show code`.
 
