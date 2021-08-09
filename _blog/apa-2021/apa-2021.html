@@ -1513,7 +1513,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </nav>
 </div>
 <h1 id="background">Background</h1>
-<p>The purpose of these supplemental materials is to walk users through a few models and technical details associated with the <code>{glmertree}</code> package and provide references/supplemental reading for our poster. Refer to the Table of Contents (or scroll down) if you’re just here for references &amp; <a href="#%20References%20&amp;%20Recommended%20Reading">recommended reading</a>.</p>
+<p>The purpose of these supplemental materials is to walk users through a few models and technical details associated with the <code>{glmertree}</code> package and provide references/supplemental reading for our poster. Refer to the Table of Contents (or scroll down) if you’re just here for references &amp; recommended reading.</p>
 <p>For readability, code is included but can be shown/hidden by clicking <code>show code</code>.</p>
 <h2 id="load-libraries">load libraries</h2>
 <div class="layout-chunk" data-layout="l-body">
@@ -1530,8 +1530,8 @@ show code
 </details>
 </div>
 <h2 id="simulating-data">simulating data</h2>
-<p>For data privacy, I’m using simulated data to walk you through these models. If you don’t care about the simulation and just want to see model specification, keep reading; you’re in the right place! If you’re interested in knowing how I simulated the data, check out <a href="www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/">this blog post of mine</a>.</p>
-<p>I made a complex interaction term that would not be easily detected by a multilevel model (MLM), and showed how you would have to <a href="www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/">specify the fixed effects</a> to appropriately approximate the data. This basically resulted in a 3-way interaction that would be highly unlikely to be theorized in multimodal approached, barring strong theoretical evidence or equally strong analyst capability (e.g., to draw associations from graphic exploration of the data).</p>
+<p>For data privacy, I’m using simulated data to walk you through these models. If you don’t care about the simulation and just want to see model specification, keep reading; you’re in the right place! If you’re interested in knowing how I simulated the data, check out <a href="https://www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/">this blog post of mine</a>.</p>
+<p>I made a complex interaction term that would not be easily detected by a multilevel model (MLM), and showed how you would have to <a href="https://www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/">specify the fixed effects</a> to appropriately approximate the data. This basically resulted in a 3-way interaction that would be highly unlikely to be theorized in multimodal approached, barring strong theoretical evidence or equally strong analyst capability (e.g., to draw associations from graphic exploration of the data).</p>
 <p>We have 15 level 1 units for each level 2 unit and 71 level 2 units (labeled with <code>id</code>). The level 1 intercept of <code>outcome</code> is 4.25 with a main effect of 1.25 for <code>x</code>, 2.00 for <code>z</code>. The function also makes a nuisance variable <code>w</code>, which does not contribute to <code>outcome</code> at all.</p>
 <div class="layout-chunk" data-layout="l-body">
 <details>
@@ -1926,9 +1926,9 @@ show code
 <p><img src="apa-2021_files/figure-html5/glmertree%20plotted%20in%20ggplot-1.png" width="1536" /></p>
 </div>
 <h1 id="going-beyond-significance">Going beyond significance</h1>
-<p>The plot above shows that we created 4 linear models that explain the data very well. We also see, though, that the two models on the left and the two models on the right share some overlap. This is where we would call in researchers that know the field. We would discuss the evidence in the data, compared to the theoretical possibilities of 4 versus 2 groups.</p>
-<p>These 4 groups may be phenomena observed or the way the model is formed may influence the fact that we have 2 parallel lines. You see, since the tree structure is dependent upon the first split, the parameter instability tests do not go across nodes.</p>
-<p>If an analyst were working with a theorist, they should discuss the implications of these four groups and find some way to demonstrate validity of 4 over 2 (as Occum’s Razor would suggest 2 is more likely than 4). If an analyst were working alone, I would suggests following up this with one final parameter instability test, comparing the two models with negative slopes to one model with negative slopes, and doing the same for the ones with positive slopes.</p>
+<p>The plot above shows that we created 4 linear models that explain the data very well. We also see, though, that the 2 models on the left overlap with one another, as do the 2 models on the right. This is where we would call in researchers that know the field. We would discuss the evidence in the data, compared to the theoretical possibilities of 4 versus 2 groups.</p>
+<p>These 4 groups may be phenomena observed or the way the model is formed may influence the fact that we have 2 parallel lines. You see, since the tree structure is dependent upon the first split, the parameter instability tests do not go across branches to see if groups could be recombined to increase model fit</p>
+<p>If an analyst were working with a theorist, they should discuss the implications of these 4 groups and find some way to demonstrate validity of 4 over 2 (as Occum’s Razor would suggest 2 is more likely than 4). If an analyst were working alone, I would suggests following up this with one final parameter instability test, comparing models with individual negative slopes to a single negative slope. Then, repeating this for 1 vs. 2 positive slopes.</p>
 <p>Visually, two groups would look like this</p>
 <div class="layout-chunk" data-layout="l-body">
 <details>

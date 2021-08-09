@@ -32,7 +32,7 @@ library(glmertree)
 
 This post is meant for two audiences:
 
-1) anyone who wants to follow along with my [APA 2021 Supplemental Material](www.christopherloan.com/blog/apa-2021/)
+1) anyone who wants to follow along with my [APA 2021 Supplemental Material](https://www.christopherloan.com/blog/apa-2021/)
 2) someone looking to simulate complex interaction with multilevel modeling.
 
 # Disclaimer
@@ -41,7 +41,7 @@ My code is available for use and alteration, but please give credit via citation
 
 # Goal
 
-Simulate data to use in my [APA 2021 Supplemental Material Post](www.christopherloan.com/blog/apa-2021/). 
+Simulate data to use in my [APA 2021 Supplemental Material Post](https://www.christopherloan.com/blog/apa-2021/). 
 
 # Function
 
@@ -241,4 +241,4 @@ summary(confirmation_lmer2)
 
 # Exploring the Data with the `{glmertree}` package
 
-Let's see how GLMM trees act in my [next post](www.christopherloan.com/blog/apa-2021/)
+Let's see how GLMM trees act in my [next post](https://www.christopherloan.com/blog/apa-2021/)

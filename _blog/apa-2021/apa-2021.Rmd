@@ -30,7 +30,7 @@ knitr::opts_chunk$set(echo = FALSE, cache = T)
 
 # Background
 
-The purpose of these supplemental materials is to walk users through a few models and technical details associated with the `{glmertree}` package and provide references/supplemental reading for our poster. Refer to the Table of Contents (or scroll down) if you're just here for references & [recommended reading](# References & Recommended Reading). 
+The purpose of these supplemental materials is to walk users through a few models and technical details associated with the `{glmertree}` package and provide references/supplemental reading for our poster. Refer to the Table of Contents (or scroll down) if you're just here for references & recommended reading. 
 
 For readability, code is included but can be shown/hidden by clicking `show code`.
 
@@ -60,9 +60,9 @@ library(ggparty)
 
 ## simulating data
 
-For data privacy, I'm using simulated data to walk you through these models. If you don't care about the simulation and just want to see model specification, keep reading; you're in the right place! If you're interested in knowing how I simulated the data, check out [this blog post of mine](www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/).
+For data privacy, I'm using simulated data to walk you through these models. If you don't care about the simulation and just want to see model specification, keep reading; you're in the right place! If you're interested in knowing how I simulated the data, check out [this blog post of mine](https://www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/).
 
-I made a complex interaction term that would not be easily detected by a multilevel model (MLM), and showed how you would have to [specify the fixed effects](www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/) to appropriately approximate the data. This basically resulted in a 3-way interaction that would be highly unlikely to be theorized in multimodal approached, barring strong theoretical evidence or equally strong analyst capability (e.g., to draw associations from graphic exploration of the data).
+I made a complex interaction term that would not be easily detected by a multilevel model (MLM), and showed how you would have to [specify the fixed effects](https://www.christopherloan.com/blog/simulating-2-level-data-for-apa-2021-supplemental/) to appropriately approximate the data. This basically resulted in a 3-way interaction that would be highly unlikely to be theorized in multimodal approached, barring strong theoretical evidence or equally strong analyst capability (e.g., to draw associations from graphic exploration of the data).
 
 ```{r function non-linear, include = FALSE}
 simulate_nonlinear_intx <-
@@ -379,11 +379,11 @@ figure_1a
 
 # Going beyond significance
 
-The plot above shows that we created 4 linear models that explain the data very well. We also see, though, that the two models on the left and the two models on the right share some overlap. This is where we would call in researchers that know the field. We would discuss the evidence in the data, compared to the theoretical possibilities of 4 versus 2 groups. 
+The plot above shows that we created 4 linear models that explain the data very well. We also see, though, that the 2 models on the left overlap with one another, as do the 2 models on the right. This is where we would call in researchers that know the field. We would discuss the evidence in the data, compared to the theoretical possibilities of 4 versus 2 groups. 
 
-These 4 groups may be phenomena observed or the way the model is formed may influence the fact that we have 2 parallel lines. You see, since the tree structure is dependent upon the first split, the parameter instability tests do not go across nodes. 
+These 4 groups may be phenomena observed or the way the model is formed may influence the fact that we have 2 parallel lines. You see, since the tree structure is dependent upon the first split, the parameter instability tests do not go across branches to see if groups could be recombined to increase model fit
 
-If an analyst were working with a theorist, they should discuss the implications of these four groups and find some way to demonstrate validity of 4 over 2 (as Occum's Razor would suggest 2 is more likely than 4). If an analyst were working alone, I would suggests following up this with one final parameter instability test, comparing the two models with negative slopes to one model with negative slopes, and doing the same for the ones with positive slopes. 
+If an analyst were working with a theorist, they should discuss the implications of these 4 groups and find some way to demonstrate validity of 4 over 2 (as Occum's Razor would suggest 2 is more likely than 4). If an analyst were working alone, I would suggests following up this with one final parameter instability test, comparing models with individual negative slopes to a single negative slope. Then, repeating this for 1 vs. 2 positive slopes. 
 
 Visually, two groups would look like this
 

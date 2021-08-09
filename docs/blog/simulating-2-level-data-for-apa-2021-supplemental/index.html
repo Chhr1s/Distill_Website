@@ -2171,13 +2171,13 @@ show code
 </div>
 <p>This post is meant for two audiences:</p>
 <ol type="1">
-<li>anyone who wants to follow along with my <a href="www.christopherloan.com/blog/apa-2021/">APA 2021 Supplemental Material</a></li>
+<li>anyone who wants to follow along with my <a href="https://www.christopherloan.com/blog/apa-2021/">APA 2021 Supplemental Material</a></li>
 <li>someone looking to simulate complex interaction with multilevel modeling.</li>
 </ol>
 <h1 id="disclaimer">Disclaimer</h1>
 <p>My code is available for use and alteration, but please give credit via citations. Anyways, let’s get into it! If you’re looking for more detail regarding the simulated data or would like to simulate your own data with a simple linear interaction, see this <a href="www.christopherloan.com/blog/simulating-multilevel-linear-data/">prior post</a> which looks more deeply at distribtions of simulated data.</p>
 <h1 id="goal">Goal</h1>
-<p>Simulate data to use in my <a href="www.christopherloan.com/blog/apa-2021/">APA 2021 Supplemental Material Post</a>.</p>
+<p>Simulate data to use in my <a href="https://www.christopherloan.com/blog/apa-2021/">APA 2021 Supplemental Material Post</a>.</p>
 <h1 id="function">Function</h1>
 <h1 id="simulating-data">Simulating data</h1>
 <p>By modifying the interaction in the previous <a href="www.christopherloan.com/blog/simulating-multilevel-linear-data/">data simulation function</a> with an <code>if_else()</code> statement, we can make a more complex interaction term that would not be easily detected by traditional multilevel models (MLMs). I am coding the interaction’s influence as conditional on it’s value, more specifically the interaction’s effect is: <code>if_else(z[[i]]*x[[i]] &lt; 0, interaction1*z[[i]]*x[[i]], interaction2*z[[i]]*x[[i]])</code>. This is one type of circumstance where MLMs may struggle without substantial theoretical understanding to guide exploration of data.</p>
@@ -2361,7 +2361,7 @@ x:z:dmmy_c0  0.331  0.041 -0.049  0.008
 x:z:dmmy_c1 -0.331 -0.100 -0.122 -0.011 -0.253</code></pre>
 </div>
 <h1 id="exploring-the-data-with-the-glmertree-package">Exploring the Data with the <code>{glmertree}</code> package</h1>
-<p>Let’s see how GLMM trees act in my <a href="www.christopherloan.com/blog/apa-2021/">next post</a></p>
+<p>Let’s see how GLMM trees act in my <a href="https://www.christopherloan.com/blog/apa-2021/">next post</a></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
