@@ -2161,7 +2161,12 @@ Links to Additional Projects
 <li><a href="#model-3-add-fixed-effects">Model 3: add fixed effects</a></li>
 </ul></li>
 <li><a href="#visualizing-the-data">Visualizing the Data</a></li>
-<li><a href="#going-beyond-significance">Going beyond significance</a></li>
+<li><a href="#viewing-model-parameters">Viewing Model Parameters</a>
+<ul>
+<li><a href="#discontinuous-linear-models">Discontinuous Linear Models</a></li>
+<li><a href="#multilevel-models">Multilevel Models</a></li>
+</ul></li>
+<li><a href="#going-beyond-significance">Going Beyond Significance</a></li>
 <li><a href="#references-recommended-reading">References &amp; Recommended Reading</a></li>
 </ul>
 </nav>
@@ -2214,7 +2219,7 @@ show code
 <p>GLMM trees should be able to find heterogeneity in the association of <code>outcome</code> and <code>x</code> (or <code>z</code>, it doesn’t matter) and explain differential effects of <code>z</code> and <code>x</code> without analyst knowledge of a complex higher-order interaction (i.e., <em>n</em>-way interactions when <em>n</em> &gt; 2).</p>
 <h1 id="fitting-generalized-linear-mixed-effects-model-regression-glmm-trees-via-glmertree">Fitting Generalized Linear Mixed Effects Model Regression (GLMM) Trees via <code>{glmertree}</code></h1>
 <p>Specifying models with <code>{glmertree}</code> is similar to multilevel models (MLM) with <code>{lme4}</code>. However, rather than <em>adding</em> random effects with <code>{lme4}</code>, you specify the model as follows: <code>forumla = outcome ~ fixed effects | random effects | splitting variables</code>.</p>
-<p>A second consideration when fitting GLMM trees is the model’s use of parameter instability tests; therefore, we need to account for cluster covariances in this process, so you want to specify the <code>id</code> variable to the <code>cluster = id</code> argument as well as in the specified formula. As far as I know, the current implementation only allows a 2 level structure, even if the MLM</p>
+<p>A second consideration when fitting GLMM trees is the model’s use of parameter instability tests; therefore, we need to account for cluster covariances in this process, so you want to specify the <code>id</code> variable to the <code>cluster = id</code> argument as well as in the specified formula. As far as I know, the current implementation only allows a 2 level structure, even if the MLM specified has more. The implications of inconsistent specification of data has not been examined to my knowledge.</p>
 <h2 id="model-1-fully-exploratory">Model 1: Fully Exploratory</h2>
 <p>Let’s run a very exploratory model here. This is everything but the kitchen sink: an intercept-only model, with random intercept for each level 2 unit, and allowing splits to be made by any of the variables in the data.</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2234,7 +2239,7 @@ show code
 </div>
 </details>
 </div>
-<p>Let’s look at plotted results first. Here are the random effects, presented as a caterpillar plot. These random effects will be used as offsets in the linear models fit within each node, if you interpret the model from the one-level with multiple node framework (i.e., from <code>summary(tree_1$tree)</code>)</p>
+<p>Let’s look at plotted results first. Here are the random effects, presented as a caterpillar plot. These random effects are showing the random intercept and surrounding variance for each <code>id</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <details>
 <summary>
@@ -2306,7 +2311,7 @@ show code
 </div>
 </details>
 </div>
-<p>Here’s a printed (instead of plotted) tree diagram. This diagram is too large to print easily, so it’s obviously more complex than we want:</p>
+<p>Here’s a printed (instead of plotted) tree diagram. This diagram is too large to print easily, so it’s obviously more complex than we want (just scroll through this, I’m trying to emphasize the tree size!)</p>
 <div class="layout-chunk" data-layout="l-body">
 <details>
 <summary>
@@ -2421,7 +2426,7 @@ Number of parameters per node: 1
 Objective function (residual sum of squares): 5187.452</code></pre>
 </div>
 <p>It looks like our model has identified too many splits for this to extract meaningful interpretations We gain knowledge that <code>x</code> and <code>z</code> are the variables that contribute to the outcome. The model is never presenting <code>w</code> as a variable influencing splitting when there is so much more heterogeneity in levels of <code>z</code> and <code>x</code>. We can prevent the model from building such a large tree with the <code>maxdepth</code> parameter. We’ll get broader strokes of the process, but will be less likely to overfit the data.</p>
-<p><strong>NOTE:</strong> For consistency when knitting the document, I actually wrote a custom function (above) to make <code>{ggparty}</code> plotting easy across the project, but you can also just use <code>plot(tree_1, which = 'tree')</code>.</p>
+<p><strong>NOTE:</strong> For visual consistency when knitting the document, I actually wrote a custom function (above) to make <code>{ggparty}</code> plotting easy across the project, but you can also just use <code>plot(tree_1, which = 'tree')</code>.</p>
 <p>There are two ways we could begin working to make results which can be interpreted. One is to just tune hyperparameters. The other is to add fixed effects, which we’ll do later.</p>
 <h2 id="model-2-modify-hyperparameters">Model 2: Modify hyperparameters</h2>
 <p>Hyperparameters are parameters that can be specified by the researcher; these parameters influence the estimation of the parameters in the model. These are common for machine learning, and those relevant to GLMM trees are any that are relevant to decision trees or parameter instability tests (see <a href="https://cran.r-project.org/web/packages/partykit/partykit.pdf"><code>{partykit}</code></a>).</p>
@@ -2512,7 +2517,8 @@ show code
         <span class='fu'>theme_minimal</span><span class='op'>(</span>base_size <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>,
         <span class='fu'>theme</span><span class='op'>(</span>
           axis.line.y <span class='op'>=</span> <span class='fu'>element_line</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>1.5</span><span class='op'>)</span>,
-          panel.grid.minor.y <span class='op'>=</span> <span class='fu'>element_blank</span><span class='op'>(</span><span class='op'>)</span>
+          panel.grid.minor.y <span class='op'>=</span> <span class='fu'>element_blank</span><span class='op'>(</span><span class='op'>)</span>,
+          axis.text.x <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span>
           <span class='op'>)</span><span class='op'>)</span>,
       shared_axis_labels <span class='op'>=</span> <span class='cn'>TRUE</span>,
       scales <span class='op'>=</span> <span class='st'>'free_x'</span><span class='op'>)</span><span class='op'>+</span>
@@ -2551,7 +2557,7 @@ show code
 </code></pre>
 </div>
 </details>
-<p><img src="apa-2021_files/figure-html5/plot%20tree%203-1.png" width="768" /></p>
+<p><img src="apa-2021_files/figure-html5/plot%20tree%203-1.png" width="1536" /></p>
 </div>
 <p>We now see a more nuanced description of the relationship of <code>x</code> to <code>outcome</code> at different levels of <code>z</code>, and the subgroups are slightly different than in <code>tree_2</code>. When <code>z</code> is large, we see larger average <code>outcome</code> (i.e., intercept) than when <code>z</code> is lower. On both halves of the plot, it looks like the relationship of <code>x</code> and <code>outcome</code> is negative when <code>x &lt; 0</code>, but is positive when <code>x &gt; 0</code>. Let’s put these onto one plot and see what it looks like.</p>
 <h1 id="visualizing-the-data">Visualizing the Data</h1>
@@ -2579,9 +2585,157 @@ show code
 </details>
 <p><img src="apa-2021_files/figure-html5/glmertree%20plotted%20in%20ggplot-1.png" width="1536" /></p>
 </div>
-<h1 id="going-beyond-significance">Going beyond significance</h1>
-<p>The plot above shows that we created 4 linear models that explain the data very well. We also see, though, that the 2 models on the left overlap with one another, as do the 2 models on the right. This is where we would call in researchers that know the field. We would discuss the evidence in the data, compared to the theoretical possibilities of 4 versus 2 groups.</p>
-<p>These 4 groups may be phenomena observed or the way the model is formed may influence the fact that we have 2 parallel lines. You see, since the tree structure is dependent upon the first split, the parameter instability tests do not go across branches to see if groups could be recombined to increase model fit</p>
+<p>The plot above shows that we created 4 linear models appear to explain the data well. Let’s see actual parameter estimates.</p>
+<h1 id="viewing-model-parameters">Viewing Model Parameters</h1>
+<h2 id="discontinuous-linear-models">Discontinuous Linear Models</h2>
+<p>The parameters from these models can be represented as discontinuous linear models with random effects offsets by calling <code>summary(tree_3$tree)</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>tree_3</span><span class='op'>$</span><span class='va'>tree</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<pre><code>$`3`
+
+Call:
+lm(formula = outcome ~ x, offset = .ranef)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-8.0329 -1.8072 -0.0501  1.7780 10.0277 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   3.7350     0.2059  18.138  &lt; 2e-16 ***
+x            -1.4000     0.2322  -6.029 3.62e-09 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.602 on 418 degrees of freedom
+Multiple R-squared:  0.1456,    Adjusted R-squared:  0.1435 
+F-statistic: 71.21 on 1 and 418 DF,  p-value: 5.298e-16
+
+
+$`4`
+
+Call:
+lm(formula = outcome ~ x, offset = .ranef)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-7.9603 -1.6546  0.0238  1.5724  7.9335 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   3.9118     0.1995   19.61   &lt;2e-16 ***
+x             3.4500     0.2035   16.95   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.499 on 454 degrees of freedom
+Multiple R-squared:  0.4142,    Adjusted R-squared:  0.4129 
+F-statistic:   321 on 1 and 454 DF,  p-value: &lt; 2.2e-16
+
+
+$`6`
+
+Call:
+lm(formula = outcome ~ x, offset = .ranef)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.9413 -2.1484 -0.0186  1.6858  7.4166 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   8.0073     0.4199  19.070   &lt;2e-16 ***
+x            -3.4074     0.4446  -7.664    2e-11 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.744 on 90 degrees of freedom
+Multiple R-squared:  0.4176,    Adjusted R-squared:  0.4111 
+F-statistic: 64.54 on 1 and 90 DF,  p-value: 3.48e-12
+
+
+$`7`
+
+Call:
+lm(formula = outcome ~ x, offset = .ranef)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.3134 -2.3014 -0.5595  2.5627 10.5835 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   7.5139     0.7371  10.194  &lt; 2e-16 ***
+x             6.8414     0.6895   9.923 2.42e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 3.529 on 95 degrees of freedom
+Multiple R-squared:  0.5026,    Adjusted R-squared:  0.4973 
+F-statistic: 95.98 on 1 and 95 DF,  p-value: 4.491e-16</code></pre>
+</div>
+<h2 id="multilevel-models">Multilevel Models</h2>
+<p>Alternatively, they could be presented as multilevel models <code>summary(tree_3$lmer)</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<details>
+<summary>
+show code
+</summary>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>tree_3</span><span class='op'>$</span><span class='va'>lmer</span><span class='op'>)</span>
+</code></pre>
+</div>
+</details>
+<pre><code>Linear mixed model fit by REML [&#39;lmerMod&#39;]
+Formula: outcome ~ .tree + .tree:x + (1 | id)
+   Data: data
+Weights: .weights
+Control: lmer.control
+
+REML criterion at convergence: 5224.1
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.9480 -0.6594 -0.0312  0.6311  3.8841 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ id       (Intercept) 0.8057   0.8976  
+ Residual             7.4246   2.7248  
+Number of obs: 1065, groups:  id, 71
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)   3.7350     0.2439  15.314
+.tree4        0.1768     0.3128   0.565
+.tree6        4.2723     0.4804   8.894
+.tree7        3.7789     0.6180   6.115
+.tree3:x     -1.4000     0.2476  -5.653
+.tree4:x      3.4500     0.2267  15.216
+.tree6:x     -3.4074     0.4514  -7.549
+.tree7:x      6.8414     0.5418  12.627
+
+Correlation of Fixed Effects:
+         (Intr) .tree4 .tree6 .tree7 .tr3:x .tr4:x .tr6:x
+.tree4   -0.637                                          
+.tree6   -0.415  0.328                                   
+.tree7   -0.319  0.250  0.166                            
+.tree3:x  0.710 -0.558 -0.366 -0.280                     
+.tree4:x  0.004 -0.576 -0.010 -0.002  0.006              
+.tree6:x -0.004  0.004  0.651  0.006 -0.004 -0.003       
+.tree7:x -0.005  0.005 -0.001 -0.814 -0.001  0.000 -0.003</code></pre>
+</div>
+<h1 id="going-beyond-significance">Going Beyond Significance</h1>
+<p>We also see, though, that the 2 models formed approximately when x &lt; 0 overlap with one another, as do the 2 models when x &gt; 0 (approximately). This is where we would call in researchers that know the field. We would discuss the evidence in the data, compared to the theoretical possibilities of 4 versus 2 groups.</p>
+<p>These 4 groups may be phenomena observed or the way the model is formed may influence the fact that we have 2 parallel lines. This is also clear from the intercepts and slopes presented in <code>summary(tree_3$tree)</code>. You see, since the tree structure is dependent upon the first split, the parameter instability tests do not go across branches to see if groups could be recombined to increase model fit</p>
 <p>If an analyst were working with a theorist, they should discuss the implications of these 4 groups and find some way to demonstrate validity of 4 over 2 (as Occum’s Razor would suggest 2 is more likely than 4). If an analyst were working alone, I would suggests following up this with one final parameter instability test, comparing models with individual negative slopes to a single negative slope. Then, repeating this for 1 vs. 2 positive slopes.</p>
 <p>Visually, two groups would look like this</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2621,7 +2775,7 @@ show code
 <p>Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686,</p>
 <p>Zeileis, A. (2001). strucchange: Testing for structural change in linear regression relationships. R News, 1(3), 8-11.</p>
 <p>Zeileis, A., Hothorn, T., &amp; Hornik, K. (2008). Model-based recursive partitioning. Journal of Computational and Graphical Statistics, 17(2), 492-514.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

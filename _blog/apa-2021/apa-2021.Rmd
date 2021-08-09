@@ -165,7 +165,7 @@ GLMM trees should be able to find heterogeneity in the association of `outcome` 
 
 Specifying models with `{glmertree}` is similar to multilevel models (MLM) with `{lme4}`. However, rather than *adding* random effects with `{lme4}`, you specify the model as follows: `forumla = outcome ~ fixed effects | random effects | splitting variables`.
 
-A second consideration when fitting GLMM trees is the model's use of parameter instability tests; therefore, we need to account for cluster covariances in this process, so you want to specify the `id` variable to the `cluster = id` argument as well as in the specified formula. As far as I know, the current implementation only allows a 2 level structure, even if the MLM 
+A second consideration when fitting GLMM trees is the model's use of parameter instability tests; therefore, we need to account for cluster covariances in this process, so you want to specify the `id` variable to the `cluster = id` argument as well as in the specified formula. As far as I know, the current implementation only allows a 2 level structure, even if the MLM specified has more. The implications of inconsistent specification of data has not been examined to my knowledge.
 
 ## Model 1: Fully Exploratory
 
@@ -181,7 +181,7 @@ tree_1 <-
   )
 ```
 
-Let's look at plotted results first. Here are the random effects, presented as a caterpillar plot. These random effects will be used as offsets in the linear models fit within each node, if you interpret the model from the one-level with multiple node framework (i.e., from `summary(tree_1$tree)`)
+Let's look at plotted results first. Here are the random effects, presented as a caterpillar plot. These random effects are showing the random intercept and surrounding variance for each `id`. 
 
 ```{r plot_ranef_1}
 plot(tree_1, which = 'ranef')
@@ -238,7 +238,7 @@ custom_boxplot <-
   }
 ```
 
-Here's a printed (instead of plotted) tree diagram. This diagram is too large to print easily, so it's obviously more complex than we want: 
+Here's a printed (instead of plotted) tree diagram. This diagram is too large to print easily, so it's obviously more complex than we want (just scroll through this, I'm trying to emphasize the tree size!)
 
 ```{r}
 tree_1$tree
@@ -250,7 +250,7 @@ It looks like our model has identified too many splits for this to extract meani
 custom_boxplot(tree_1, write_labels = F)
 ```
 
-**NOTE:** For consistency when knitting the document, I actually wrote a custom function (above) to make `{ggparty}` plotting easy across the project, but you can also just use `plot(tree_1, which = 'tree')`.
+**NOTE:** For visual consistency when knitting the document, I actually wrote a custom function (above) to make `{ggparty}` plotting easy across the project, but you can also just use `plot(tree_1, which = 'tree')`.
 
 There are two ways we could begin working to make results which can be interpreted. One is to just tune hyperparameters. The other is to add fixed effects, which we'll do later.
 
@@ -326,7 +326,8 @@ custom_scatter_lm <-
         theme_minimal(base_size = 30),
         theme(
           axis.line.y = element_line(size = 1.5),
-          panel.grid.minor.y = element_blank()
+          panel.grid.minor.y = element_blank(),
+          axis.text.x = element_text(size = 12)
           )),
       shared_axis_labels = TRUE,
       scales = 'free_x')+
@@ -353,8 +354,9 @@ custom_scatter_lm <-
   }
 ```
 
-```{r plot tree 3, layout = "l-body", fig.width = 8, fig.height=8}
+```{r plot tree 3, layout = "l-body", fig.width = 16, fig.height=8}
 custom_scatter_lm(tree_3)
+
 ```
 
 We now see a more nuanced description of the relationship of `x` to `outcome` at different levels of `z`, and the subgroups are slightly different than in `tree_2`. When `z` is large, we see larger average `outcome` (i.e., intercept) than when `z` is lower. On both halves of the plot, it looks like the relationship of `x` and `outcome` is negative when `x < 0`, but is positive when `x > 0`. Let's put these onto one plot and see what it looks like. 
@@ -375,13 +377,34 @@ figure_1a <-
     ) +
   theme(plot.subtitle = element_text(size = 15)) 
 figure_1a
+
 ```
 
-# Going beyond significance
+The plot above shows that we created 4 linear models appear to explain the data well. Let's see actual parameter estimates.
 
-The plot above shows that we created 4 linear models that explain the data very well. We also see, though, that the 2 models on the left overlap with one another, as do the 2 models on the right. This is where we would call in researchers that know the field. We would discuss the evidence in the data, compared to the theoretical possibilities of 4 versus 2 groups. 
+# Viewing Model Parameters
 
-These 4 groups may be phenomena observed or the way the model is formed may influence the fact that we have 2 parallel lines. You see, since the tree structure is dependent upon the first split, the parameter instability tests do not go across branches to see if groups could be recombined to increase model fit
+## Discontinuous Linear Models
+
+The parameters from these models can be represented as discontinuous linear models with random effects offsets by calling `summary(tree_3$tree)`.
+
+```{r}
+summary(tree_3$tree)
+```
+
+## Multilevel Models
+
+Alternatively, they could be presented as multilevel models `summary(tree_3$lmer)`.
+
+```{r}
+summary(tree_3$lmer)
+```
+
+# Going Beyond Significance
+
+We also see, though, that the 2 models formed approximately when x < 0 overlap with one another, as do the 2 models when x > 0 (approximately). This is where we would call in researchers that know the field. We would discuss the evidence in the data, compared to the theoretical possibilities of 4 versus 2 groups. 
+
+These 4 groups may be phenomena observed or the way the model is formed may influence the fact that we have 2 parallel lines. This is also clear from the intercepts and slopes presented in  `summary(tree_3$tree)`. You see, since the tree structure is dependent upon the first split, the parameter instability tests do not go across branches to see if groups could be recombined to increase model fit
 
 If an analyst were working with a theorist, they should discuss the implications of these 4 groups and find some way to demonstrate validity of 4 over 2 (as Occum's Razor would suggest 2 is more likely than 4). If an analyst were working alone, I would suggests following up this with one final parameter instability test, comparing models with individual negative slopes to a single negative slope. Then, repeating this for 1 vs. 2 positive slopes. 
 
