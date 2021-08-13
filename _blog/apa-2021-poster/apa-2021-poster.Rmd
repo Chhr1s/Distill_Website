@@ -16,7 +16,6 @@ categories:
   - Multi-Level Modeling
   - MLM
   - Plotting
-  - Simulated Data
   - Tutorial 
 date: 2021-08-09
 output:
