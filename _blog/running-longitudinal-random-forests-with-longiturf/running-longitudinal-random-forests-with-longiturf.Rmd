@@ -1,0 +1,57 @@
+---
+title: "Running Longitudinal Random Forests with `{LongituRF}`"
+description: |
+  A short description of the post.
+author:
+  - name: Christopher Loan
+date: 2021-08-24
+output:
+  distill::distill_article:
+    self_contained: false
+draft: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+I'm working on a project with my PhD advisor, Dr. Keith Zvoch, which provided multi-wave, nested data. We wanted to make predictions on the data, but hoped to properly model the repeated measures and nested design. After some digging, I found `{LongituRF}` and the corresponding research paper on the method [Capitaine et al. (2021)](https://doi.org/10.1177/0962280220946080). They introduce the stochastic random effects expectation maximation (SREEM) forest and provide a more general framework for the generalized semi-parametric stochastic mixed-effects model that unites previously proposed related models (i.e., MERTs, MERFs, REEMtrees)
+
+# Background
+
+Here's their generalized semi-parametric stochastic mixed-effects model, which SREEM forests are an example of the generalized semi-parametric stochastic mixed-effects model:
+
+$Yij = f(X_{ij}) + Z_{ij}b_i + ω(t_{ij}) + ε_{ij}$
+f = mean behavior function created by a matrix of covariates ($X_{ij}$)
+$Z_{ij}$ = vector a covariates associated with a vector of random effects $b_i$
+ω = serial correlation modeled as a stochastic process.
+$ε_{ij}$ = error.
+
+## Instances of generalized model
+
+We can modify the terms of the generalized model to get instances of more familiar models with this framework, just like with the generalized linear model and, e.g., regression or t-test:
+
+•	decision tree (f estimated by single tree and all predictors, Z = ω = 0)
+•	random forest (f estimated by many trees with subset of predictors, Z = ω = 0)
+•	mixed effects regression tree (f estimated by single tree and all predictors, Z = estimated as linear mixed effects model, ω = 0)
+•	mixed effects random forest (f estimated by many trees with subset of predictors, Z = estimated as linear mixed effects model, ω = 0)
+•	stochastic random effect expectation maximation forest (f estimated by many trees with subset of predictors, Z = estimated as linear mixed effects model, ω = estimated as a stochastic process)
+
+The stochastic random effect is a term used to account for longitudinal data, we can still account for random effects of nesting without estimating serial correlation via the stochastic term. However, Capitaine et al. (2021) showed SREEM forests are relatively robust to inappropriate incorporation of such stochasticity.
+
+## Algorithm 
+
+The algorithm iterates between estimation of unknown model parameters (i.e., Z and ω) and the estimation of the mean behavior function f with an adaptation of the maximum likelihood-based EM algorithm until convergence is reached. Random effects and stochastic process are estimated after computation of an estimated f. 
+
+This is done by taking conditional expectations given the data and forming best linear unbiased predictors based on matrix algebra combining the variance matrices, the effects of predictors, and the difference between the observed outcome and the estimated f. Iterating through this process accounts for the intra-individual covariance matrix in the values of terminal nodes.
+
+Take the difference between observed value and random effects estimate (which begins at mean 0 and variance 1, so the first value is the observed value). Then we estimate f for each tree in the forest and estimate leaf values. The product of the function and the estimated values are then averaged. This is used to estimate two functions for all individuals: (1) the stochastic process and (2) the random effects. 
+
+Updating those functions results in new values for the variance matrices of the stochastic terms and random effects. If the convergence criterion is not met, the difference between the estimated value and the random effects terms are taken and f is re-estimated, followed by re-estimation of other terms, etc.
+
+In simpler terms, this iterates between estimation of fixed effects and random effects, where fixed effects are estimated in a tree-based model. Refer to Capitaine et al. (2021) for greater details.
+
+# Using the package
+
+Okay, now that's out of the way and we can actually run the model. I often use the Georgia department of Education's data for examples because it's in my field and is publicly available. If you want the data, check out my GitHub
