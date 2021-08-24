@@ -54,4 +54,4 @@ In simpler terms, this iterates between estimation of fixed effects and random e
 
 # Using the package
 
-Okay, now that's out of the way and we can actually run the model. I often use the Georgia department of Education's data for examples because it's in my field and is publicly available. If you want the data, check out my GitHub
+Okay, now that's out of the way and we can actually run the model. I often use the Georgia department of Education's data for examples because it's in my field and is publicly available. If you want the data, it's on my [GitHub for this project]()
