@@ -12,14 +12,14 @@
       "title": "Blog",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-08-06T16:48:27-07:00"
+      "last_modified": "2021-08-13T12:25:08-07:00"
     },
     {
       "path": "index.html",
       "title": "Welcome!",
       "author": [],
-      "contents": "\n\n\n\nd-title {\n    padding-top: 6rem;\n    background-color: rgb(120 157 175);\n\n}\n\n\n\n\n\n\n\n\n\n   \n\n\n\nI’m Christopher Loan, a PhD student at the UO’s Quantitative Research Methods in Education program.\nI primarily consider myself a methodologist, exploring applications of structural equation modeling, multilevel-modeling, machine learning, data visualization, & their intersections.\n\n\nI’ve applied these methods in Prevention Science, Psychology, & Education contexts, with my theoretical interests lying at these fields’ boundaries. I use R every chance I get — including making this website with distill — but dabble in Python, as well.\nWhen I’m not on my laptop, you can find me:\n disc golfing,\n walking my dog,\n skateboarding,\ntrying to play golf,\n rock climbing,\nProjects coming soon\nLately, my interests have pulled me towards deep learning, computer vision, and network analysis. So keep an eye out for new blog posts on these coming soon.\n\n\n\n",
-      "last_modified": "2021-08-06T13:52:25-07:00"
+      "contents": "\n\n\n\nd-title {\n    padding-top: 6rem;\n    background-color: rgb(120 157 175);\n\n}\n\n\n\n\n\n\n\n\n\n   \n\n\n\nI’m Christopher Loan, a PhD student at the UO’s Quantitative Research Methods in Education program.\nI primarily consider myself a methodologist, exploring applications of structural equation modeling, multilevel-modeling, machine learning, data visualization, & their intersections.\n\n\nI’ve applied these methods in Prevention Science, Psychology, & Education contexts, with my theoretical interests lying at these fields’ boundaries. I use R every chance I get — including making this website with distill — but dabble in Python, as well.\nWhen I’m not on my laptop, you can find me:\n disc golfing,\n walking my dog,\n skateboarding,\ntrying to play golf,\n rock climbing,\n\n\n\n",
+      "last_modified": "2021-08-24T10:24:23-07:00"
     }
   ],
   "collections": ["blog/blog.json"]

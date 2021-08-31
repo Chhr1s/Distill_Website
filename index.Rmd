@@ -67,7 +67,3 @@ I've applied these methods in **Prevention Science, Psychology, & Education** co
 
 ***
 
-# Projects coming soon
-
-Lately, my interests have pulled me towards deep learning, computer vision, and network analysis. So keep an eye out for new blog posts on these coming soon. 
-
