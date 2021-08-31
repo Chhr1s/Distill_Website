@@ -5,11 +5,21 @@ description: |
 author:
   - name: Christopher Loan
 date: 2021-08-24
+
 output:
   distill::distill_article:
-    self_contained: false
-    code_folding: show
-draft: false
+    code_folding: show code
+    toc: true
+    toc_float: false
+
+categories:
+  - Machine Learning
+  - Decision Trees
+  - Multi-Level Modeling
+  - Model Comparisons
+  - Plotting
+  - Public Data
+  - Tutorial
 ---
 
 
@@ -83,7 +93,8 @@ options(tibble.width = Inf)
 
 I do a few things here, including:
 
-* make numeric factors for unique districts, schools, and school type (k12, elementary, middle, high school, unreported/other)
+* make numeric factors for unique districts, schools, and school type (k12, elementary, middle, high school, unreported)
+* Drop unreported school types
 * only train the model on schools who reported data for each of the first 3 years. I do this because this is an important model for repeated measures data, so I want to focus on that
 * split data into training (3 years) and testing (1 year)
 * mean center and scale (with standard-deviation) the data; **NOTE: training and testing scaled separately**
@@ -715,3 +726,4 @@ tibble(
   theme(axis.text.x = element_blank())
 ```
 
+The reason school type is so important is because middle and high schools have many more exclusionary punishments than other schools. Large schools mean more students to have more exclusionary punishments. And inequal distribution of exclusionary punishments by racial/ethnic group (particularly with Black students getting more) are well documented. Again, see this [flexdashboard](https://chhr1s.github.io/GA_DOE_Public/) of mine for a better understanding of the data, its sources, etc. 
