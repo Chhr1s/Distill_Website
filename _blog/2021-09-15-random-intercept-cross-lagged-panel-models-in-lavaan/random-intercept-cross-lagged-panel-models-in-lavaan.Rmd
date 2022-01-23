@@ -1,0 +1,210 @@
+---
+title: "Random Intercept Cross Lagged Panel Models in {lavaan}"
+description: |
+  A tutorial on fitting RICLPMs.
+author: Christopher M. Loan
+date: 2021-09-15
+output:
+  distill::distill_article:
+    self_contained: false
+draft: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(lavaan)
+```
+
+While getting my Masters Degree in Prevention Science, I was working with some psychosocial variables that were both known to contribute to substance use among adolescents. There was mixed evidence in the literature about which of these had the greater and earliest effect. This is a tough thing to disentangle, and (almost) exclusively answerable with Structural Equation Modeling (SEM), due to the time-lagged, multiple-outcome nature of the question. 
+
+After digging through the methodological possibilities, the research team settled on the Random Intercept Cross Lagged Panel Model (RICLPM; [Hamaker, Kuiper, & Grasman (2015)](https://www.researchgate.net/profile/Ellen-Hamaker/publication/274262847_A_Critique_of_the_Cross-Lagged_Panel_Model/links/5b80154c92851c1e122f351f/A-Critique-of-the-Cross-Lagged-Panel-Model.pdf)). A recent publication expands these methods [(Mulder & Hamaker, 2020)](https://www.tandfonline.com/doi/pdf/10.1080/10705511.2020.1784738). If you're interested in more technical details than simply fitting these models, I'd start with these. Here's [some good code](https://jeroendmulder.github.io/RI-CLPM/) to supplement these models, put out by the authors themselves. 
+
+I'm going to first simulate some data. I'll be using the same data that I used in my [growth and parallel process model post](https://www.christopherloan.com/blog/growth-ppm/). 
+
+The goal of this post is to fit an RICLPM with an outcome predicted by the cross-lagged panel variables (a.k.a. the within-person variables). I will then show how to use bootstrapping to calculate a mediated effect through the panel portion to the outcome
+
+```{r}
+
+growth_mod <- 
+  '
+
+## intercept & slope growth terms for X
+iX =~ 1*x1 + 1*x2 + 1*x3 + 1*x4 + 1*x5
+sX =~ 0*x1 + 1*x2 + 2*x3 + 3*x4 + 4*x5
+
+## intercept, slope, & quadratic terms for Y
+iY =~ 1*y1 + 1*y2 + 1*y3 + 1*y4 + 1*y5 
+sY =~ 0*y1 + 1*y2 + 2*y3 + 3*y4 + 4*y5 
+#qY =~ 0*y1 + 1*y2 + 4*y3 + 9*y4 + 16*y5
+
+# ## set variances
+sY ~~ 2*sY
+sX ~~ 3*sX
+
+## set intercepts
+iX ~ 3*1
+sX ~ 1.6*1
+sY ~ -1*1
+#qY ~ -1.5*1
+
+sY ~ 2*predictor
+
+outcome ~ 2*iX + 3*sY 
+
+  '
+```
+
+```{r }
+sim_growth_dat <- 
+  simulateData(model = growth_mod, 
+               model.type = "growth", 
+               seed = 82020, 
+               orthogonal = F,
+               auto.cov.y = T, 
+               auto.var = T, 
+               sample.nobs = 2000
+               )
+
+```
+
+```{r}
+mod1 <- '
+  # Create between components (random intercepts)
+  RIx =~ 1*x1 + 1*x2 + 1*x3 + 1*x4 + 1*x5
+  RIy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4 + 1*y5
+  
+  # Estimate the variance and covariance of the random intercepts. 
+  RIx ~~ RIx
+  RIy ~~ RIy
+  RIx ~~ RIy
+  
+  # Regression of time-invariant outcome z2 on within components.
+  outcome ~ wx1 + wx2 + wx3 + wx4 + wx5 + wy1 + wy2 + wy3 + wy4 + wy5
+  outcome ~~ outcome # Residual variance z2
+  
+  # Create within-person centered variables
+  wx1 =~ 1*x1
+  wx2 =~ 1*x2
+  wx3 =~ 1*x3 
+  wx4 =~ 1*x4
+  wx5 =~ 1*x5
+  wy1 =~ 1*y1
+  wy2 =~ 1*y2
+  wy3 =~ 1*y3
+  wy4 =~ 1*y4
+  wy5 =~ 1*y5
+  
+  # # Regression of observed variables on z1 (constrained). 
+  #x1 + x2 + x3 + x4 + x5 ~ s1*z1 # Constrained over time.
+  y1 + y2 + y3 + y4 + y5 ~ s2*predictor # Constrained over time.
+  
+  # Estimate the lagged effects between the within-person centered variables.
+  wx2 + wy2 ~ wx1 + wy1
+  wx3 + wy3 ~ wx2 + wy2
+  wx4 + wy4 ~ wx3 + wy3
+  wx5 + wy5 ~ wx4 + wy4
+  
+  # Estimate the covariance between the within-person centered variables at the first wave. 
+  wx1 ~~ wy1 # Covariance
+  
+  # Estimate the covariances between the residuals of the within-person centered variables (the innovations).
+  wx2 ~~ wy2
+  wx3 ~~ wy3
+  wx4 ~~ wy4
+  wx5 ~~ wy5
+  
+  # Estimate the (residual) variance of the within-person centered variables.
+  wx1 ~~ wx1 # Variances
+  wy1 ~~ wy1 
+  wx2 ~~ wx2 # Residual variances
+  wy2 ~~ wy2 
+  wx3 ~~ wx3 
+  wy3 ~~ wy3 
+  wx4 ~~ wx4 
+  wy4 ~~ wy4 
+  wx5 ~~ wx5
+  wy5 ~~ wy5
+'
+
+fit1 <- lavaan(
+  mod1, 
+  data = sim_growth_dat, 
+  meanstructure = T, 
+  int.ov.free = T
+  ) 
+
+summary(fit1, standardized = T)
+```
+
+THIS IS ALL DIRECTLY COPIED AND SHOULD BE REWORDED
+
+```{r}
+mod2 <- '
+  # Create between components (random intercepts)
+  RIx =~ 1*x1 + 1*x2 + 1*x3 + 1*x4 + 1*x5
+  RIy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4 + 1*y5
+  
+  # Estimate the variance and covariance of the random intercepts. 
+  RIx ~~ RIx
+  RIy ~~ RIy
+  RIx ~~ RIy
+  
+  # Regression of time-invariant outcome z2 on within components.
+  outcome ~ wx1 + wx2 + wx3 + wx4 + wx5 + wy1 + wy2 + wy3 + wy4 + wy5
+  outcome ~~ outcome # Residual variance z2
+  
+  # Create within-person centered variables
+  wx1 =~ 1*x1
+  wx2 =~ 1*x2
+  wx3 =~ 1*x3 
+  wx4 =~ 1*x4
+  wx5 =~ 1*x5
+  wy1 =~ 1*y1
+  wy2 =~ 1*y2
+  wy3 =~ 1*y3
+  wy4 =~ 1*y4
+  wy5 =~ 1*y5
+  
+  # Regression of observed variables on z1 (constrained). 
+  y1 + y2 + y3 + y4 + y5 ~ s2*predictor # Constrained over time.
+  
+  # Estimate the lagged effects between the within-person centered variables.
+  
+  wx2 + wy2 ~ wx1 + wy1
+  wx3 + wy3 ~ wx2 + wy2
+  wx4 + wy4 ~ wx3 + wy3
+  wx5 + wy5 ~ wx4 + wy4
+  
+  # Estimate the covariance between the within-person centered variables at the first wave. 
+  wx1 ~~ wy1 # Covariance
+  
+  # Estimate the covariances between the residuals of the within-person centered variables (the innovations).
+  wx2 ~~ wy2
+  wx3 ~~ wy3
+  wx4 ~~ wy4
+  wx5 ~~ wy5
+  
+  # Estimate the (residual) variance of the within-person centered variables.
+  wx1 ~~ wx1 # Variances
+  wy1 ~~ wy1 
+  wx2 ~~ wx2 # Residual variances
+  wy2 ~~ wy2 
+  wx3 ~~ wx3 
+  wy3 ~~ wy3 
+  wx4 ~~ wx4 
+  wy4 ~~ wy4 
+  wx5 ~~ wx5
+  wy5 ~~ wy5
+'
+
+fit2 <- lavaan(
+  mod2, 
+  data = sim_growth_dat, 
+  meanstructure = T, 
+  int.ov.free = T
+  ) 
+
+summary(fit2, standardized = T)
+```
