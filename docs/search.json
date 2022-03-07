@@ -12,7 +12,7 @@
       "title": "Blog",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-09-09T10:02:33-07:00"
+      "last_modified": "2022-03-06T19:52:00-08:00"
     },
     {
       "path": "index.html",
@@ -22,5 +22,5 @@
       "last_modified": "2022-01-23T08:57:22-08:00"
     }
   ],
-  "collections": ["blog/blog.json"]
+  "collections": ["posts/posts.json", "blog/blog.json"]
 }
