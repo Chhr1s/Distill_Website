@@ -2341,19 +2341,18 @@ show code
 <p>This model was used to simulate data:</p>
 <p><span class="math display">\[
 \begin{aligned}
-    \operatorname{reading\_spring} = \\
-    \alpha + \beta_{1}(\operatorname{reading\_fall}) +
-\beta_{2}(\operatorname{demo\_observed}_{\operatorname{Subgroup}}) + \\
+    \operatorname{SpringReading} = \\
+    \alpha + \beta_{1}(\operatorname{FallReading}) +
+\beta_{2}(\operatorname{StudentGroup}_{\operatorname{Subgroup}}) + \\
     \beta_{3}(\operatorname{treatment}_{\operatorname{Intervention}}) +
-\beta_{4}(\operatorname{reading\_fall} \times
+\beta_{4}(\operatorname{FallReading} \times
 \operatorname{treatment}_{\operatorname{Intervention}}) + \\
-    \beta_{5}(\operatorname{reading\_fall} \times
-\operatorname{demo\_observed}_{\operatorname{Subgroup}}) + \\
-    \beta_{6}(\operatorname{demo\_observed}_{\operatorname{Subgroup}}
+    \beta_{5}(\operatorname{FallReading} \times
+\operatorname{StudentGroup}_{\operatorname{Subgroup}}) + \\
+    \beta_{6}(\operatorname{StudentGroup}_{\operatorname{Subgroup}}
 \times \operatorname{treatment}_{\operatorname{Intervention}}) + \\
-\beta_{7}(\operatorname{reading\_fall}
-\times  \operatorname{demo\_observed}_{\operatorname{Subgroup}} \times
-\\
+\beta_{7}(\operatorname{FallReading}
+\times  \operatorname{StudentGroup}_{\operatorname{Subgroup}} \times \\
     \operatorname{treatment}_{\operatorname{Intervention}}) + \epsilon
 \end{aligned}
 \]</span></p>
