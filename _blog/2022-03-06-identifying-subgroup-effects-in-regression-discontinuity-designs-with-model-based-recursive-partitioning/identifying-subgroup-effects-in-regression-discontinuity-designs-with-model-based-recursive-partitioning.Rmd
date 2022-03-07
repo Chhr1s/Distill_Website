@@ -94,7 +94,14 @@ number_of_cases <- 4000
 This model was used to simulate data:
 
 $$
-\operatorname{reading\_spring} = \alpha + \beta_{1}(\operatorname{reading\_fall}) + \beta_{2}(\operatorname{demo\_observed}_{\operatorname{Subgroup}}) + \beta_{3}(\operatorname{treatment}_{\operatorname{Intervention}}) + \beta_{4}(\operatorname{reading\_fall} \times \operatorname{treatment}_{\operatorname{Intervention}}) + \beta_{5}(\operatorname{reading\_fall} \times \operatorname{demo\_observed}_{\operatorname{Subgroup}}) + \beta_{6}(\operatorname{demo\_observed}_{\operatorname{Subgroup}} \times \operatorname{treatment}_{\operatorname{Intervention}}) + \beta_{7}(\operatorname{reading\_fall} \times \operatorname{demo\_observed}_{\operatorname{Subgroup}} \times \operatorname{treatment}_{\operatorname{Intervention}}) + \epsilon
+\begin{aligned}
+    \operatorname{reading\_spring} = \\
+    \alpha + \beta_{1}(\operatorname{reading\_fall}) + \beta_{2}(\operatorname{demo\_observed}_{\operatorname{Subgroup}}) + \\
+    \beta_{3}(\operatorname{treatment}_{\operatorname{Intervention}}) + \beta_{4}(\operatorname{reading\_fall} \times \operatorname{treatment}_{\operatorname{Intervention}}) + \\
+    \beta_{5}(\operatorname{reading\_fall} \times \operatorname{demo\_observed}_{\operatorname{Subgroup}}) + \\
+    \beta_{6}(\operatorname{demo\_observed}_{\operatorname{Subgroup}} \times \operatorname{treatment}_{\operatorname{Intervention}}) + \\ \beta_{7}(\operatorname{reading\_fall} \times  \operatorname{demo\_observed}_{\operatorname{Subgroup}} \times \\
+    \operatorname{treatment}_{\operatorname{Intervention}}) + \epsilon
+\end{aligned}
 $$
 
 Five non-zero combinations of effects were specified. 
@@ -147,7 +154,7 @@ dat <-
     nuisance = X3
     ) %>% 
   mutate(
-    demo_observed = 
+    student_group = 
       ifelse(
         underlying_demo_dist <= qnorm(1-proportion_reference_group),
         1, 0), 
@@ -165,16 +172,16 @@ dat <-
       effs$b1*reading_fall + 
       effs$b2*treatment + 
       effs$b3*reading_fall*treatment + 
-      effs$b4*demo_observed +
-      effs$b5*reading_fall*demo_observed + 
-      effs$b6*treatment*demo_observed + 
-      effs$b7*reading_fall*treatment*demo_observed + 
+      effs$b4*student_group +
+      effs$b5*reading_fall*student_group + 
+      effs$b6*treatment*student_group + 
+      effs$b7*reading_fall*treatment*student_group + 
       effs$b8*nuisance + 
       effs$b9*nuisance_categorical + 
       effs$e*error,
-    demo_observed = 
+    student_group = 
       factor(
-        demo_observed, 
+        student_group, 
         levels = 0:1, 
         labels = c('Reference', 'Subgroup')
         ),
@@ -195,7 +202,7 @@ dat <-
         reading_spring, 
         reading_fall,
         treatment, 
-        demo_observed,
+        student_group,
         nuisance, 
         nuisance_categorical
         ) %>% 
@@ -204,22 +211,37 @@ dat <-
 
 ## Plots of Simualted Data
 
+```{r}
+project_theme <- 
+  list(
+    theme_bw(base_size = 18),
+    theme(
+      plot.title.position = 'plot',
+      legend.text = element_text(size = 11),
+      legend.position = 'bottom'
+      ), 
+    colorblindr::scale_color_OkabeIto(order = c(6, 2, 7, 5)),
+    colorblindr::scale_fill_OkabeIto(order = c(6, 2, 7, 5))
+    ) 
+```
+
+
 ### True Structure
 
 This is the structure of the actual data. We can see that the intervention helped boost the performance of those in the reference group across the board and it helped those at the lowest end the most. For the subgroup, we see the exact opposite effect: universal negative effect with the least detriment to those lower on fall reading score.
 
-```{r}
+```{r fig.width=8, fig.height = 6}
 fully_specified_plot <- 
   dat %>% 
   mutate(
     reading_fall_bin = plyr::round_any(reading_fall, 0.2),
-    plt_intx = paste0(demo_observed, ' & \n', treatment)
+    plt_intx = paste0(student_group, ' & \n', treatment)
     ) %>% 
   ggplot(
     aes(
       x = reading_fall, 
       y = reading_spring,
-      shape = demo_observed
+      shape = student_group
       )
     ) +
   geom_abline(
@@ -229,14 +251,13 @@ fully_specified_plot <-
     linetype = 2, 
     alpha = 0.4
     ) +
-  geom_smooth(aes(group = plt_intx, color = plt_intx), size = 2, alpha = 0.6, se = FALSE, method = 'lm') + 
-  theme_minimal(base_size = 20) +
-  theme(
-    plot.title.position = 'plot',
-    axis.line = element_line(size = 1.3, color = 'black'),
-    legend.position = 'bottom',
-    legend.text = element_text(size = 10)
-    ) +
+  geom_smooth(
+    aes(group = plt_intx, color = plt_intx), 
+    size = 2, 
+    alpha = 0.6, 
+    se = FALSE, 
+    method = 'lm'
+    ) + 
   labs(
     y = 'Spring Reading Score',
     x = 'Fall Reading Score',
@@ -245,8 +266,8 @@ fully_specified_plot <-
     title = 'Figure 1. Association of Fall and Spring Reading',
     subtitle = 'Associations by Treatment Condition & Subgroup'
     ) + 
-  colorblindr::scale_color_OkabeIto(order = c(6, 2, 7, 5)) + 
-  facet_wrap(vars(demo_observed))
+  facet_wrap(vars(student_group)) +
+  project_theme
 fully_specified_plot
 ```
 
@@ -254,7 +275,7 @@ fully_specified_plot
 
 If a researcher wanted to see the raw effect of this intervention, they might plot this without the subgroups. Because the subgroup only contains 15% of the sample, this intervention still looks effective; as shown above, though, it's effect is heterogenous when specified properly.
 
-```{r}
+```{r fig.width=8, fig.height = 6}
 naive_specified_plot <- 
   dat %>% 
   ggplot(
@@ -269,18 +290,17 @@ naive_specified_plot <-
     slope = 1, 
     size = 1.5, 
     linetype = 2, 
-    alpha = 0.4
+    alpha = 0.6
     ) +
- # geom_point(aes(color = treatment), size = 4, show.legend = FALSE) + 
-  geom_smooth(aes(group = treatment, color = treatment), size = 2, alpha = 0.6, se = FALSE, method = 'lm') + 
-  theme_minimal(base_size = 20) +
-  theme(
-    plot.title.position = 'plot',
-    axis.line = element_line(size = 1.3, color = 'black'),
-    legend.position = 'bottom',
-    #strip.text = element_blank(),
-    legend.text = element_text(size = 11)
-    ) +
+  geom_smooth(
+    aes(
+      group = treatment, 
+      color = treatment
+      ), 
+    size = 2, 
+    alpha = 0.6, 
+    se = FALSE, 
+    method = 'lm') + 
   labs(
     y = 'Spring Reading Score',
     x = 'Fall Reading Score',
@@ -289,7 +309,8 @@ naive_specified_plot <-
     title = 'Figure 2. Association of Fall and Spring Reading',
     subtitle = 'Associations by Treatment Condition'
     ) + 
-  colorblindr::scale_color_OkabeIto(order = c(6, 2)) 
+  project_theme
+  
 naive_specified_plot
 ```
 
@@ -390,7 +411,7 @@ naive_lm <-
     data = ., 
     formula = 
       reading_spring ~ 
-          1 + reading_fall + demo_observed + 
+          1 + reading_fall + student_group + 
           treatment + reading_fall:treatment + 
           nuisance + nuisance_categorical
   )
@@ -407,7 +428,7 @@ overparameterized_lm <-
     data = ., 
     formula = 
       reading_spring ~ 
-        1 + reading_fall * demo_observed * treatment * nuisance * nuisance_categorical
+        1 + reading_fall * student_group * treatment * nuisance * nuisance_categorical
   )
 ```
 
@@ -441,7 +462,7 @@ cv_estimates <-
     mod_formula = 
         reading_spring ~ 
           1 + reading_fall + treatment + reading_fall:treatment | 
-          demo_observed +  nuisance + nuisance_categorical
+          student_group +  nuisance + nuisance_categorical
     ) %>% 
   arrange(mean_mae)
 ```
@@ -457,7 +478,7 @@ tree_training <-
     formula = 
       reading_spring ~ 
           1 + reading_fall + treatment + reading_fall:treatment | 
-          demo_observed +  nuisance + nuisance_categorical,
+          student_group +  nuisance + nuisance_categorical,
     maxdepth = cv_estimates$maxdepth_par[[1]],
     alpha = cv_estimates$alpha_par[[1]],
     trim = cv_estimates$trim_par[[1]]
@@ -497,7 +518,7 @@ In an equity intervention, we are interested particularly in the ability of thes
 ```{r}
 ## difference by subgroup
 comp_test_long %>% 
-  group_by(model, demo_observed) %>% 
+  group_by(model, student_group) %>% 
   summarize(
     MAE = mae(observed_y = reading_spring, predicted_y = prediction)
     )
@@ -507,7 +528,7 @@ comp_test_long %>%
 
 We can see something similar by plotting distribution of residuals by subgroup. We can see that the residuals are (relatively) normally distributed around 0 in both reference conditions, but for the subgroup, the models are less normally distributed around 0. The naive linear model has the greatest systematic departure from normal distribution around 0, with the overparameterized model and model-based recursive partitioning being closer. 
 
-```{r}
+```{r fig.width=8, fig.height = 8}
 training_data %>% 
   mutate(
     residual_lm_naive = residuals(naive_lm), 
@@ -518,21 +539,28 @@ training_data %>%
     cols = starts_with('residual_'),
     names_prefix = 'residual_', 
     names_to = 'model',
-    values_to = 'residual'
+    values_to = 'Residuals'
   ) %>% 
   ggplot(
-    aes(x = residual, y = model, fill = model)
+    aes(
+      x = Residuals, 
+      fill = model)
     ) + 
   geom_vline(xintercept = 0, size = 1.5) +
-  ggridges::geom_density_ridges(
+  geom_density(
     color = 'black', 
-    alpha = 0.4, 
+    alpha = 0.6, 
     size = 2
   ) +
-  facet_wrap(vars(demo_observed, treatment)) + 
-  theme_bw() +
-  theme(axis.text.y = element_blank(), legend.position = 'bottom') +
-  scale_x_continuous(limits = c(-3, 3)) 
+  labs(
+    y = element_blank(), 
+    title = 'Figure 3. Density Distribution of Residuals',
+    subtitle = 'Student Group x Treatment Condition Shown'
+    ) + 
+  facet_wrap(vars(student_group, treatment)) + 
+  scale_x_continuous(limits = c(-3, 3)) + 
+  scale_y_continuous(breaks = NULL) +
+  project_theme
 ```
 
 ## Parameter Estimates
@@ -546,7 +574,7 @@ tree_full <-
     formula = 
       reading_spring ~ 
           1 + reading_fall + treatment + reading_fall:treatment | 
-          demo_observed +  nuisance + nuisance_categorical,
+          student_group +  nuisance + nuisance_categorical,
     maxdepth = cv_estimates$maxdepth_par[[1]],
     alpha = cv_estimates$alpha_par[[1]],
     trim = cv_estimates$trim_par[[1]]
@@ -558,7 +586,7 @@ naive_lm_full <-
     data = ., 
     formula = 
       reading_spring ~ 
-          1 + reading_fall + demo_observed + 
+          1 + reading_fall + student_group + 
           treatment + reading_fall:treatment + 
           nuisance + nuisance_categorical
   )
@@ -570,28 +598,28 @@ overparameterized_lm_full <-
     data = ., 
     formula = 
       reading_spring ~ 
-        1 + reading_fall * demo_observed * treatment * nuisance * nuisance_categorical
+        1 + reading_fall * student_group * treatment * nuisance * nuisance_categorical
   )
 ```
 
-
 ```{r}
+# ignore the ugly code to specify my axis labels :) 
 d1 <- 
   tibble(
     renamed = 
   c('Intercept\n',
     'Reading Score (Fall)\n', 
-    'Subgroup_d\n',
-    'Treatment_d\n',
+    'Subgroup\n',
+    'Treatment\n',
     'Nuisance\n', 
     'Nuisance_d1\n',
     'Nuisance_d2\n',
     'Nuisance_d3\n', 
     '(Reading Score (Fall) x 
-        Treatment_d)\n',
+        Treatment)\n',
     '(Subgroup x 
         Reading Score (Fall)\n)',
-    '(Subgroup x Treatment_d)\n',
+    '(Subgroup x Treatment)\n',
     '(Subgroup x Nuisance)\n',
     '(Subgroup x Nuisance_d1)\n',
     '(Subgroup x Nuisance_d2)\n',
@@ -601,28 +629,13 @@ d1 <-
         Subgroup)\n'
   ), 
   true_effects = 
-    c(
-      0, 
-      effs$b1, 
-      effs$b4,
-      effs$b2, 
-      0, 
-      0, 
-      0, 
-      0, 
-      effs$b3, 
-      effs$b5, 
-      effs$b6,
-      0,
-      0,
-      0,
-      0,
-      effs$b7
-    )
+    c(0, effs$b1, effs$b4,
+      effs$b2, 0, 0, 
+      0, 0, effs$b3, 
+      effs$b5, effs$b6, 0,
+      0, 0, 0, effs$b7)
   )
 
-
-# ADD THE ACTUAL ESTIMATES FROM `effs` to this
 
 naive_lm_tidy <- 
   broom::tidy(naive_lm_full) %>% 
@@ -631,71 +644,76 @@ naive_lm_tidy <-
     renamed = 
       c('Intercept\n',
         'Reading Score (Fall)\n', 
-        'Subgroup_d\n',
-        'Treatment_d\n',
+        'Subgroup\n',
+        'Treatment\n',
         'Nuisance\n', 
         'Nuisance_d1\n',
         'Nuisance_d2\n',
         'Nuisance_d3\n', 
         '(Reading Score (Fall) x 
-        Treatment_d)\n')
-  ) 
-  #left_join(d1, by = 'renamed') %>% 
-  #pivot_longer(cols = c('estimate', 'true_effects')) %>% 
+        Treatment)\n')
+  ) %>% 
+  left_join(d1)
+```
+
+```{r fig.width=8, fig.height = 6}
 naive_lm_ests_plot <- 
   naive_lm_tidy %>% 
   ggplot(
     aes(
       y = renamed, 
       x = estimate, 
-      color = if_else(p <= 0.05, '< 0.05', 'n.s.'),
       xmin = estimate - 1.96*std.error, 
       xmax = estimate + 1.96*std.error
     )
   ) + 
-  geom_vline(xintercept = 0, color = 'black', size = 1.3, alpha = 0.5)+
+  geom_vline(
+    xintercept = 0, 
+    color = 'black', 
+    size = 1.3, 
+    alpha = 0.6
+    ) +
   geom_errorbar(width =  0.3) +
   geom_point(
     size = 5, 
-    alpha = 0.5
+    alpha = 0.6
   ) +
-  theme_bw(base_size = 13) +
   labs(
     y = 'Parameters',
-    color = 'p-value',
-    title = 'Figure ##. Estimates from Naive Linear Model'
+    caption = 'Circles = Estimates | Error Bars = 1.96 * Std. Error | Diamonds  = True Values',
+    title = 'Figure 4. Naive Linear Model Estimates'
   ) +
-  theme(
-    legend.position = c(0.8, 0.2),
-    axis.text.y = element_text(angle = 10),
-    plot.title.position = 'plot'
-  ) +
-  colorblindr::scale_color_OkabeIto() +
+  theme(axis.text.y = element_text(angle = 10)) +
   geom_point(
     inherit.aes = FALSE,
-    data = filter(d1, renamed %in% naive_lm_tidy$renamed),
     aes(x = true_effects, y = renamed),
     color = 'gray30',
     shape = 5,
     size = 5
-  )
+  ) + 
+  project_theme
+
 naive_lm_ests_plot
 
 ```
 
-```{r}
+```{r fig.width=8, fig.height = 6}
+# ignore the ugly code to specify my axis labels :) 
 d2 <-
   tibble(
     Group = rep(c('Reference', 'Subgroup'), 4),
-    term = 
-      c('treatmentIntervention',
-      'treatmentIntervention',
-      'reading_fall:treatmentIntervention', 
-      'reading_fall:treatmentIntervention', 
-      'reading_fall', 
-      'reading_fall', 
-      '(Intercept)',
-      '(Intercept)'
+    term_renamed = 
+      c(rep('Treatment\n', 2),
+        rep('(Reading Score (Fall) x 
+        Treatment)\n', 2),
+        rep('Reading Score (Fall)\n', 2),
+        rep('Intercept\n', 2)
+        ),
+      term = 
+      c(rep('treatmentIntervention', 2), 
+      rep('reading_fall:treatmentIntervention', 2), 
+      rep('reading_fall', 2),
+      rep('(Intercept)', 2)
     ), 
     effects = 
       c(effs$b2, 
@@ -710,44 +728,51 @@ d2 <-
   )
 ```
 
-```{r}
+```{r fig.width=8, fig.height = 6}
 summary(tree_full) %>% 
   map_dfr(broom::tidy, .id = 'node') %>% 
   mutate(
     Group = if_else(node == 2, 'Reference', 'Subgroup')
   ) %>% 
+  left_join(d2) %>% 
   ggplot(
     aes(
-      y = term, 
+      y = term_renamed, 
       x = estimate, 
       color = Group,
       xmin = estimate - 1.96*std.error, 
       xmax = estimate + 1.96*std.error
     )
   ) + 
-  geom_vline(xintercept = 0, color = 'black', size = 1.3, alpha = 0.5)+
+  geom_vline(
+    xintercept = 0, 
+    color = 'black', 
+    size = 1.3, 
+    alpha = 0.5
+    ) +
   geom_errorbar(
     aes(group = Group),
-    #color = 'gray30',
     width =  0.3,
     position = position_dodge(width = 0.5),
     ) +
   geom_point(
     size = 5, 
-    alpha = 0.5,
+    alpha = 0.6,
     position = position_dodge(width = 0.5),
   ) +
   geom_point(
     position = position_dodge(width = 0.5),
     inherit.aes = FALSE, 
-    data = d2, 
-    mapping = aes(x = effects, y = term, group = Group), 
+    mapping = aes(x = effects, y = term_renamed, group = Group), 
     shape = 5,
     color = 'gray30', 
     size = 5
-  ) +
-  theme_bw() +
-  colorblindr::scale_color_OkabeIto()
+  ) + 
+  labs(
+    title = 'Figure 5. Model-Based Recursive Partitioning Estimates',
+    caption = 'Circles = Estimates | Error Bars = 1.96 * Std. Error | Diamonds  = True Values'
+    ) +
+  project_theme 
 ```
 
 ## What these models mean for outcomes
@@ -756,18 +781,18 @@ We can then simulate data for possible combinations of observed variables and us
 
 To see the average influence of the intervention that each model would propose, we can then subtract fall reading score from predicted spring score. This will tell us what an analyst using only 1 model would recommend about the intervention given to new individuals. We see here that the naive linear model thinks the model is good for everyone. Both MOB and the overparameterized model think that the intervention is good for those in the reference but bad for those in the subgroup. A distinction between the overparameterized linear model and the model-based recursive partitioning model is that the former has a very wide range of possible outcomes which are purely noise, whereas the model-based recursive partitioning algorithm finds clear evidence that the intervention is good for those in the reference and bad —to varying degrees— for those in the subgroup. 
 
-```{r}
+```{r fig.width=12, fig.height = 12}
 expand.grid(
-  demo_observed = c('Reference', 'Subgroup'),
+  student_group = c('Reference', 'Subgroup'),
   reading_fall = seq(-3, qnorm(threshold_score), 0.1),
-  treatment = c('Intervention'),#, 'Control'), 
+  treatment = c('Intervention'),
   nuisance =  seq(-3, 3, 0.1), 
   nuisance_categorical = letters[1:4]
   ) %>% 
   tibble(
     prediction_Naive_LinearModel = predict(naive_lm_full, newdata = .),
     prediction_MOB = predict(tree_full, newdata = .),
-    prediction_OP_LinearModel = predict(overparameterized_lm_full, newdata = .)
+    prediction_Overparam_LinearModel = predict(overparameterized_lm_full, newdata = .)
   ) %>% 
   pivot_longer(
     cols = starts_with('prediction_'),
@@ -776,17 +801,46 @@ expand.grid(
     values_to = 'prediction'
   ) %>% 
   mutate(diff = prediction - reading_fall) %>% 
+  group_by(student_group, model) %>% 
+  mutate(average_diff = mean(diff)) %>% 
   ggplot(
     aes(
-      #x = reading_fall, 
       x = diff,
-      color = demo_observed, 
-      fill = demo_observed
+      color = student_group, 
+      fill = student_group
     )
   ) +
-  # geom_point() + 
-  # geom_smooth(method = 'lm') +
-  geom_density() + 
-  facet_wrap(vars(model, treatment)) +
-  scale_x_continuous(limits = c(-3, 3))
+  labs(
+    y = element_blank(),
+    color = 'Student Group',
+    fill = 'Student Group',
+    x = 'Spring Reading Score - Fall Reading Score',
+    title = 'Figure 6. Predicted Change in Reading Score for Eligible Students'
+    ) +
+  geom_density(
+    color = 'black', 
+    alpha = 0.6, 
+    size = 2
+  ) + 
+  facet_wrap(
+    vars(fct_reorder(model, desc(diff))),
+    ncol = 1
+    ) +
+  geom_vline(
+    alpha = 0.6, 
+    size = 2, 
+    linetype = 2,
+    aes(
+      color = student_group, 
+      xintercept = average_diff
+      )
+    ) +
+  geom_vline(
+    color = 'gray30', 
+    xintercept = 0, 
+    size = 1.4
+    ) +
+  scale_x_continuous(limits = c(-3, 3)) + 
+  scale_y_continuous(breaks = NULL) +
+  project_theme
 ```
