@@ -2,10 +2,9 @@
 title: "Identifying Subgroup Effects in Regression Discontinuity Designs with Model-Based Recursive Partitioning"
 description: |
   A simulation study to demonstrate the ability of model-based recursive partitioning to identify differential effects in a regression discontinuity design (RDD).
-date: 2022-03-06
 author:
-  - name: Christopher M. Loan
-    url: {}
+  - name: Christopher Loan
+date: 2022-03-06
 categories:
   - Model-Based Recursive Partitioning
   - Machine Learning

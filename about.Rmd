@@ -33,8 +33,6 @@ Hamilton College\n
 
 ## Published:
 
-[Loan, C. M., Khurana, A., Wright, J., & Romer, D. (2021). Selection versus socialization effects of peer norms on adolescent cigarette use. Tobacco use insights, 14, 1179173X211066005.](https://journals.sagepub.com/doi/pdf/10.1177/1179173X211066005)
-
 [Parr, N. J., Loan, C. M., & Tanner-Smith, E. E. (2021). Using Machine Learning to Identify and Investigate Moderators of Alcohol Use Intervention Effects in Meta-Analyses. Alcohol and Alcoholism.](https://doi.org/10.1093/alcalc/agab036)
 
 [Tanner-Smith, E. E., Nichols, L. M., Loan, C. M., Finch, A. J., & Moberg, D. P. (2020). Recovery High School Attendance Effects on Student Delinquency and Substance Use: the Moderating Role of Social Problem Solving Styles. Prevention Science, 21(8), 1104-1113.](https://doi.org/10.1007/s11121-020-01161-z)

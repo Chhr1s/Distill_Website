@@ -363,7 +363,7 @@ We now see a more nuanced description of the relationship of `x` to `outcome` at
 
 # Visualizing the Data
 
-```{r glmertree plotted in ggplot}
+```{r glmertree plotted in ggplot, layout = "l-body", fig.height=12, fig.width = 16}
 figure_1a <-   
   sim_dat %>% 
   mutate(node = factor(as.vector(predict(tree_3, type = 'node')))) %>% 
@@ -415,13 +415,7 @@ sim_dat %>%
   mutate(node = factor(as.vector(predict(tree_3, type = 'node'))),
          dichot_node = factor(if_else(node %in% c(4,7), 1, 0))
          ) %>% 
-  ggplot(
-    aes(
-      x = x, 
-      y = outcome, 
-      group = dichot_node, 
-      color = dichot_node)
-    ) + 
+  ggplot(aes(x = x, y = outcome, group = dichot_node, color = dichot_node)) + 
   geom_point() +
   geom_smooth(method = 'lm') +
   theme_minimal() +

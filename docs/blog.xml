@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+  <channel>
+    <title>Christopher Loan's Website</title>
+    <link>/</link>
+    <atom:link href="/blog.xml" rel="self" type="application/rss+xml"/>
+    <description>CML
+</description>
+    <image>
+      <title>Christopher Loan's Website</title>
+      <url>/images/photo.png</url>
+      <link>/</link>
+    </image>
+    <generator>Distill</generator>
+    <lastBuildDate>Sun, 06 Mar 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Identifying Subgroup Effects in Regression Discontinuity Designs with Model-Based Recursive Partitioning</title>
+      <dc:creator>Christopher Loan</dc:creator>
+      <link>/blog/2022-03-06-identifying-subgroup-effects-in-regression-discontinuity-designs-with-model-based-recursive-partitioning</link>
+      <description>A simulation study to demonstrate the ability of model-based recursive partitioning to identify differential effects in a regression discontinuity design (RDD).</description>
+      <category>Model-Based Recursive Partitioning</category>
+      <category>Machine Learning</category>
+      <category>Plotting</category>
+      <category>Simulated Data</category>
+      <guid>/blog/2022-03-06-identifying-subgroup-effects-in-regression-discontinuity-designs-with-model-based-recursive-partitioning</guid>
+      <pubDate>Sun, 06 Mar 2022 00:00:00 +0000</pubDate>
+      <media:content url="/blog/2022-03-06-identifying-subgroup-effects-in-regression-discontinuity-designs-with-model-based-recursive-partitioning/identifying-subgroup-effects-in-regression-discontinuity-designs-with-model-based-recursive-partitioning_files/figure-html5/unnamed-chunk-5-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>Comparing (Stochastic) Mixed-Effects Tree-Based Models in `{LongituRF}` &amp; `{ranger}`</title>
+      <dc:creator>Christopher Loan</dc:creator>
+      <link>/blog/running-longitudinal-random-forests-with-longiturf</link>
+      <description>A comparison of (S)MERTs, (S)REEMtrees, (S)MERFs &amp; Traditional Random Forests.</description>
+      <category>Machine Learning</category>
+      <category>Decision Trees</category>
+      <category>Multi-Level Modeling</category>
+      <category>Model Comparisons</category>
+      <category>Plotting</category>
+      <category>Public Data</category>
+      <category>Tutorial</category>
+      <guid>/blog/running-longitudinal-random-forests-with-longiturf</guid>
+      <pubDate>Tue, 24 Aug 2021 00:00:00 +0000</pubDate>
+      <media:content url="/blog/running-longitudinal-random-forests-with-longiturf/distill-preview.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>APA 2021 Poster</title>
+      <dc:creator>Christopher Loan</dc:creator>
+      <dc:creator>Matthew C. Graham</dc:creator>
+      <dc:creator>Edwin M. Zorilla</dc:creator>
+      <dc:creator>Idalis Villanueva Alarcon</dc:creator>
+      <dc:creator>Jenefer Husman</dc:creator>
+      <dc:creator>Keith Zvoch</dc:creator>
+      <link>/blog/apa-2021-poster</link>
+      <description>Poster Presented at APA 2021.</description>
+      <category>Collaboration</category>
+      <category>Conference</category>
+      <category>Machine Learning</category>
+      <category>Multi-Level Modeling</category>
+      <category>MLM</category>
+      <category>Plotting</category>
+      <category>Tutorial</category>
+      <guid>/blog/apa-2021-poster</guid>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
+      <media:content url="/blog/apa-2021-poster/apa-2021-poster_files/figure-html5/unnamed-chunk-1-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>APA 2021 Supplemental Material</title>
+      <dc:creator>Christopher M. Loan</dc:creator>
+      <link>/blog/apa-2021</link>
+      <description>Supplmental Material for the Application of Generalized Linear Mixed-Effects Model Regression Trees with Multi-Modal Data poster presented at APA 2021, co-authored with Matthew C. Graham, Edwin M. Zorilla, Idalis Villanueva Alarcon, Jenefer Husman, &amp; Keith Zvoch</description>
+      <category>Collaboration</category>
+      <category>Conference</category>
+      <category>Machine Learning</category>
+      <category>Multi-Level Modeling</category>
+      <category>MLM</category>
+      <category>Plotting</category>
+      <category>Simulated Data</category>
+      <category>Tutorial</category>
+      <guid>/blog/apa-2021</guid>
+      <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
+      <media:content url="/blog/apa-2021/apa-2021_files/figure-html5/plot_ranef_1-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>Simulating Non-Linear Interactions</title>
+      <dc:creator>Christopher Loan</dc:creator>
+      <link>/blog/simulating-2-level-data-for-apa-2021-supplemental</link>
+      <description>Simulating 2-level data for APA 2021 Supplemental, so others can follow along.</description>
+      <category>Conference</category>
+      <category>Multi-Level Modeling</category>
+      <category>MLM</category>
+      <category>Plotting</category>
+      <category>Simulated Data</category>
+      <category>Tutorial</category>
+      <guid>/blog/simulating-2-level-data-for-apa-2021-supplemental</guid>
+      <pubDate>Tue, 03 Aug 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Simulating Multilevel Linear Data with Interaction</title>
+      <dc:creator>Christopher Loan</dc:creator>
+      <link>/blog/simulating-multilevel-linear-data</link>
+      <description>function to simulate multilevel data with interaction.</description>
+      <category>Multi-Level Modeling</category>
+      <category>MLM</category>
+      <category>Plotting</category>
+      <category>Simulated Data</category>
+      <category>Tutorial</category>
+      <guid>/blog/simulating-multilevel-linear-data</guid>
+      <pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Quantifying Pandemic-Era Growth in Disc Golf by Webtraffic</title>
+      <dc:creator>Christopher Loan</dc:creator>
+      <link>/blog/disc-golf-web-traffic</link>
+      <description>Trying to figure out why the disc golf course is so crowded these days, with code.</description>
+      <category>Side Projects</category>
+      <category>Google Trends</category>
+      <category>Public Data</category>
+      <category>Plotting</category>
+      <category>Geographic Data</category>
+      <guid>/blog/disc-golf-web-traffic</guid>
+      <pubDate>Sat, 26 Dec 2020 00:00:00 +0000</pubDate>
+      <media:content url="/blog/disc-golf-web-traffic/Popularity-of-DG_files/figure-html5/unnamed-chunk-4-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>Impact of GKPro Sponsorship on OTB &amp; GKPro Webtraffic </title>
+      <dc:creator>Christopher Loan</dc:creator>
+      <link>/blog/webtraffic-analysis-for-otb-discs</link>
+      <description>An example of leveraging free data to benefit a company, with code.</description>
+      <category>Side Projects</category>
+      <category>Google Trends</category>
+      <category>Public Data</category>
+      <category>SEM</category>
+      <category>Structural Equation Modeling</category>
+      <category>Mediation</category>
+      <category>Bootstrapping</category>
+      <category>Plotting</category>
+      <guid>/blog/webtraffic-analysis-for-otb-discs</guid>
+      <pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate>
+      <media:content url="/blog/webtraffic-analysis-for-otb-discs/OTB_GKPro_Sales_files/figure-html5/unnamed-chunk-6-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>Introduction to Growth &amp; Parallel Process Models in `{lavaan}`</title>
+      <dc:creator>Christopher Loan</dc:creator>
+      <link>/blog/growth-ppm</link>
+      <description>A tutorial to parameterize and plot results of a parallel process model (PPM) in `{lavaan}`.</description>
+      <category>SEM</category>
+      <category>Structural Equation Modeling</category>
+      <category>Mediation</category>
+      <category>Bootstrapping</category>
+      <category>Plotting</category>
+      <category>Simulated Data</category>
+      <category>Tutorial</category>
+      <category>Model Comparisons</category>
+      <guid>/blog/growth-ppm</guid>
+      <pubDate>Tue, 08 Sep 2020 00:00:00 +0000</pubDate>
+      <media:content url="/blog/growth-ppm/growth-ppm_files/figure-html5/unnamed-chunk-6-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>An introduction to `{Tidymodels}`: Decision Tree Learning in R</title>
+      <dc:creator>Cianna Bedford-Petersen</dc:creator>
+      <dc:creator>Christopher Loan</dc:creator>
+      <dc:creator>Brendan Cullen</dc:creator>
+      <link>/blog/decision-trees-in-r</link>
+      <description>Exploring Decision Tree Variants in `{tidymodels}`.</description>
+      <category>Machine Learning</category>
+      <category>Decision Trees</category>
+      <category>Model Comparisons</category>
+      <category>Plotting</category>
+      <category>Public Data</category>
+      <category>Collaboration</category>
+      <category>Tutorial</category>
+      <guid>/blog/decision-trees-in-r</guid>
+      <pubDate>Tue, 02 Jun 2020 00:00:00 +0000</pubDate>
+      <media:content url="/blog/decision-trees-in-r/Decision_Trees_in_R_files/figure-html5/unnamed-chunk-16-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+  </channel>
+</rss>
