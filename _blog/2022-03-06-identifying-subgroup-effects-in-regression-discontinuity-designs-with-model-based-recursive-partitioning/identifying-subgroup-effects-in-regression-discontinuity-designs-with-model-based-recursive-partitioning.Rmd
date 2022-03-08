@@ -56,7 +56,7 @@ Let's imagine we have a fall reading intervention given to a sample of n = 4000 
 
 The intervention's main goal is to raise scores among students at the bottom of the distribution. This is an equity intervention, meaning it's goal is to help everyone eligible (based on fall reading test); further, those at the lower end of the distribution of eligible students are given progressively more support. 
 
-Let's also imagine there is a subgroup of students that make up ~15% of the student body (~267 students). This could be any form of minority based on mental health, gender identity, racial/ethnic identity, religious identity, immigrant status, etc. 
+Let's also imagine there is a subgroup of students that make up ~15% of the student body. This could be any form of minority based on mental health, gender identity, racial/ethnic identity, religious identity, immigrant status, etc. 
 
 In such situations, individuals in the subgroup are particularly vulnerable to worse educational outcomes because information is frequently tailored to the majority group either implicitly or explicitly. For example, if this intervention was made primarily by individuals outside this subgroup or teachers implementing the intervention were not from this group, we can imagine content or delivery of this may not resonate with that subgroup as well as the primary group. Perhaps this happens from assumptions about student backgrounds or in other ways. The reason why this hypothetical intervention is not equally effective does not matter, but let's assume it is not. 
 
