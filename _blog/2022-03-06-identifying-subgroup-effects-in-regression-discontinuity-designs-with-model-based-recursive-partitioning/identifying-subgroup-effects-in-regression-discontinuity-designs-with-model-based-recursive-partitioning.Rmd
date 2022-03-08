@@ -775,6 +775,120 @@ summary(tree_full) %>%
   project_theme 
 ```
 
+## Consider Group Size
+
+Though the point estimate for the effect of the intervention is null, we should think about our power to detect that effect in a 15% sample. Here are the group sizes. At the very least, the tree is nice because it actually 
+
+```{r}
+dat %>% 
+  count(treatment, student_group)
+```
+
+
+# One Other Way to Look at This
+
+This plot isn't the easiest to see, but that's precisely because model-based recursive partitioning is that accurate. The predicted lines basically overlap fully with the actual.
+
+```{r eval=FALSE, include=FALSE}
+
+plot_it <- 
+  function(
+    tree_object,
+    write_labels = TRUE
+  ){
+    format <- list(geom_edge(size = 1.2),
+    geom_node_label(
+      aes(label = splitvar),
+      ids = "inner"),
+    geom_node_plot(
+        gglist = list(
+          geom_point(
+            aes(
+              y = reading_spring,
+              x = reading_fall, 
+              color = treatment
+              ), 
+            alpha = 0.1,
+            size = 2),
+          geom_smooth(
+            aes(
+              y = reading_spring,
+              x = reading_fall, 
+              color = treatment
+              ),
+            method = 'lm', 
+            se = FALSE),
+          theme_minimal(base_size = 12),
+          theme(
+            axis.title.x = element_blank(),
+            axis.text.x = element_blank(),
+            axis.line.y = element_line(size = 1.5),
+            panel.grid.minor.x = element_blank()
+            )),
+        shared_axis_labels = TRUE),
+    geom_node_label(
+      line_list = 
+        list(
+          aes(label = splitvar),
+          aes(label = paste('N = ' , nodesize)),
+          aes(label = if_else(p.value < 0.001, "p < 0.001", paste0('p = ', round(p.value, 3))))),
+      line_gpar = list(
+        list(size = 15),
+        list(size = 12),
+        list(size = 12)),
+      ids = "inner"),
+    geom_node_label(
+      aes(
+        label = paste0("N = ", nodesize)
+        ),
+      ids = "terminal", 
+      line_gpar = list(list(size = 15))
+      )
+    )
+    if (write_labels == T) {
+      return(
+        ggparty(tree_object[1]) + geom_edge_label() + format
+        )
+    }
+    else {return(ggparty(tree_object[1]) + format)}
+  }
+```
+
+```{r eval=FALSE, include=FALSE}
+# this is a custom function above
+plot_it(tree_object = tree_full)
+```
+
+```{r fig.width=12, fig.height = 12}
+dat %>% 
+  mutate(
+    predictions_tree = predict(tree_full, newdata = .),
+    predictions_lm = predict(naive_lm, newdata = .),
+    predictions_op = predict(overparameterized_lm, newdata = .)
+    ) %>% 
+  rename(actual = reading_spring) %>% 
+  pivot_longer(
+    cols = c(predictions_tree, predictions_lm, predictions_op, actual)
+    ) %>% 
+  ggplot(
+    aes(
+      x = reading_fall,
+      y = value,
+      color = name
+      )
+  ) + 
+  geom_smooth(method = 'lm', se = F) +
+  facet_wrap(vars(treatment, student_group), scales = 'free') + 
+  project_theme +
+  labs(
+    y = 'Reading Spring',
+    x = 'Reading Fall',
+    color = element_blank(),
+    title = 'Figure 6. Estimated effects vs. actual effects'
+    ) 
+```
+
+
 ## What these models mean for outcomes
 
 We can then simulate data for possible combinations of observed variables and use these to show what each model says about outcomes. Because this intervention is targeted (meaning fall reading score determines intervention status), we can create an expanded grid of all possible combinations of observed variables for a sequence of possible values on fall reading score. I've chosen to go from -3 standard deviations to the threshold. 
@@ -815,7 +929,7 @@ expand.grid(
     color = 'Student Group',
     fill = 'Student Group',
     x = 'Spring Reading Score - Fall Reading Score',
-    title = 'Figure 6. Predicted Change in Reading Score for Eligible Students'
+    title = 'Figure 7. Predicted Change in Reading Score for Eligible Students'
     ) +
   geom_density(
     color = 'black', 
