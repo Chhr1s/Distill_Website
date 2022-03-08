@@ -97,25 +97,24 @@ $$
 \begin{aligned}
     \operatorname{SpringReading} = \\
     \alpha + \beta_{1}(\operatorname{FallReading}) + \beta_{2}(\operatorname{StudentGroup}_{\operatorname{Subgroup}}) + \\
-    \beta_{3}(\operatorname{treatment}_{\operatorname{Intervention}}) + \beta_{4}(\operatorname{FallReading} \times \operatorname{treatment}_{\operatorname{Intervention}}) + \\
+    \beta_{3}(\operatorname{Treatment}_{\operatorname{Intervention}}) + \beta_{4}(\operatorname{FallReading} \times \operatorname{Treatment}_{\operatorname{Intervention}}) + \\
     \beta_{5}(\operatorname{FallReading} \times \operatorname{StudentGroup}_{\operatorname{Subgroup}}) + \\
-    \beta_{6}(\operatorname{StudentGroup}_{\operatorname{Subgroup}} \times \operatorname{treatment}_{\operatorname{Intervention}}) + \\ \beta_{7}(\operatorname{FallReading} \times  \operatorname{StudentGroup}_{\operatorname{Subgroup}} \times \\
-    \operatorname{treatment}_{\operatorname{Intervention}}) + \epsilon
+    \beta_{6}(\operatorname{StudentGroup}_{\operatorname{Subgroup}} \times \operatorname{Treatment}_{\operatorname{Intervention}}) + \\ \beta_{7}(\operatorname{FallReading} \times  \operatorname{StudentGroup}_{\operatorname{Subgroup}} \times \operatorname{Treatment}_{\operatorname{Intervention}}) + \epsilon
 \end{aligned}
 $$
 
 Five non-zero combinations of effects were specified. 
 
-* $\beta_{Fall} = 1.2$ 
-* $\beta_{TX} = 0.3$
-* $\beta_{Fall : TX} = -0.4$
-* $\beta_{TX : Subgroup} = -0.6$
-* $\beta_{Fall : TX : Subgroup} = 0.7$ 
+* $\beta_{1} = 1.2$ 
+* $\beta_{3} = 0.3$
+* $\beta_{4} = -0.4$
+* $\beta_{6} = -0.6$
+* $\beta_{7} = 0.7$ 
 
 Excluding nuisance variables, two effects were set at 0:
 
-* $\beta_{Subgroup} = 0$ 
-* $\beta_{Fall x Subgroup} = 0$
+* $\beta_{2} = 0$ 
+* $\beta_{5} = 0$
 
 
 ```{r}
@@ -769,6 +768,7 @@ summary(tree_full) %>%
     size = 5
   ) + 
   labs(
+    y = 'Parameters',
     title = 'Figure 5. Model-Based Recursive Partitioning Estimates',
     caption = 'Circles = Estimates | Error Bars = 1.96 * Std. Error | Diamonds  = True Values'
     ) +

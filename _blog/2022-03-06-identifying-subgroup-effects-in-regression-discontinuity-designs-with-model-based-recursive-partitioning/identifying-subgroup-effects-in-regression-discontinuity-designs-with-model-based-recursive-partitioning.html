@@ -1690,33 +1690,30 @@ show code
     \operatorname{SpringReading} = \\
     \alpha + \beta_{1}(\operatorname{FallReading}) +
 \beta_{2}(\operatorname{StudentGroup}_{\operatorname{Subgroup}}) + \\
-    \beta_{3}(\operatorname{treatment}_{\operatorname{Intervention}}) +
+    \beta_{3}(\operatorname{Treatment}_{\operatorname{Intervention}}) +
 \beta_{4}(\operatorname{FallReading} \times
-\operatorname{treatment}_{\operatorname{Intervention}}) + \\
+\operatorname{Treatment}_{\operatorname{Intervention}}) + \\
     \beta_{5}(\operatorname{FallReading} \times
 \operatorname{StudentGroup}_{\operatorname{Subgroup}}) + \\
     \beta_{6}(\operatorname{StudentGroup}_{\operatorname{Subgroup}}
-\times \operatorname{treatment}_{\operatorname{Intervention}}) + \\
+\times \operatorname{Treatment}_{\operatorname{Intervention}}) + \\
 \beta_{7}(\operatorname{FallReading}
-\times  \operatorname{StudentGroup}_{\operatorname{Subgroup}} \times \\
-    \operatorname{treatment}_{\operatorname{Intervention}}) + \epsilon
+\times  \operatorname{StudentGroup}_{\operatorname{Subgroup}} \times
+\operatorname{Treatment}_{\operatorname{Intervention}}) + \epsilon
 \end{aligned}
 \]</span></p>
 <p>Five non-zero combinations of effects were specified.</p>
 <ul>
-<li><span class="math inline">\(\beta_{Fall} = 1.2\)</span></li>
-<li><span class="math inline">\(\beta_{TX} = 0.3\)</span></li>
-<li><span class="math inline">\(\beta_{Fall : TX} = -0.4\)</span></li>
-<li><span class="math inline">\(\beta_{TX : Subgroup} =
--0.6\)</span></li>
-<li><span class="math inline">\(\beta_{Fall : TX : Subgroup} =
-0.7\)</span></li>
+<li><span class="math inline">\(\beta_{1} = 1.2\)</span></li>
+<li><span class="math inline">\(\beta_{3} = 0.3\)</span></li>
+<li><span class="math inline">\(\beta_{4} = -0.4\)</span></li>
+<li><span class="math inline">\(\beta_{6} = -0.6\)</span></li>
+<li><span class="math inline">\(\beta_{7} = 0.7\)</span></li>
 </ul>
 <p>Excluding nuisance variables, two effects were set at 0:</p>
 <ul>
-<li><span class="math inline">\(\beta_{Subgroup} = 0\)</span></li>
-<li><span class="math inline">\(\beta_{Fall x Subgroup} =
-0\)</span></li>
+<li><span class="math inline">\(\beta_{2} = 0\)</span></li>
+<li><span class="math inline">\(\beta_{5} = 0\)</span></li>
 </ul>
 <div class="layout-chunk" data-layout="l-body">
 <details>
