@@ -5,6 +5,30 @@ output:
     toc: true
 ---
 
+# Current Roles
+
+**Quantitative Research Methods in Education PhD Student**
+* Organization: University of Oregon
+* Start Date: Fall 2020
+* Current Graduate Employee Position — Methodologist & Data Scientist. A Study in Equity: Oregon's 9th Grade Transition. Institute of Education Sciences [IES] $881,756 Grant Award number R305S210005
+
+**Data Science Mentor**
+* Organization: RStudio Inc.
+* Start Date: November 2021
+
+**Statistical Analyst & Data Science Consultant**
+* Northwest Data Science (Start Date February 2022)
+* Behavioral Research & Teaching (Start Date March 2022)
+
+# Statistical Software & Package Development 
+
+`{gardenr}`: An R Package for Working with Model-Based Recursive Partitioning.
+k-fold cross-validation of the multilevel extension of model-based recursive partitioning (i.e., general linear mixed-effects regression trees)
+
+[Package Website](https://chhr1s.github.io/gardenr/)
+[Git Repository](https://github.com/Chhr1s/gardenr)
+
+
 # Education
 
 Doctoral Student: [Quantitative Research Methods in Education](https://education.uoregon.edu/qrme)\n
@@ -12,6 +36,7 @@ Department of Education Methodology, Policy, & Leadership\n
 College of Education\n
 University of Oregon\n
 
+* Advanced to Candidacy Spring 2022
 * Fall 2020 - Present
 * GPA (to date): 4.13/4.00
 
@@ -33,16 +58,34 @@ Hamilton College\n
 
 ## Published:
 
-[Parr, N. J., Loan, C. M., & Tanner-Smith, E. E. (2021). Using Machine Learning to Identify and Investigate Moderators of Alcohol Use Intervention Effects in Meta-Analyses. Alcohol and Alcoholism.](https://doi.org/10.1093/alcalc/agab036)
+First Authorship:
 
-[Tanner-Smith, E. E., Nichols, L. M., Loan, C. M., Finch, A. J., & Moberg, D. P. (2020). Recovery High School Attendance Effects on Student Delinquency and Substance Use: the Moderating Role of Social Problem Solving Styles. Prevention Science, 21(8), 1104-1113.](https://doi.org/10.1007/s11121-020-01161-z)
+[**Loan, C. M.**, Khurana, A., Wright, J., & Romer, D. (2021). Selection versus socialization effects of peer norms on adolescent cigarette use. Tobacco use insights, 14](https://journals.sagepub.com/doi/pdf/10.1177/1179173X211066005)
 
-## Under Review:
+Other Authorship (Chronologically):
 
-Clark, M., Loan, C.M., Kjellstrand, J. (Revise & Resubmit 2021). Predictors of Parent-Child Contact During a Parent’s Incarceration. Children and Youth Services Review.
+Khurana, A., Loan, C. M., Romer, D. (ACCEPTED JUL 2022). Predicting Cigarette Use Initiation and Dependence in Adolescence Using an Affect-Driven Exploration Model. Frontiers Psychology.
+
+[Van Ryzin, M. J., Roseth, C. J., Low, S., & **Loan, C. M.** (2022). Reciprocated Friendship as a Mediator of the Effects of Cooperative Learning on Peer Victimization in Middle School. Journal of School Violence, 1-12.](https://www.tandfonline.com/doi/abs/10.1080/15388220.2022.2098502)
+
+[Clark M., **Loan, C. M.**, Kjellstrand J. (2022) Predictors of Parent-Child Contact During a Parent’s Incarceration. Corrections.](https://www.tandfonline.com/doi/abs/10.1080/23774657.2022.2052381)
+
+[Parr, N. J., **Loan, C. M.**, & Tanner-Smith, E. E. (2021). Using Machine Learning to Identify and Investigate Moderators of Alcohol Use Intervention Effects in Meta-Analyses. Alcohol and Alcoholism.](https://doi.org/10.1093/alcalc/agab036)
+
+[Tanner-Smith, E. E., Nichols, L. M., **Loan, C. M.**, Finch, A. J., & Moberg, D. P. (2020). Recovery High School Attendance Effects on Student Delinquency and Substance Use: the Moderating Role of Social Problem Solving Styles. Prevention Science, 21(8), 1104-1113.](https://doi.org/10.1007/s11121-020-01161-z)
 
 
-## Unpublished Documents:
+Under Review: 
+
+Kjellstrand, J., Clark, M. Manan, I., & Loan, C.M. (R&R APRIL 2022) Social Support During Incarceration: Predictors of External Social Support for Incarcerated Individuals. American Journal of Criminal Justice.
+
+## Unpublished Documents / Works in Progress:
+
+Loan, C. M., Zvoch, K., & Guha, A. (IN PREP). Using Machine Learning to Identify Inequity in Exclusionary Punishments: An Exploratory Analysis of Historical Data from Schools in Georgia.
+
+Loan, C.M., Tanner-Smith, E. E., & Anderson, D. J. (IN PREP). Exploratory Identification of Meta-Analytic Moderators of Alcohol Use Intervention Effects with General Linear Mixed-Effects Model Regression Trees.
+
+Loan, C. M., Clark, B. M., Delgado-Riley, R. (2022). Latent Transition Analysis of Multidimensional Well-Being Measures of Undergraduates: Assessing a Quasi Experimental Design. Office of Assessment and Research, Division of Student Life, University of Oregon.
 
 Loan, C. M., & Clark, B. A. M. (2020). Wellbeing of International Undergraduates during Initial Months of the COVID-19 Pandemic. Office of Assessment and Research, Division of Student Life, University of Oregon.
 
