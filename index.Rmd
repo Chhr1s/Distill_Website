@@ -38,7 +38,7 @@ knitr::include_graphics("~/Documents/Distill_Website/images/photo.png")
 
 ::: {}
 
-I'm Christopher Loan, a PhD student at the UO's **Quantitative Research Methods in Education** program & A **Data Science Mentor at RStudio**.\n
+I'm Christopher Loan, a PhD student at the UO's **Quantitative Research Methods in Education** program, a **Statistics & Data Science Consultant** & a **Data Science Mentor at RStudio**.\n
 
 ***
 
