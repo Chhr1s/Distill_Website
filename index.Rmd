@@ -38,11 +38,11 @@ knitr::include_graphics("~/Documents/Distill_Website/images/photo.png")
 
 ::: {}
 
-I'm Christopher Loan, a PhD student at the UO's **Quantitative Research Methods in Education** program, a **Statistics & Data Science Consultant** & a **Data Science Mentor at RStudio**.\n
+I'm Christopher Loan, a PhD student at the UO's **Quantitative Research Methods in Education** program and a **Statistics & Data Science Consultant**.\n
 
 ***
 
-I primarily consider myself a methodologist, exploring applications of **structural equation modeling, multilevel-modeling, machine learning, data visualization, & their intersections**.\n
+I primarily consider myself a methodologist, exploring applications of **structural equation modeling, multilevel-modeling, machine learning, data visualization, & their intersections**. I am in my final year of my PhD program, working on my dissertation with model-based recursive partitioning.\n
 
 ***
 

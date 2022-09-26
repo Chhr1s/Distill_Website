@@ -8,26 +8,39 @@ output:
 # Current Roles
 
 **Quantitative Research Methods in Education PhD Student**
+
 * Organization: University of Oregon
 * Start Date: Fall 2020
 * Current Graduate Employee Position — Methodologist & Data Scientist. A Study in Equity: Oregon's 9th Grade Transition. Institute of Education Sciences [IES] $881,756 Grant Award number R305S210005
 
-**Data Science Mentor**
-* Organization: RStudio Inc.
-* Start Date: November 2021
-
 **Statistical Analyst & Data Science Consultant**
-* Northwest Data Science (Start Date February 2022)
+
+* Northwest Data Science (Start Date February 2022) 
+* Choose Kindness Foundation (Start Date February 2022)
 * Behavioral Research & Teaching (Start Date March 2022)
 
+**Data Science Mentor at RStudio**
+
+* Organization: RStudio Inc.
+* Employment Dates: November 2021 — July 2022
+
 # Statistical Software & Package Development 
+
+## Developer & Maintainer
 
 `{gardenr}`: An R Package for Working with Model-Based Recursive Partitioning.
 k-fold cross-validation of the multilevel extension of model-based recursive partitioning (i.e., general linear mixed-effects regression trees)
 
-[Package Website](https://chhr1s.github.io/gardenr/)
-[Git Repository](https://github.com/Chhr1s/gardenr)
+* [Package Website](https://chhr1s.github.io/gardenr/)
+* [Git Repository](https://github.com/Chhr1s/gardenr)
 
+## Maintainer
+
+These three packages were developed by Daniel Anderson, PhD; I documented and extended their functionality, and I currently maintain these. Their function is for internal use at BRT. They pull from the Oregon Extended Assessment's database (`{orextdb}`), then process the data to be analyzed (`{dbprocess}`), before analyzing the data with Item Response Theory Models (`{exirt}`).
+
+* [`{orextdb}` Git Repository](https://github.com/UO-BRT/orextdb)
+* [`{dbprocess}` Git Repository](https://github.com/UO-BRT/dbprocess)
+* [`{exirt}` Git Repository & Package Tutorial](https://github.com/UO-BRT/exirt)
 
 # Education
 
@@ -62,9 +75,11 @@ First Authorship:
 
 [**Loan, C. M.**, Khurana, A., Wright, J., & Romer, D. (2021). Selection versus socialization effects of peer norms on adolescent cigarette use. Tobacco use insights, 14](https://journals.sagepub.com/doi/pdf/10.1177/1179173X211066005)
 
+[Loan, C. M., Rowley, B., Tindal, S., & Tindal, G. (2022). Oregon Extended Assessment Technical Documentation. Behavioral Research and Teaching](https://orext-techreport22.netlify.app/)
+
 Other Authorship (Chronologically):
 
-Khurana, A., Loan, C. M., Romer, D. (ACCEPTED JUL 2022). Predicting Cigarette Use Initiation and Dependence in Adolescence Using an Affect-Driven Exploration Model. Frontiers Psychology.
+[Khurana, A., **Loan, C. M.**, Romer, D. (2022). Predicting Cigarette Use Initiation and Dependence in Adolescence Using an Affect-Driven Exploration Model. Frontiers Psychology.](https://www.frontiersin.org/articles/10.3389/fpsyg.2022.887021/full)
 
 [Van Ryzin, M. J., Roseth, C. J., Low, S., & **Loan, C. M.** (2022). Reciprocated Friendship as a Mediator of the Effects of Cooperative Learning on Peer Victimization in Middle School. Journal of School Violence, 1-12.](https://www.tandfonline.com/doi/abs/10.1080/15388220.2022.2098502)
 
