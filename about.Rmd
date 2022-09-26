@@ -19,10 +19,7 @@ output:
 * Choose Kindness Foundation (Start Date February 2022)
 * Behavioral Research & Teaching (Start Date March 2022)
 
-**Data Science Mentor at RStudio**
-
-* Organization: RStudio Inc.
-* Employment Dates: November 2021 — July 2022
+**Student Representative on University of Oregon College of Education's Data Science Tenure Track Faculty Hire**
 
 # Statistical Software & Package Development 
 
@@ -81,6 +78,8 @@ Other Authorship (Chronologically):
 
 [Khurana A., Loan C. M., & Romer D. (2022). Predicting cigarette use initiation and dependence in adolescence using an affect-driven exploration model. Frontiers in Psychology 13:887021. doi: 10.3389/fpsyg.2022.887021](https://www.frontiersin.org/articles/10.3389/fpsyg.2022.887021/full)
 
+[Kjellstrand, J. M., Clark, M. G., Mannan, I. A., & Loan, C. M. (2022). Social Support During Incarceration: Predictors of External Social Support for Incarcerated Individuals. American Journal of Criminal Justice, 1-21.](https://link.springer.com/article/10.1007/s12103-022-09685-6)
+
 [Van Ryzin, M. J., Roseth, C. J., Low, S., & **Loan, C. M.** (2022). Reciprocated Friendship as a Mediator of the Effects of Cooperative Learning on Peer Victimization in Middle School. Journal of School Violence, 1-12.](https://www.tandfonline.com/doi/abs/10.1080/15388220.2022.2098502)
 
 [Clark M., **Loan, C. M.**, Kjellstrand J. (2022) Predictors of Parent-Child Contact During a Parent’s Incarceration. Corrections.](https://www.tandfonline.com/doi/abs/10.1080/23774657.2022.2052381)
@@ -88,11 +87,6 @@ Other Authorship (Chronologically):
 [Parr, N. J., **Loan, C. M.**, & Tanner-Smith, E. E. (2021). Using Machine Learning to Identify and Investigate Moderators of Alcohol Use Intervention Effects in Meta-Analyses. Alcohol and Alcoholism.](https://doi.org/10.1093/alcalc/agab036)
 
 [Tanner-Smith, E. E., Nichols, L. M., **Loan, C. M.**, Finch, A. J., & Moberg, D. P. (2020). Recovery High School Attendance Effects on Student Delinquency and Substance Use: the Moderating Role of Social Problem Solving Styles. Prevention Science, 21(8), 1104-1113.](https://doi.org/10.1007/s11121-020-01161-z)
-
-
-Under Review: 
-
-Kjellstrand, J., Clark, M. Manan, I., & Loan, C.M. (R&R APRIL 2022) Social Support During Incarceration: Predictors of External Social Support for Incarcerated Individuals. American Journal of Criminal Justice.
 
 ## Unpublished Documents / Works in Progress:
 
@@ -110,6 +104,9 @@ Loan, C. M. (2019). MS Thesis: A Developmental, Behavioral Economics Explanation
 
 # Selected Poster Presentations: 
 
+
+Zvoch, K., Loan, C. M., & Scalise, K. (2022, September). Predicting 9th Grade On-Track to Graduation Status with 8th Grade School- and Student-Level, using Mixed Effects Random Forests. Presented at the Society for Research on Educational Effectiveness (SREE) 2022 Conference: From Reckoning to Racial Justice: Centering Underserved Communities in Research on Educational Effectiveness, Washington D.C.
+
 Zvoch, K., Scalise, K., Loan, C. M., & Farley, D. (2021, September). Student success teams and Oregon’s 9th grade transition: An in the pipeline investigation of the 9th grade on-track to graduation rate. Poster accepted for presentation at the Annual Meeting of the Society for Research in Educational Effectiveness, Washington, DC.
 
 Loan, C. M., Graham, M.C., Zorilla, E. M., Villanueva, I., Husman, J., & Zvoch, K. (2021, August 12-14). Application of generalized mixed-effect regression trees with multi-modal data [Poster]. APA2021, Remote. https://convention.apa.org/
@@ -119,13 +116,19 @@ Marchetti, M., Loan, C. M., Cronce, J. M. (November 2019). An Investigation of C
 Loan, C. M. & Khurana, A. (2019). Role of Subjective Affect and Risk Perceptions in Predicting 	Initiation of Adolescent Substance Use. University of Oregon 2019 Graduate Research Forum, Eugene, OR.
 
 
-# Fun Publications
+# Non-Academic Publications
 
 [Loan, C. &  Williamson, A. (2019, August 25). Do Ratings Take a Dive in Estonia? Retrieved](https://udisc.com/blog/post/do-ratings-take-a-dive-in-estonia)
 
 # Work Experience
 
+## Data Science Mentor at RStudio
+
+* Organization: RStudio Inc.
+* Employment Dates: November 2021 — July 2022
+
 ## Assessment & Research 
+
 * Assessment & Research Extern | UO Office of Assessment & Research | 2019-Present
 * Graduate Research Assistant | Prevention Science Institute (Khurana & DeGarmo Lab) | 2019-2020
 * Substance Abuse Prevention Extern | UO Office of Dean of Students | 2019
