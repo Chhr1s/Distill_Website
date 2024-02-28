@@ -24,7 +24,9 @@ knitr::opts_chunk$set(echo = FALSE)
 # partykit:::.list.rules.party(tree1)
 ```
 
-# THIS IS A ROUGH DRAFT RIGHT NOW, ONLY PUBLIC IN ORDER TO SHOW FOR PRESENTATION TO EDLD 650
+## DISCLAIMER: 
+
+**This is a quick project I put together for a graduate school final project.**
 
 # Getting Started
 

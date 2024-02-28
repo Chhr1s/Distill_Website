@@ -5,65 +5,6 @@ output:
     toc: true
 ---
 
-# Current Roles
-
-**Quantitative Research Methods in Education PhD Student**
-
-* Organization: University of Oregon
-* Start Date: Fall 2020
-* Current Graduate Employee Position — Methodologist & Data Scientist. A Study in Equity: Oregon's 9th Grade Transition. Institute of Education Sciences [IES] $881,756 Grant Award number R305S210005
-
-**Statistical Analyst & Data Science Consultant**
-
-* Northwest Data Science (Start Date February 2022) 
-* Choose Kindness Foundation (Start Date February 2022)
-* Behavioral Research & Teaching (Start Date March 2022)
-
-**Student Representative on University of Oregon College of Education's Data Science Tenure Track Faculty Hire**
-
-# Statistical Software & Package Development 
-
-## Developer & Maintainer
-
-`{gardenr}`: An R Package for Working with Model-Based Recursive Partitioning.
-k-fold cross-validation of the multilevel extension of model-based recursive partitioning (i.e., general linear mixed-effects regression trees)
-
-* [Package Website](https://chhr1s.github.io/gardenr/)
-* [Git Repository](https://github.com/Chhr1s/gardenr)
-
-## Maintainer
-
-These three packages were developed by Daniel Anderson, PhD; I documented and extended their functionality, and I currently maintain these. Their function is for internal use at BRT. They pull from the Oregon Extended Assessment's database (`{orextdb}`), then process the data to be analyzed (`{dbprocess}`), before analyzing the data with Item Response Theory Models (`{exirt}`).
-
-* [`{orextdb}` Git Repository](https://github.com/UO-BRT/orextdb)
-* [`{dbprocess}` Git Repository](https://github.com/UO-BRT/dbprocess)
-* [`{exirt}` Git Repository & Package Tutorial](https://github.com/UO-BRT/exirt)
-
-# Education
-
-Doctoral Student: [Quantitative Research Methods in Education](https://education.uoregon.edu/qrme)\n
-Department of Education Methodology, Policy, & Leadership\n
-College of Education\n
-University of Oregon\n
-
-* Advanced to Candidacy Spring 2022
-* Fall 2020 - Present
-* GPA (to date): 4.13/4.00
-
-Master of Science: [Prevention Science](https://education.uoregon.edu/prevsci/graduate/ms)\n
-Department of Counseling Psychology & Human Services\n
-College of Education\n
-University of Oregon\n
-
-* Fall 2018 - Spring 2020
-* GPA: 4.14/4.00 
-
-Bachelor of Arts: [Neuroscience](https://www.hamilton.edu/academics/departments/Home?dept=Neuroscience)\n
-Hamilton College\n
-
-* Fall 2011 - Spring 2015
-* GPA: 3.61/4.00 
-
 # Manuscripts
 
 ## Published:
@@ -104,7 +45,6 @@ Loan, C. M. (2019). MS Thesis: A Developmental, Behavioral Economics Explanation
 
 # Selected Poster Presentations: 
 
-
 Zvoch, K., Loan, C. M., & Scalise, K. (2022, September). Predicting 9th Grade On-Track to Graduation Status with 8th Grade School- and Student-Level, using Mixed Effects Random Forests. Presented at the Society for Research on Educational Effectiveness (SREE) 2022 Conference: From Reckoning to Racial Justice: Centering Underserved Communities in Research on Educational Effectiveness, Washington D.C.
 
 Zvoch, K., Scalise, K., Loan, C. M., & Farley, D. (2021, September). Student success teams and Oregon’s 9th grade transition: An in the pipeline investigation of the 9th grade on-track to graduation rate. Poster accepted for presentation at the Annual Meeting of the Society for Research in Educational Effectiveness, Washington, DC.
@@ -119,32 +59,6 @@ Loan, C. M. & Khurana, A. (2019). Role of Subjective Affect and Risk Perceptions
 # Non-Academic Publications
 
 [Loan, C. &  Williamson, A. (2019, August 25). Do Ratings Take a Dive in Estonia? Retrieved](https://udisc.com/blog/post/do-ratings-take-a-dive-in-estonia)
-
-# Work Experience
-
-## Data Science Mentor at RStudio
-
-* Organization: RStudio Inc.
-* Employment Dates: November 2021 — July 2022
-
-## Assessment & Research 
-
-* Assessment & Research Extern | UO Office of Assessment & Research | 2019-Present
-* Graduate Research Assistant | Prevention Science Institute (Khurana & DeGarmo Lab) | 2019-2020
-* Substance Abuse Prevention Extern | UO Office of Dean of Students | 2019
-* Graduate Research Assistant | Prevention Science Institute (Tanner-Smith Lab) | 2019
-
-## Teaching & Course Development
-
-* Course Developer: EDLD 312—Effective Leadership Decision Making | UO College of Education | 2020-Present 
-* Teaching Assistant | EDUC 642: Mutliple Regression | UO College of Education | 2020
-* Medical College Admissions Test (MCAT) Teacher | Kaplan @ Oregon State University | 2018-2019 (Summers)
-* High School Science Teacher | Christ School (Asheville, NC) | 2015-2017
-
-## Administrative
-
-* Data Science Graduate Employee | UO College of Education | 2020-Present 
-
 
 
 

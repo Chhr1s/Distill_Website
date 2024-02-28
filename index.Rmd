@@ -29,8 +29,6 @@ knitr::include_graphics("~/Documents/Distill_Website/images/photo.png")
 
 <center>
 [`r fa("github", fill = "steelblue",  height = '35px')`](https://github.com/Chhr1s)
-[`r fa("linkedin", fill = "steelblue", height = '35px')`](https://www.linkedin.com/in/christopher-loan-09965950/)
-[`r fa("twitter", fill = "steelblue", height = '35px')`](https://twitter.com/chhr1s)
 [`r fa("clock", fill = "steelblue", height = '35px')`](https://chhr1s.github.io/GA_DOE_Public/index.html)
 </center>
 
@@ -38,7 +36,7 @@ knitr::include_graphics("~/Documents/Distill_Website/images/photo.png")
 
 ::: {}
 
-I'm Christopher Loan, a PhD student at the UO's **Quantitative Research Methods in Education** program and a **Statistics & Data Science Consultant**.\n
+I'm Christopher Loan, a PhD student at the UO's **Quantitative Research Methods in Education** program and a **Statistics & Data Science Consultant and Software Developer**.\n
 
 ***
 
