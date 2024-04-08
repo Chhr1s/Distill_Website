@@ -456,8 +456,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
 
   <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-  <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
-  <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
+  <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet"/>
+  <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet"/>
   <script src="site_libs/headroom-0.9.4/headroom.min.js"></script>
   <!--/radix_placeholder_navigation_in_header-->
   <!--radix_placeholder_distill-->
@@ -527,6 +527,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article table.gt_table td,
   d-article table.gt_table th {
     border-bottom: none;
+    font-size: 100%;
   }
 
   .html-widget {
@@ -567,9 +568,21 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     display: none !important;
   }
 
+  hr.section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 0px;
+  }
+
+
+  d-byline {
+    border-top: none;
+  }
+
   d-article {
     padding-top: 2.5rem;
     padding-bottom: 30px;
+    border-top: none;
   }
 
   d-appendix {
@@ -664,6 +677,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article div.sourceCode pre {
     padding-left: 18px;
     font-size: 14px;
+  }
+
+  /* tweak for Pandoc numbered line within distill */
+  d-article pre.numberSource code > span {
+      left: -2em;
   }
 
   d-article pre {
@@ -1425,6 +1443,12 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // create d-title
     $('.d-title').changeElementType('d-title');
 
+    // separator
+    var separator = '<hr class="section-separator" style="clear: both"/>';
+    // prepend separator above appendix
+    $('.d-byline').before(separator);
+    $('.d-article').before(separator);
+
     // create d-byline
     var byline = $('<d-byline></d-byline>');
     $('.d-byline').replaceWith(byline);
@@ -1502,8 +1526,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     $('.distill-force-highlighting-css').parent().remove();
 
     // remove empty line numbers inserted by pandoc when using a
-    // custom syntax highlighting theme
-    $('code.sourceCode a:empty').remove();
+    // custom syntax highlighting theme, except when numbering line
+    // in code chunk
+    $('pre:not(.numberLines) code.sourceCode a:empty').remove();
 
     // load distill framework
     load_distill_framework();
@@ -1529,12 +1554,13 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
       // add orcid ids
       $('.authors-affiliations').find('.author').each(function(i, el) {
         var orcid_id = front_matter.authors[i].orcidID;
+        var author_name = front_matter.authors[i].author
         if (orcid_id) {
           var a = $('<a></a>');
           a.attr('href', 'https://orcid.org/' + orcid_id);
           var img = $('<img></img>');
           img.addClass('orcid-id');
-          img.attr('alt', 'ORCID ID');
+          img.attr('alt', author_name ? 'ORCID ID for ' + author_name : 'ORCID ID');
           img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
           a.append(img);
           $(this).append(a);
@@ -1599,15 +1625,21 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
-        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
-          var fn = $(this).children()[0]
+        const citeChild = $(this).children()[0]
+        // Do not process if @xyz has been used without escaping and without bibliography activated
+        // https://github.com/rstudio/distill/issues/466
+        if (citeChild === undefined) return true
+
+        if (citeChild.nodeName == "D-FOOTNOTE") {
+          var fn = citeChild
           $(this).html(fn.shadowRoot.querySelector("sup"))
           $(this).id = fn.id
           fn.remove()
         }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
-          return "<p>" + $('#ref-' + ref).html() + "</p>";
+          // Could use CSS.escape too here, we insure backward compatibility in navigator
+          return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
         }).join("\n");
         window.tippy(this, {
           allowHTML: true,
@@ -1806,7 +1838,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.15/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.23/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2143,6 +2175,7 @@ Links to Additional Projects
 
 <div class="d-title">
 <h1>Abbreviated Curriculum Vitae</h1>
+
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
 
@@ -2154,245 +2187,44 @@ Links to Additional Projects
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#current-roles">Current Roles</a></li>
-<li><a href="#statistical-software-package-development">Statistical
-Software &amp; Package Development</a>
+<li><a href="#manuscripts" id="toc-manuscripts">Manuscripts</a>
 <ul>
-<li><a href="#developer-maintainer">Developer &amp; Maintainer</a></li>
-<li><a href="#maintainer">Maintainer</a></li>
+<li><a href="#published" id="toc-published">Published:</a></li>
+<li><a href="#unpublished-documents-works-in-progress" id="toc-unpublished-documents-works-in-progress">Unpublished Documents / Works in Progress:</a></li>
 </ul></li>
-<li><a href="#education">Education</a></li>
-<li><a href="#manuscripts">Manuscripts</a>
-<ul>
-<li><a href="#published">Published:</a></li>
-<li><a href="#unpublished-documents-works-in-progress">Unpublished
-Documents / Works in Progress:</a></li>
-</ul></li>
-<li><a href="#selected-poster-presentations">Selected Poster
-Presentations:</a></li>
-<li><a href="#non-academic-publications">Non-Academic
-Publications</a></li>
-<li><a href="#work-experience">Work Experience</a>
-<ul>
-<li><a href="#data-science-mentor-at-rstudio">Data Science Mentor at
-RStudio</a></li>
-<li><a href="#assessment-research">Assessment &amp; Research</a></li>
-<li><a href="#teaching-course-development">Teaching &amp; Course
-Development</a></li>
-<li><a href="#administrative">Administrative</a></li>
-</ul></li>
+<li><a href="#selected-poster-presentations" id="toc-selected-poster-presentations">Selected Poster Presentations:</a></li>
+<li><a href="#non-academic-publications" id="toc-non-academic-publications">Non-Academic Publications</a></li>
 </ul>
 </nav>
 </div>
-<h1 id="current-roles">Current Roles</h1>
-<p><strong>Quantitative Research Methods in Education PhD
-Student</strong></p>
-<ul>
-<li>Organization: University of Oregon</li>
-<li>Start Date: Fall 2020</li>
-<li>Current Graduate Employee Position — Methodologist &amp; Data
-Scientist. A Study in Equity: Oregon’s 9th Grade Transition. Institute
-of Education Sciences [IES] $881,756 Grant Award number R305S210005</li>
-</ul>
-<p><strong>Statistical Analyst &amp; Data Science
-Consultant</strong></p>
-<ul>
-<li>Northwest Data Science (Start Date February 2022)</li>
-<li>Choose Kindness Foundation (Start Date February 2022)</li>
-<li>Behavioral Research &amp; Teaching (Start Date March 2022)</li>
-</ul>
-<p><strong>Student Representative on University of Oregon College of
-Education’s Data Science Tenure Track Faculty Hire</strong></p>
-<h1 id="statistical-software-package-development">Statistical Software
-&amp; Package Development</h1>
-<h2 id="developer-maintainer">Developer &amp; Maintainer</h2>
-<p><code>{gardenr}</code>: An R Package for Working with Model-Based
-Recursive Partitioning. k-fold cross-validation of the multilevel
-extension of model-based recursive partitioning (i.e., general linear
-mixed-effects regression trees)</p>
-<ul>
-<li><a href="https://chhr1s.github.io/gardenr/">Package Website</a></li>
-<li><a href="https://github.com/Chhr1s/gardenr">Git Repository</a></li>
-</ul>
-<h2 id="maintainer">Maintainer</h2>
-<p>These three packages were developed by Daniel Anderson, PhD; I
-documented and extended their functionality, and I currently maintain
-these. Their function is for internal use at BRT. They pull from the
-Oregon Extended Assessment’s database (<code>{orextdb}</code>), then
-process the data to be analyzed (<code>{dbprocess}</code>), before
-analyzing the data with Item Response Theory Models
-(<code>{exirt}</code>).</p>
-<ul>
-<li><a href="https://github.com/UO-BRT/orextdb"><code>{orextdb}</code>
-Git Repository</a></li>
-<li><a
-href="https://github.com/UO-BRT/dbprocess"><code>{dbprocess}</code> Git
-Repository</a></li>
-<li><a href="https://github.com/UO-BRT/exirt"><code>{exirt}</code> Git
-Repository &amp; Package Tutorial</a></li>
-</ul>
-<h1 id="education">Education</h1>
-<p>Doctoral Student: <a
-href="https://education.uoregon.edu/qrme">Quantitative Research Methods
-in Education</a> Department of Education Methodology, Policy, &amp;
-Leadership College of Education University of Oregon</p>
-<ul>
-<li>Advanced to Candidacy Spring 2022</li>
-<li>Fall 2020 - Present</li>
-<li>GPA (to date): 4.13/4.00</li>
-</ul>
-<p>Master of Science: <a
-href="https://education.uoregon.edu/prevsci/graduate/ms">Prevention
-Science</a> Department of Counseling Psychology &amp; Human Services
-College of Education University of Oregon</p>
-<ul>
-<li>Fall 2018 - Spring 2020</li>
-<li>GPA: 4.14/4.00</li>
-</ul>
-<p>Bachelor of Arts: <a
-href="https://www.hamilton.edu/academics/departments/Home?dept=Neuroscience">Neuroscience</a>
-Hamilton College</p>
-<ul>
-<li>Fall 2011 - Spring 2015</li>
-<li>GPA: 3.61/4.00</li>
-</ul>
 <h1 id="manuscripts">Manuscripts</h1>
 <h2 id="published">Published:</h2>
 <p>First Authorship:</p>
-<p><a
-href="https://journals.sagepub.com/doi/pdf/10.1177/1179173X211066005"><strong>Loan,
-C. M.</strong>, Khurana, A., Wright, J., &amp; Romer, D. (2021).
-Selection versus socialization effects of peer norms on adolescent
-cigarette use. Tobacco use insights, 14</a></p>
-<p><a href="https://orext-techreport22.netlify.app/">Loan, C. M.,
-Rowley, B., Tindal, S., &amp; Tindal, G. (2022). Oregon Extended
-Assessment Technical Documentation. Behavioral Research and
-Teaching</a></p>
+<p><a href="https://journals.sagepub.com/doi/pdf/10.1177/1179173X211066005"><strong>Loan, C. M.</strong>, Khurana, A., Wright, J., &amp; Romer, D. (2021). Selection versus socialization effects of peer norms on adolescent cigarette use. Tobacco use insights, 14</a></p>
+<p><a href="https://orext-techreport22.netlify.app/">Loan, C. M., Rowley, B., Tindal, S., &amp; Tindal, G. (2022). Oregon Extended Assessment Technical Documentation. Behavioral Research and Teaching</a></p>
 <p>Other Authorship (Chronologically):</p>
-<p><a
-href="https://www.frontiersin.org/articles/10.3389/fpsyg.2022.887021/full">Khurana
-A., Loan C. M., &amp; Romer D. (2022). Predicting cigarette use
-initiation and dependence in adolescence using an affect-driven
-exploration model. Frontiers in Psychology 13:887021. doi:
-10.3389/fpsyg.2022.887021</a></p>
-<p><a
-href="https://link.springer.com/article/10.1007/s12103-022-09685-6">Kjellstrand,
-J. M., Clark, M. G., Mannan, I. A., &amp; Loan, C. M. (2022). Social
-Support During Incarceration: Predictors of External Social Support for
-Incarcerated Individuals. American Journal of Criminal Justice,
-1-21.</a></p>
-<p><a
-href="https://www.tandfonline.com/doi/abs/10.1080/15388220.2022.2098502">Van
-Ryzin, M. J., Roseth, C. J., Low, S., &amp; <strong>Loan, C. M.</strong>
-(2022). Reciprocated Friendship as a Mediator of the Effects of
-Cooperative Learning on Peer Victimization in Middle School. Journal of
-School Violence, 1-12.</a></p>
-<p><a
-href="https://www.tandfonline.com/doi/abs/10.1080/23774657.2022.2052381">Clark
-M., <strong>Loan, C. M.</strong>, Kjellstrand J. (2022) Predictors of
-Parent-Child Contact During a Parent’s Incarceration.
-Corrections.</a></p>
-<p><a href="https://doi.org/10.1093/alcalc/agab036">Parr, N. J.,
-<strong>Loan, C. M.</strong>, &amp; Tanner-Smith, E. E. (2021). Using
-Machine Learning to Identify and Investigate Moderators of Alcohol Use
-Intervention Effects in Meta-Analyses. Alcohol and Alcoholism.</a></p>
-<p><a href="https://doi.org/10.1007/s11121-020-01161-z">Tanner-Smith, E.
-E., Nichols, L. M., <strong>Loan, C. M.</strong>, Finch, A. J., &amp;
-Moberg, D. P. (2020). Recovery High School Attendance Effects on Student
-Delinquency and Substance Use: the Moderating Role of Social Problem
-Solving Styles. Prevention Science, 21(8), 1104-1113.</a></p>
-<h2 id="unpublished-documents-works-in-progress">Unpublished Documents /
-Works in Progress:</h2>
-<p>Loan, C. M., Zvoch, K., &amp; Guha, A. (IN PREP). Using Machine
-Learning to Identify Inequity in Exclusionary Punishments: An
-Exploratory Analysis of Historical Data from Schools in Georgia.</p>
-<p>Loan, C.M., Tanner-Smith, E. E., &amp; Anderson, D. J. (IN PREP).
-Exploratory Identification of Meta-Analytic Moderators of Alcohol Use
-Intervention Effects with General Linear Mixed-Effects Model Regression
-Trees.</p>
-<p>Loan, C. M., Clark, B. M., Delgado-Riley, R. (2022). Latent
-Transition Analysis of Multidimensional Well-Being Measures of
-Undergraduates: Assessing a Quasi Experimental Design. Office of
-Assessment and Research, Division of Student Life, University of
-Oregon.</p>
-<p>Loan, C. M., &amp; Clark, B. A. M. (2020). Wellbeing of International
-Undergraduates during Initial Months of the COVID-19 Pandemic. Office of
-Assessment and Research, Division of Student Life, University of
-Oregon.</p>
-<p>Loan, C. M. (2019). Evaluation of 3rd Millennium as a Universal
-Alcohol and Cannabis Prevention Program at the University of Oregon.
-Office of Dean of Students, University of Oregon.</p>
-<p>Loan, C. M. (2019). MS Thesis: A Developmental, Behavioral Economics
-Explanation of Adolescence Cigarette Use &amp; Tobacco Use Disorder
-Symptom.</p>
-<h1 id="selected-poster-presentations">Selected Poster
-Presentations:</h1>
-<p>Zvoch, K., Loan, C. M., &amp; Scalise, K. (2022, September).
-Predicting 9th Grade On-Track to Graduation Status with 8th Grade
-School- and Student-Level, using Mixed Effects Random Forests. Presented
-at the Society for Research on Educational Effectiveness (SREE) 2022
-Conference: From Reckoning to Racial Justice: Centering Underserved
-Communities in Research on Educational Effectiveness, Washington
-D.C.</p>
-<p>Zvoch, K., Scalise, K., Loan, C. M., &amp; Farley, D. (2021,
-September). Student success teams and Oregon’s 9th grade transition: An
-in the pipeline investigation of the 9th grade on-track to graduation
-rate. Poster accepted for presentation at the Annual Meeting of the
-Society for Research in Educational Effectiveness, Washington, DC.</p>
-<p>Loan, C. M., Graham, M.C., Zorilla, E. M., Villanueva, I., Husman,
-J., &amp; Zvoch, K. (2021, August 12-14). Application of generalized
-mixed-effect regression trees with multi-modal data [Poster]. APA2021,
-Remote. <a href="https://convention.apa.org/"
-class="uri">https://convention.apa.org/</a></p>
-<p>Marchetti, M., Loan, C. M., Cronce, J. M. (November 2019). An
-Investigation of Cannabis–related Consequences and Their Predictors
-Among College Students. Association of Cognitive and Behavioral Therapy
-(Addictive Behavior Sig), Atlanta, GA.</p>
-<p>Loan, C. M. &amp; Khurana, A. (2019). Role of Subjective Affect and
-Risk Perceptions in Predicting Initiation of Adolescent Substance Use.
-University of Oregon 2019 Graduate Research Forum, Eugene, OR.</p>
+<p><a href="https://www.frontiersin.org/articles/10.3389/fpsyg.2022.887021/full">Khurana A., Loan C. M., &amp; Romer D. (2022). Predicting cigarette use initiation and dependence in adolescence using an affect-driven exploration model. Frontiers in Psychology 13:887021. doi: 10.3389/fpsyg.2022.887021</a></p>
+<p><a href="https://link.springer.com/article/10.1007/s12103-022-09685-6">Kjellstrand, J. M., Clark, M. G., Mannan, I. A., &amp; Loan, C. M. (2022). Social Support During Incarceration: Predictors of External Social Support for Incarcerated Individuals. American Journal of Criminal Justice, 1-21.</a></p>
+<p><a href="https://www.tandfonline.com/doi/abs/10.1080/15388220.2022.2098502">Van Ryzin, M. J., Roseth, C. J., Low, S., &amp; <strong>Loan, C. M.</strong> (2022). Reciprocated Friendship as a Mediator of the Effects of Cooperative Learning on Peer Victimization in Middle School. Journal of School Violence, 1-12.</a></p>
+<p><a href="https://www.tandfonline.com/doi/abs/10.1080/23774657.2022.2052381">Clark M., <strong>Loan, C. M.</strong>, Kjellstrand J. (2022) Predictors of Parent-Child Contact During a Parent’s Incarceration. Corrections.</a></p>
+<p><a href="https://doi.org/10.1093/alcalc/agab036">Parr, N. J., <strong>Loan, C. M.</strong>, &amp; Tanner-Smith, E. E. (2021). Using Machine Learning to Identify and Investigate Moderators of Alcohol Use Intervention Effects in Meta-Analyses. Alcohol and Alcoholism.</a></p>
+<p><a href="https://doi.org/10.1007/s11121-020-01161-z">Tanner-Smith, E. E., Nichols, L. M., <strong>Loan, C. M.</strong>, Finch, A. J., &amp; Moberg, D. P. (2020). Recovery High School Attendance Effects on Student Delinquency and Substance Use: the Moderating Role of Social Problem Solving Styles. Prevention Science, 21(8), 1104-1113.</a></p>
+<h2 id="unpublished-documents-works-in-progress">Unpublished Documents / Works in Progress:</h2>
+<p>Loan, C. M., Zvoch, K., &amp; Guha, A. (IN PREP). Using Machine Learning to Identify Inequity in Exclusionary Punishments: An Exploratory Analysis of Historical Data from Schools in Georgia.</p>
+<p>Loan, C.M., Tanner-Smith, E. E., &amp; Anderson, D. J. (IN PREP). Exploratory Identification of Meta-Analytic Moderators of Alcohol Use Intervention Effects with General Linear Mixed-Effects Model Regression Trees.</p>
+<p>Loan, C. M., Clark, B. M., Delgado-Riley, R. (2022). Latent Transition Analysis of Multidimensional Well-Being Measures of Undergraduates: Assessing a Quasi Experimental Design. Office of Assessment and Research, Division of Student Life, University of Oregon.</p>
+<p>Loan, C. M., &amp; Clark, B. A. M. (2020). Wellbeing of International Undergraduates during Initial Months of the COVID-19 Pandemic. Office of Assessment and Research, Division of Student Life, University of Oregon.</p>
+<p>Loan, C. M. (2019). Evaluation of 3rd Millennium as a Universal Alcohol and Cannabis Prevention Program at the University of Oregon. Office of Dean of Students, University of Oregon.</p>
+<p>Loan, C. M. (2019). MS Thesis: A Developmental, Behavioral Economics Explanation of Adolescence Cigarette Use &amp; Tobacco Use Disorder Symptom.</p>
+<h1 id="selected-poster-presentations">Selected Poster Presentations:</h1>
+<p>Zvoch, K., Loan, C. M., &amp; Scalise, K. (2022, September). Predicting 9th Grade On-Track to Graduation Status with 8th Grade School- and Student-Level, using Mixed Effects Random Forests. Presented at the Society for Research on Educational Effectiveness (SREE) 2022 Conference: From Reckoning to Racial Justice: Centering Underserved Communities in Research on Educational Effectiveness, Washington D.C.</p>
+<p>Zvoch, K., Scalise, K., Loan, C. M., &amp; Farley, D. (2021, September). Student success teams and Oregon’s 9th grade transition: An in the pipeline investigation of the 9th grade on-track to graduation rate. Poster accepted for presentation at the Annual Meeting of the Society for Research in Educational Effectiveness, Washington, DC.</p>
+<p>Loan, C. M., Graham, M.C., Zorilla, E. M., Villanueva, I., Husman, J., &amp; Zvoch, K. (2021, August 12-14). Application of generalized mixed-effect regression trees with multi-modal data [Poster]. APA2021, Remote. <a href="https://convention.apa.org/" class="uri">https://convention.apa.org/</a></p>
+<p>Marchetti, M., Loan, C. M., Cronce, J. M. (November 2019). An Investigation of Cannabis–related Consequences and Their Predictors Among College Students. Association of Cognitive and Behavioral Therapy (Addictive Behavior Sig), Atlanta, GA.</p>
+<p>Loan, C. M. &amp; Khurana, A. (2019). Role of Subjective Affect and Risk Perceptions in Predicting Initiation of Adolescent Substance Use. University of Oregon 2019 Graduate Research Forum, Eugene, OR.</p>
 <h1 id="non-academic-publications">Non-Academic Publications</h1>
-<p><a
-href="https://udisc.com/blog/post/do-ratings-take-a-dive-in-estonia">Loan,
-C. &amp; Williamson, A. (2019, August 25). Do Ratings Take a Dive in
-Estonia? Retrieved</a></p>
-<h1 id="work-experience">Work Experience</h1>
-<h2 id="data-science-mentor-at-rstudio">Data Science Mentor at
-RStudio</h2>
-<ul>
-<li>Organization: RStudio Inc.</li>
-<li>Employment Dates: November 2021 — July 2022</li>
-</ul>
-<h2 id="assessment-research">Assessment &amp; Research</h2>
-<ul>
-<li>Assessment &amp; Research Extern | UO Office of Assessment &amp;
-Research | 2019-Present</li>
-<li>Graduate Research Assistant | Prevention Science Institute (Khurana
-&amp; DeGarmo Lab) | 2019-2020</li>
-<li>Substance Abuse Prevention Extern | UO Office of Dean of Students |
-2019</li>
-<li>Graduate Research Assistant | Prevention Science Institute
-(Tanner-Smith Lab) | 2019</li>
-</ul>
-<h2 id="teaching-course-development">Teaching &amp; Course
-Development</h2>
-<ul>
-<li>Course Developer: EDLD 312—Effective Leadership Decision Making | UO
-College of Education | 2020-Present</li>
-<li>Teaching Assistant | EDUC 642: Mutliple Regression | UO College of
-Education | 2020</li>
-<li>Medical College Admissions Test (MCAT) Teacher | Kaplan @ Oregon
-State University | 2018-2019 (Summers)</li>
-<li>High School Science Teacher | Christ School (Asheville, NC) |
-2015-2017</li>
-</ul>
-<h2 id="administrative">Administrative</h2>
-<ul>
-<li>Data Science Graduate Employee | UO College of Education |
-2020-Present</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p><a href="https://udisc.com/blog/post/do-ratings-take-a-dive-in-estonia">Loan, C. &amp; Williamson, A. (2019, August 25). Do Ratings Take a Dive in Estonia? Retrieved</a></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
